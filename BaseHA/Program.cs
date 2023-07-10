@@ -57,6 +57,8 @@ var Configuration = builder.Configuration;
 
 //services.AddCache(Configuration);
 services.AddCustomConfiguration(Configuration);
+// Add the Kendo UI services to the services container.
+services.AddKendo();
 //services.AddHostedService<RequestTimeConsumer>();
 // call http to grpc
 services.Configure<PasswordHasherOptions>(option =>

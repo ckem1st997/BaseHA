@@ -28,12 +28,12 @@ namespace BaseHA.Configuration
     {
         public static void AddCustomConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddCustomConfigurationCore(configuration, "Test");
-            services.AddCustomConfigurationCoreDB<Fake2DbContext>(configuration, "", true);
+            services.AddCustomConfigurationCore<HomeController>(configuration, "Test");
+            services.AddCustomConfigurationCoreDB<FakeDbContext>(configuration, "", true);
             services.AddMediatR(Assembly.GetExecutingAssembly());
             services.AddGenericRepository<FakeDbContext>();
-            services.AddGenericRepository<Fake2DbContext>();
-            services.AddCustomConfigurationCoreDapper();
+           // services.AddGenericRepository<Fake2DbContext>();
+          //services.AddCustomConfigurationCoreDapper();
 
         }
 

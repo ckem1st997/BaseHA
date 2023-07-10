@@ -9,10 +9,13 @@ namespace BaseHA.Domain.Entity
     {
         public Unit()
         {
+            Number = 0;
+            Id = Guid.NewGuid().ToString();
         }
 
         public string UnitName { get; set; }
         public string Code { get; set; }
+        public int Number { get; set; }
         public bool Inactive { get; set; }
 
     }

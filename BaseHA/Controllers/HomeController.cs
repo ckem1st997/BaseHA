@@ -1,11 +1,18 @@
 ﻿using BaseHA.Domain.Entity;
 using BaseHA.Infrastructure;
 using BaseHA.Models;
+using Kendo.Mvc.UI;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Share.BaseCore;
 using Share.BaseCore.Extensions;
 using Share.BaseCore.IRepositories;
 using System.Diagnostics;
+using System.Drawing;
+using System.Reflection;
 
 namespace BaseHA.Controllers
 {
@@ -13,14 +20,12 @@ namespace BaseHA.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IGenericRepository<FakeDbContext> _generic;
-        private readonly IGenericRepository<Fake2DbContext> _generic2;
 
-        public HomeController(ILogger<HomeController> logger, IGenericRepository<FakeDbContext> generic, IGenericRepository<Fake2DbContext> generic2)
+        public HomeController(ILogger<HomeController> logger, IGenericRepository<FakeDbContext> generic)
         {
             _logger = logger;
             _generic = generic;
-            _generic2 = generic2;
-         //   this.dapper1 = EngineContext.Current.Resolve<IDapper>(DataConnectionHelper.ConnectionStringNames.Warehouse);
+            //   this.dapper = EngineContext.Current.Resolve<IDapper>(DataConnectionHelper.ConnectionStringNames.Warehouse);
 
         }
 
@@ -28,74 +33,115 @@ namespace BaseHA.Controllers
         {
             var list = new List<Unit>();
             var l = from i in _generic.GetQueryable<Unit>() select i;
-            if (l.Count()<1)
+            if (l.Count() < 1)
             {
-                for (int i = 0; i < 10; i++)
+                for (int i = 0; i < 100; i++)
                 {
                     list.Add(new Unit()
                     {
-                        Id = i.ToString(),
+                        Id = Guid.NewGuid().ToString(),
                         UnitName = i.ToString(),
-                        Inactive = true,
+                        Code = Guid.NewGuid().ToString(),
+                        Inactive = i % 2 == 0,
                     });
 
                 }
                 await _generic.AddAsync<Unit>(list);
-                await _generic.SaveChangesAsync();
             }
+            await _generic.SaveChangesAsync();
 
-
-            return View(l.ToList());
+            return View();
         }
+
+        public async Task<IActionResult> Edit(string id)
+        {
+            var res = await _generic.GetByIdAsync<Unit>(id);
+
+
+            return View(res);
+        }
+
+
+
+        [HttpPost]
+        public async Task<IActionResult> Add(string id, Unit unit)
+        {
+            await _generic.AddAsync<Unit>(unit);
+            var res = await _generic.SaveChangesAsync();
+            return Ok(res);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(string id)
+        {
+            var model = await _generic.GetByIdAsync<Unit>(id);
+            if (model == null)
+                return Ok(false);
+            _generic.Remove<Unit>(model);
+            var res = await _generic.SaveChangesAsync();
+            return Ok(res);
+        }
+
+
+        public async Task<IActionResult> Add()
+        {
+            return View(new Unit());
+        }
+
+
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(string id, Unit unit)
+        {
+            var model = await _generic.GetByIdAsync<Unit>(id);
+            if (model == null)
+                return Ok(false);
+            var res = await _generic.UpdateAsync<Unit>(unit);
+            return Ok(res);
+        }
+
 
         public async Task<IActionResult> Privacy()
         {
-            var list = new List<Unitssss>();
-            var l = from i in _generic2.DbContext.Unitsssses select i;
-            if (l.Count() < 1)
-            {
-                for (int i = 0; i < 10; i++)
-                {
-                    list.Add(new Unitssss()
-                    {
-                        Id = i.ToString(),
-                        UnitName = i.ToString(),
-                        Inactive = true,
-                    });
-
-                }
-                await _generic2.AddAsync<Unitssss>(list);
-                await _generic2.SaveChangesAsync();
-            }
-
-
-            return View(l.ToList());
+            return View();
         }
-         
-        
-        public async Task<IActionResult> Dapper()
+
+
+
+        #region List
+        /// <summary>
+        /// Lấy về danh sách dữ liệu phân trang
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="searchModel"></param>
+        /// <returns></returns>
+        [IgnoreAntiforgeryToken]
+        [HttpPost]
+        public async Task<IActionResult> Get([DataSourceRequest] DataSourceRequest request, UnitSearchModel searchModel)
         {
-            var list = new List<Unitssss>();
-            var l = from i in _generic2.DbContext.Unitsssses select i;
-            if (l.Count() < 1)
+
+            searchModel.BindRequest(request);
+
+            var res = new List<Unit>();
+
+            var l = from i in _generic.GetQueryable<Unit>() select i;
+            if (!string.IsNullOrEmpty(searchModel.Keywords))
+                l = from aa in l where aa.UnitName.Contains(searchModel.Keywords) || aa.Code.Contains(searchModel.Keywords) select aa;
+
+            var data = await l.Skip((searchModel.PageIndex - 1) * searchModel.PageSize).Take(searchModel.PageSize).ToListAsync();
+
+            var result = new DataSourceResult
             {
-                for (int i = 0; i < 10; i++)
-                {
-                    list.Add(new Unitssss()
-                    {
-                        Id = i.ToString(),
-                        UnitName = i.ToString(),
-                        Inactive = true,
-                    });
+                Data = data,
+                Total = await l.CountAsync()
+            };
 
-                }
-                await _generic2.AddAsync<Unitssss>(list);
-                await _generic2.SaveChangesAsync();
-            }
-
-
-            return View(l.ToList());
+            return Ok(result);
         }
+        #endregion
+
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

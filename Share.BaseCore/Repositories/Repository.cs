@@ -115,7 +115,7 @@ namespace Share.BaseCore.Repositories
 
                     object primaryValue = entity.GetType().GetProperty(primaryKeyName).GetValue(entity, null);
 
-                    if (primaryKeyDefaultValue.Equals(primaryValue))
+                    if (primaryKeyDefaultValue != null && primaryKeyDefaultValue.Equals(primaryValue))
                     {
                         throw new InvalidOperationException("The primary key value of the entity to be updated is not valid.");
                     }

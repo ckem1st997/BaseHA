@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Nest;
+using Newtonsoft.Json.Serialization;
 using Serilog;
 using Share.BaseCore.Authozire;
 using Share.BaseCore.Extensions;
@@ -20,13 +21,14 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Share.BaseCore.CustomConfiguration
 {
     public static class CustomConfigurationCore
     {
-        public static void AddCustomConfigurationCore(this IServiceCollection services, IConfiguration configuration, string TitleSwagger)
+        public static void AddCustomConfigurationCore<TControler>(this IServiceCollection services, IConfiguration configuration, string TitleSwagger)
         {
             services.AddOptions();
             services.AddControllers(options =>
@@ -34,12 +36,14 @@ namespace Share.BaseCore.CustomConfiguration
                 options.Filters.Add(typeof(HttpGlobalExceptionFilter));
                 options.Filters.Add(typeof(CustomValidationAttribute));
             })
-               // .AddApplicationPart()
+                .AddApplicationPart(typeof(TControler).Assembly)
                 .AddJsonOptions(options =>
                 {
                     options.JsonSerializerOptions.WriteIndented = true;
-                    //options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
-                }).AddNewtonsoftJson();
+                    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+                }).AddNewtonsoftJson(options =>
+                       options.SerializerSettings.ContractResolver =
+                          new DefaultContractResolver());
             services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.SuppressModelStateInvalidFilter = true;
