@@ -36,9 +36,11 @@
 <!-- #region Page Content -->
 <div class="page-data">
     <div class="row search-form">
-        <form>
+        <form style="
+    display: flex;
+    align-items: center;">
             <div class="search-label">
-                Search:
+                Tìm kiếm:
             </div>
             <div class="col-md-4">
                 <div class="form-group form-group-sm">
@@ -65,9 +67,9 @@
                 columns.Select().Width(30);
                 columns.Bound(x => x.Id).Width(300).Hidden();
                 columns.Bound(x => x.UnitName).Width(100).Title("Tên");
-                columns.Bound(x => x.Code).Width(300).Title("Mã");
+                columns.Bound(x => x.Code).Width(100).Title("Mã");
                 columns.Bound(x => x.Number).Width(100).Title("Số lượng");
-                columns.Bound(x => x.Inactive).ClientTemplate("#=grd.tmp.activate(!Inactive)#").Width(130).Title("Kích hoạt");
+                columns.Bound(x => x.Inactive).ClientTemplate("#=grd.tmp.activate(!Inactive)#").Width(100).Title("Kích hoạt");
             })
             .DataSource(dataSource => dataSource
             .Ajax()
@@ -174,9 +176,9 @@
             var $status = $('#@Html.FieldIdFor(m => m.ActiveStatus)');
 
             var searchModel = {
-                Keywords: $keywords.val() ,
+                Keywords: $keywords.val(),
                 Status: $status.val(),
-             //   LanguageId: "1"
+                //   LanguageId: "1"
             };
             return searchModel;
         };
@@ -198,13 +200,13 @@
             var id = grd.api.selectedIds()[0];
             console.log(id)
             if (id) {
-                location.href=`${master.urlEdit}/${id}`;
-              //  app.window.form.open({ url: `${master.urlEdit}/${id}`, options: { width: '450px' }, callback: master.actionCallback });
+                location.href = `${master.urlEdit}/${id}`;
+                //  app.window.form.open({ url: `${master.urlEdit}/${id}`, options: { width: '450px' }, callback: master.actionCallback });
             } else {
                 notify({ text: 'Notifies.NoItemsSelected', type: 'info' });
             }
-        });    
-        
+        });
+
         // Lấy thẻ <a> bằng cách sử dụng phương thức querySelector()
         const addLink = document.querySelector('a[data-action="create"]');
 
@@ -212,11 +214,11 @@
         addLink.addEventListener('click', function () {
             // Xử lý khi thẻ <a> được nhấp
             console.log('Đã nhấp vào create');
-            location.href=`${master.urlCreate}`;
-           
-        });      
-        
-        
+            location.href = `${master.urlCreate}`;
+
+        });
+
+
         // Lấy thẻ <a> bằng cách sử dụng phương thức querySelector()
         const deleteLink = document.querySelector('a[data-action="deletes"]');
 
@@ -255,7 +257,7 @@
             } else {
                 notify({ text: 'Notifies.NoItemsSelected', type: 'info' });
             }
-            
+
         });
 
         // Methods
@@ -376,9 +378,9 @@
             grd.actions.init();
         };
         grd.actions.init = function () {
-           // grd.api.initDblClick(master.details);
-           // grd.api.initEdit(master.edit);
-           // grd.api.initActivate(master.activates);
+            // grd.api.initDblClick(master.details);
+            // grd.api.initEdit(master.edit);
+            // grd.api.initActivate(master.activates);
         };
         mnu.init = function () {
             mnu.$el = $(mnu.el);

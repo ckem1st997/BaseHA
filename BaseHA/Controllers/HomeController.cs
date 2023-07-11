@@ -29,6 +29,14 @@ namespace BaseHA.Controllers
 
         }
 
+        private static string GenerateRandomName(int length)
+        {
+            Random random = new Random();
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            string randomName = new string(Enumerable.Repeat(chars, length)
+                .Select(s => s[random.Next(s.Length)]).ToArray());
+            return randomName;
+        }
         public async Task<IActionResult> Index()
         {
             var list = new List<Unit>();
@@ -40,8 +48,8 @@ namespace BaseHA.Controllers
                     list.Add(new Unit()
                     {
                         Id = Guid.NewGuid().ToString(),
-                        UnitName = i.ToString(),
-                        Code = Guid.NewGuid().ToString(),
+                        UnitName = GenerateRandomName(10),
+                        Code = GenerateRandomName(10),
                         Inactive = i % 2 == 0,
                     });
 

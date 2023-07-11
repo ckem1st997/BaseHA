@@ -13,7 +13,7 @@
         <div class="form-body">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                <h4 class="modal-title">Warehouse.Units.AppActions.Edit</h4>
+                <h4 class="modal-title">Chỉnh sửa</h4>
             </div>
             <div class="modal-body">
                 @Html.AntiForgeryToken()
@@ -52,9 +52,9 @@
                     <i class="fa fa-spinner fa-spin spin-submit"></i>
                     <i class="fa fa-check"></i> Common.Save
                 </button>
-                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">
+                <a asp-action="index" class="btn btn-default btn-sm" data-dismiss="modal">
                     <i class="fa fa-times"></i> Common.Close
-                </button>
+                </a>
             </div>
         </div>
     </form>
@@ -84,9 +84,11 @@
                             location.href = "/";
                         }, 1000);
                     }
-                    else
-                        notify({ text: 'Thất bại !', type: 'success' });
+                    else {
+                        var errorMessage = response.errors.msg.join(", ");
+                        notify({ text: errorMessage ?? 'Thất bại !', type: 'error' });
 
+                    }
                 },
                 error: function (xhr, status, error) {
                     // Xử lý lỗi
