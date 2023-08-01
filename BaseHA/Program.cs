@@ -46,9 +46,6 @@ var services = builder.Services;
 var Configuration = builder.Configuration;
 
 services.AddMediatR(Assembly.GetExecutingAssembly());
-services.AddConfigurationCoreFilter<Program>();
-services.AddSwaggerCore();
-services.AddGeneric();
 //services.AddCache(Configuration);
 services.AddCustomConfiguration(Configuration);
 // Add the Kendo UI services to the services container.

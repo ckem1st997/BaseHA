@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Share.BaseCore;
 using Share.BaseCore.Attribute;
+using Share.BaseCore.BaseNop;
 using Share.BaseCore.Extensions;
 using Share.BaseCore.IRepositories;
 using StackExchange.Redis;
@@ -22,10 +23,10 @@ namespace BaseHA.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IRepositoryEF<Unit> _generic;
-        public HomeController(ILogger<HomeController> logger, IRepositoryEF<Unit> generic)
+        public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
-            _generic = generic;
+            _generic = EngineContext.Current.Resolve<IRepositoryEF<Unit>>(DataConnectionHelper.ConnectionStringNames.Warehouse);
             //   this.dapper = EngineContext.Current.Resolve<IDapper>(DataConnectionHelper.ConnectionStringNames.Warehouse);
         }
 
