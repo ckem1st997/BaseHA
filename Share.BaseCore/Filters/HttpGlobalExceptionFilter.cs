@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using Share.BaseCore.BaseNop;
 using Share.BaseCore.Extensions;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,9 @@ namespace Share.BaseCore.Filters
 
         public void OnException(ExceptionContext context)
         {
+            string getEnv = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? Environments.Development;
+
+
             Log.Error(context.Exception + "|" + context.Exception.Message);
             if (context.Exception.GetType() == typeof(BaseException))
             {
@@ -40,22 +44,18 @@ namespace Share.BaseCore.Filters
                 context.Result = new BadRequestObjectResult(problemDetails);
                 context.HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
             }
-         
+
             else
             {
                 var jsonResult = new ResultMessageResponse
                 {
-                    message = "Có lỗi ngoài ý muốn xảy ra, xin vui lòng liên hệ bộ phận liên quan !" + context.Exception.Message,
+                    message = "Có lỗi ngoài ý muốn xảy ra, xin vui lòng liên hệ bộ phận liên quan !",
                     httpStatusCode = (int)HttpStatusCode.InternalServerError,
                     success = false
                 };
+                if (getEnv.Equals(Environments.Development))
+                    jsonResult.message = context.Exception.Message;
 
-                //if (env.IsDevelopment())
-                //{
-                //    jsonResult.data = ;
-                //}
-                // Result asigned to a result object but in destiny the response is empty. This is a known bug of .net core 1.1
-                // It will be fixed in .net core 1.1.2. See https://github.com/aspnet/Mvc/issues/5594 for more information
                 context.Result = new InternalServerErrorObjectResult(jsonResult);
                 context.HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
             }

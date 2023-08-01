@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Share.BaseCore;
+using Share.BaseCore.BaseNop;
 #nullable disable
 
 namespace BaseHA.Domain.Entity

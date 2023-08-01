@@ -31,7 +31,11 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Share.BaseCore.Logging;
+using MediatR;
+using Share.BaseCore.CustomConfiguration;
+using Share.BaseCore.Extensions;
+using System.Configuration;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,8 +44,14 @@ builder.Services.AddControllersWithViews();
 var services = builder.Services;
 var Configuration = builder.Configuration;
 
-services.AddScoped<IMvcNotifier, MvcNotifier>();
+services.AddMediatR(Assembly.GetExecutingAssembly());
 
+services.AddCustomConfigurationCore<WarehouseManagementContext, Startup>(configuration, DataConnectionHelper.ConnectionString.Warehouse);
+services.AddCustomConfigurationCore<MasterdataContext, Startup>(configuration, DataConnectionHelper.ConnectionString.Master);
+
+
+services.AddConfigurationCoreFilter<Program>();
+services.AddSwaggerCore();
 //services.AddCache(Configuration);
 services.AddCustomConfiguration(Configuration);
 // Add the Kendo UI services to the services container.

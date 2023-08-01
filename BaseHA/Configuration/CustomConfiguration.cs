@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Share.BaseCore.Specification;
 using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;

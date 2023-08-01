@@ -50,51 +50,17 @@
             <div class="modal-footer form-actions">
                 <button type="submit" class="btn blue btn-sm">
                     <i class="fa fa-spinner fa-spin spin-submit"></i>
-                    <i class="fa fa-check"></i> Common.Save
+                    <i class="fa fa-check"></i> Lưu lại
                 </button>
-                <a asp-action="index" class="btn btn-default btn-sm" data-dismiss="modal">
-                    <i class="fa fa-times"></i> Common.Close
-                </a>
+                <button type="submit" class="btn blue btn-sm" data-action="continueAdding">
+                    <i class="fa fa-spinner fa-spin spin-submit"></i>
+                    <i class="fa fa-plus"></i> Tiếp tục thêm
+                </button>
+                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">
+                    <i class="fa fa-times"></i> Đóng
+                </button>
             </div>
         </div>
     </form>
 </div>
 
-<script>
-    $(document).ready(function () {
-        $('form').submit(function (e) {
-            e.preventDefault(); // Ngăn chặn hành vi gửi form mặc định
-
-            var form = $(this);
-            var url = form.attr('action');
-            var data = form.serialize(); // Lấy dữ liệu từ form
-
-            // Gửi yêu cầu Ajax
-            $.ajax({
-                type: 'POST',
-                url: url,
-                data: data,
-                success: function (response) {
-                    // Xử lý kết quả thành công
-                    console.log(response);
-                    if (response === 1) {
-                        notify({ text: 'Thành công !', type: 'success' });
-                        // Hàm sẽ được thực thi sau 1000ms
-                        setTimeout(function () {
-                            location.href = "/";
-                        }, 1000);
-                    }
-                    else {
-                        var errorMessage = response.errors.msg.join(", ");
-                        notify({ text: errorMessage ?? 'Thất bại !', type: 'error' });
-
-                    }
-                },
-                error: function (xhr, status, error) {
-                    // Xử lý lỗi
-                    console.log(error);
-                }
-            });
-        });
-    });
-</script>

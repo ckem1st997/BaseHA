@@ -11,7 +11,6 @@ using Share.BaseCore;
 using Share.BaseCore.Attribute;
 using Share.BaseCore.Extensions;
 using Share.BaseCore.IRepositories;
-using Share.BaseCore.Logging;
 using StackExchange.Redis;
 using System.Diagnostics;
 using System.Drawing;
@@ -19,20 +18,15 @@ using System.Reflection;
 
 namespace BaseHA.Controllers
 {
-    [MvcNotify(Order = 1000)] // Run last (OnResultExecuting)
-
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IGenericRepository<FakeDbContext> _generic;
-        public IMvcNotifier Services;
-        public HomeController(ILogger<HomeController> logger, IGenericRepository<FakeDbContext> generic, IMvcNotifier services)
+        private readonly IRepositoryEF<Unit> _generic;
+        public HomeController(ILogger<HomeController> logger, IRepositoryEF<Unit> generic)
         {
             _logger = logger;
             _generic = generic;
-            Services = services;
             //   this.dapper = EngineContext.Current.Resolve<IDapper>(DataConnectionHelper.ConnectionStringNames.Warehouse);
-
         }
 
         private static string GenerateRandomName(int length)
@@ -46,7 +40,7 @@ namespace BaseHA.Controllers
         public async Task<IActionResult> Index()
         {
             var list = new List<Unit>();
-            var l = from i in _generic.GetQueryable<Unit>() select i;
+            var l = from i in _generic.Table select i;
             if (l.Count() < 1)
             {
                 for (int i = 0; i < 100; i++)
@@ -60,18 +54,16 @@ namespace BaseHA.Controllers
                     });
 
                 }
-                await _generic.AddAsync<Unit>(list);
+                await _generic.AddAsync(list);
             }
-            await _generic.SaveChangesAsync();
+            await _generic.SaveChangesConfigureAwaitAsync();
 
             return View();
         }
 
         public async Task<IActionResult> Edit(string id)
         {
-            var res = await _generic.GetByIdAsync<Unit>(id);
-
-
+            var res = await _generic.GetFirstAsyncAsNoTracking(id);
             return View(res);
         }
 
@@ -80,25 +72,36 @@ namespace BaseHA.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(Unit unit)
         {
-            await _generic.AddAsync<Unit>(unit);
-            var res = await _generic.SaveChangesAsync();
+            await _generic.AddAsync(unit);
+            var res = await _generic.SaveChangesConfigureAwaitAsync();
             return Ok(new ResultMessageResponse()
             {
                 message = "Thành công !",
-                success = true
+                success = res > 0
             });
         }
 
 
         [HttpPost]
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(IEnumerable<string> id)
         {
-            var model = await _generic.GetByIdAsync<Unit>(id);
-            if (model == null)
-                return Ok(false);
-            _generic.Remove<Unit>(model);
-            var res = await _generic.SaveChangesAsync();
-            return Ok(res);
+            if (id == null)
+                return Ok(new ResultMessageResponse()
+                {
+                    message = "Thất bại !",
+                    success = false
+                });
+
+            var model = _generic.GetList(x => id.Contains(x.Id));
+
+
+            _generic.Delete(model);
+            var res = await _generic.SaveChangesConfigureAwaitAsync();
+            return Ok(new ResultMessageResponse()
+            {
+                message = "Thành công !",
+                success = res > 0
+            });
         }
 
 
@@ -110,13 +113,22 @@ namespace BaseHA.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Edit(string id, Unit unit)
+        public async Task<IActionResult> Edit(Unit unit)
         {
-            var model = await _generic.GetByIdAsync<Unit>(id);
+            var model = await _generic.GetFirstAsync(unit.Id);
             if (model == null)
-                return Ok(false);
-            var res = await _generic.UpdateAsync<Unit>(unit);
-            return Ok(res);
+                return Ok(new ResultMessageResponse()
+                {
+                    message = "Không tồn tại bản ghi !",
+                    success = false
+                });
+            _generic.Update(unit);
+            var res = await _generic.SaveChangesConfigureAwaitAsync();
+            return Ok(new ResultMessageResponse()
+            {
+                message = "Thành công !",
+                success = res > 0
+            });
         }
 
 
@@ -143,7 +155,7 @@ namespace BaseHA.Controllers
 
             var res = new List<Unit>();
 
-            var l = from i in _generic.GetQueryable<Unit>() select i;
+            var l = from i in _generic.Table select i;
             if (!string.IsNullOrEmpty(searchModel.Keywords))
                 l = from aa in l where aa.UnitName.Contains(searchModel.Keywords) || aa.Code.Contains(searchModel.Keywords) select aa;
 
