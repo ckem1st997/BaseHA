@@ -51,6 +51,9 @@
             @{
                 await Html.RenderPartialAsync("_Notifications");
             }
+           @* @{
+                await Html.RenderPartialAsync("~/Views/Shared/Admin/_PjaxStartup.cshtml");
+            }*@
 
             @{
                 await RenderSectionAsync("HeadScripts", false);

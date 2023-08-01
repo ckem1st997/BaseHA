@@ -1,7 +1,4 @@
-﻿
-
-
-<!-- #region Kendo Window -->
+﻿<!-- #region Kendo Window -->
 
 <div id="app_window_alert" style="display: none">
     <div class="form fixed-layout-form">
@@ -78,46 +75,63 @@
     //TODO: XBase Resource
     app.ajax.statusCodeHandler = {
         302: function (xhr) {
-            app.window.alert.open({ title: 'tt.GetResource("Common.Warning")', text: 'tt.GetResource("Common.Errors.400")', type: 'danger', options: { width: '40%' } });
+            let msg = xhr.responseJSON.message;
+            app.window.alert.open({ title: 'Cảnh báo !', text: msg ? msg : "Lỗi hệ thống, xin vui lòng thử lại !", type: 'danger', options: { width: '40%' } });
         },
         400: function (xhr) {
-            app.window.alert.open({ title: 'tt.GetResource("Common.Warning")', text: 'tt.GetResource("Common.Errors.400")', type: 'danger', options: { width: '40%' } });
+            let msg = xhr.responseJSON.message;
+            app.window.alert.open({ title: 'Cảnh báo !', text: msg ? msg : "Lỗi hệ thống, xin vui lòng thử lại !", type: 'danger', options: { width: '40%' } });
         },
         401: function (xhr) {
             if (!app.ajax.handleUnauthorizedRequest(xhr))
                 return;
-            app.window.alert.open({ title: 'tt.GetResource("Common.Warning")', text: 'tt.GetResource("Common.Errors.401")', type: 'danger', options: { width: '40%' } });
+            let msg = xhr.responseJSON.message;
+            app.window.alert.open({ title: 'Cảnh báo !', text: msg ? msg : "Lỗi hệ thống, xin vui lòng thử lại !", type: 'danger', options: { width: '40%' } });
         },
         403: function (xhr) {
-            app.window.alert.open({ title: 'tt.GetResource("Common.Warning")', text: 'tt.GetResource("Common.Errors.403")', type: 'danger', options: { width: '40%' } });
+            let msg = xhr.responseJSON.message;
+            app.window.alert.open({ title: 'Cảnh báo !', text: msg ? msg : "Lỗi hệ thống, xin vui lòng thử lại !", type: 'danger', options: { width: '40%' } });
         },
         404: function (xhr) {
-            app.window.alert.open({ title: 'tt.GetResource("Common.Warning")', text: 'tt.GetResource("Common.Errors.404")', type: 'danger', options: { width: '40%' } });
+            let msg = xhr.responseJSON.message;
+            app.window.alert.open({ title: 'Cảnh báo !', text: msg ? msg : "Lỗi hệ thống, xin vui lòng thử lại !", type: 'danger', options: { width: '40%' } });
         },
         405: function (xhr) {
-            app.window.alert.open({ title: 'tt.GetResource("Common.Warning")', text: 'tt.GetResource("Common.Errors.405")', type: 'danger', options: { width: '40%' } });
+            let msg = xhr.responseJSON.message;
+            app.window.alert.open({ title: 'Cảnh báo !', text: msg ? msg : "Lỗi hệ thống, xin vui lòng thử lại !", type: 'danger', options: { width: '40%' } });
         },
         406: function (xhr) {
-            app.window.alert.open({ title: 'tt.GetResource("Common.Warning")', text: 'tt.GetResource("Common.Errors.406")', type: 'danger', options: { width: '40%' } });
+            let msg = xhr.responseJSON.message;
+            app.window.alert.open({ title: 'Cảnh báo !', text: msg ? msg : "Lỗi hệ thống, xin vui lòng thử lại !", type: 'danger', options: { width: '40%' } });
         },
         408: function (xhr) {
-            app.window.alert.open({ title: 'tt.GetResource("Common.Warning")', text: 'tt.GetResource("Common.Errors.408")', type: 'danger', options: { width: '40%' } });
+            let msg = xhr.responseJSON.message;
+            app.window.alert.open({ title: 'Cảnh báo !', text: msg ? msg : "Lỗi hệ thống, xin vui lòng thử lại !", type: 'danger', options: { width: '40%' } });
         },
         412: function (xhr) {
-            app.window.alert.open({ title: 'tt.GetResource("Common.Warning")', text: 'tt.GetResource("Common.Errors.412")', type: 'danger', options: { width: '40%' } });
+            let msg = xhr.responseJSON.message;
+            app.window.alert.open({ title: 'Cảnh báo !', text: msg ? msg : "Lỗi hệ thống, xin vui lòng thử lại !", type: 'danger', options: { width: '40%' } });
         },
         500: function (xhr) {
-            app.window.alert.open({ title: 'tt.GetResource("Common.Warning")', text: 'tt.GetResource("Common.Errors.500")', type: 'danger', options: { width: '40%' } });
+            let msg = xhr.responseJSON.message;
+            app.window.alert.open({ title: 'Cảnh báo !', text: msg ? msg : "Lỗi hệ thống, xin vui lòng thử lại !", type: 'danger', options: { width: '40%' } });
         },
         501: function (xhr) {
-            app.window.alert.open({ title: 'tt.GetResource("Common.Warning")', text: 'tt.GetResource("Common.Errors.501")', type: 'danger', options: { width: '40%' } });
+            let msg = xhr.responseJSON.message;
+            app.window.alert.open({ title: 'Cảnh báo !', text: msg ? msg : "Lỗi hệ thống, xin vui lòng thử lại !", type: 'danger', options: { width: '40%' } });
         },
         502: function (xhr) {
-            app.window.alert.open({ title: 'tt.GetResource("Common.Warning")', text: 'tt.GetResource("Common.Errors.502")', type: 'danger', options: { width: '40%' } });
+            let msg = xhr.responseJSON.message;
+            app.window.alert.open({ title: 'Cảnh báo !', text: msg ? msg : "Lỗi hệ thống, xin vui lòng thử lại !", type: 'danger', options: { width: '40%' } });
         },
         503: function (xhr) {
-            app.window.alert.open({ title: 'tt.GetResource("Common.Warning")', text: 'tt.GetResource("Common.Errors.503")', type: 'danger', options: { width: '40%' } });
-        }
+            let msg = xhr.responseJSON.message;
+            app.window.alert.open({ title: 'Cảnh báo !', text: msg ? msg : "Lỗi hệ thống, xin vui lòng thử lại !", type: 'danger', options: { width: '40%' } });
+        },
+        //200: function (xhr) {
+        //    let msg = xhr.responseJSON.message;
+        //    app.window.alert.open({ title: 'Cảnh báo !', text: 'tt.GetResource("Common.Errors.503")', type: 'success', options: { width: '40%' } });
+        //}
     };
 
     // app.urls
