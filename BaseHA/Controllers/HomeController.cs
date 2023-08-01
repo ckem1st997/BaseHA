@@ -83,7 +83,11 @@ namespace BaseHA.Controllers
             await _generic.AddAsync<Unit>(unit);
             var res = await _generic.SaveChangesAsync();
             Services.Success("Thành công !");
-            return Ok(new DataSourceResult());
+            return Ok(new ResultMessageResponse()
+            {
+                message = "",
+                success = true
+            });
         }
 
 
