@@ -46,8 +46,7 @@ var Configuration = builder.Configuration;
 
 services.AddMediatR(Assembly.GetExecutingAssembly());
 
-services.AddCustomConfigurationCore<WarehouseManagementContext, Startup>(configuration, DataConnectionHelper.ConnectionString.Warehouse);
-services.AddCustomConfigurationCore<MasterdataContext, Startup>(configuration, DataConnectionHelper.ConnectionString.Master);
+services.AddCustomConfigurationCore<FakeDbContext, Program>(Configuration, DataConnectionHelper.ConnectionString.Warehouse);
 
 
 services.AddConfigurationCoreFilter<Program>();
