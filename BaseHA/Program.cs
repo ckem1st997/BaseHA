@@ -31,20 +31,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+using Share.BaseCore.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -53,7 +40,7 @@ builder.Services.AddControllersWithViews();
 var services = builder.Services;
 var Configuration = builder.Configuration;
 
-
+services.AddScoped<IMvcNotifier, MvcNotifier>();
 
 //services.AddCache(Configuration);
 services.AddCustomConfiguration(Configuration);

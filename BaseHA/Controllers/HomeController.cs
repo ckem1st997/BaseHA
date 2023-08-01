@@ -8,23 +8,29 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Share.BaseCore;
+using Share.BaseCore.Attribute;
 using Share.BaseCore.Extensions;
 using Share.BaseCore.IRepositories;
+using Share.BaseCore.Logging;
+using StackExchange.Redis;
 using System.Diagnostics;
 using System.Drawing;
 using System.Reflection;
 
 namespace BaseHA.Controllers
 {
+    [MvcNotify(Order = 1000)] // Run last (OnResultExecuting)
+
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IGenericRepository<FakeDbContext> _generic;
-
-        public HomeController(ILogger<HomeController> logger, IGenericRepository<FakeDbContext> generic)
+        public IMvcNotifier Services;
+        public HomeController(ILogger<HomeController> logger, IGenericRepository<FakeDbContext> generic, IMvcNotifier services)
         {
             _logger = logger;
             _generic = generic;
+            Services = services;
             //   this.dapper = EngineContext.Current.Resolve<IDapper>(DataConnectionHelper.ConnectionStringNames.Warehouse);
 
         }
@@ -72,11 +78,12 @@ namespace BaseHA.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Add(string id, Unit unit)
+        public async Task<IActionResult> Add(Unit unit)
         {
             await _generic.AddAsync<Unit>(unit);
             var res = await _generic.SaveChangesAsync();
-            return Ok(res);
+            Services.Success("Thành công !");
+            return Ok(new DataSourceResult());
         }
 
 

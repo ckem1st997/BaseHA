@@ -60,8 +60,8 @@ namespace Share.BaseCore.Extensions
 
         public SyncedCollection(ICollection<T> wrappedCollection, object syncRoot)
         {
-            Guard.IsNotNull(wrappedCollection, nameof(wrappedCollection));
-            Guard.IsNotNull(syncRoot, nameof(syncRoot));
+            Guard.NotNull(wrappedCollection, nameof(wrappedCollection));
+            Guard.NotNull(syncRoot, nameof(syncRoot));
             _col = wrappedCollection;
             SyncRoot = syncRoot;
         }

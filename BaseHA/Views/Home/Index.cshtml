@@ -207,16 +207,18 @@
             }
         });
 
-        // Lấy thẻ <a> bằng cách sử dụng phương thức querySelector()
-        const addLink = document.querySelector('a[data-action="create"]');
+        //// Lấy thẻ <a> bằng cách sử dụng phương thức querySelector()
+        //const addLink = document.querySelector('a[data-action="create"]');
 
-        // Thêm sự kiện click cho thẻ <a>
-        addLink.addEventListener('click', function () {
-            // Xử lý khi thẻ <a> được nhấp
-            console.log('Đã nhấp vào create');
-            location.href = `${master.urlCreate}`;
+        //// Thêm sự kiện click cho thẻ <a>
+        //addLink.addEventListener('click', function () {
+        //    // Xử lý khi thẻ <a> được nhấp
+        //    console.log('Đã nhấp vào create');
+        //    app.window.form.open({ url: master.urlCreate, options: { width: '450px' }, callback: master.actionCallback });
 
-        });
+        //   // location.href = `${master.urlCreate}`;
+
+        //});
 
 
         // Lấy thẻ <a> bằng cách sử dụng phương thức querySelector()
@@ -274,7 +276,7 @@
             console.log();
         };
         master.create = function () {
-            app.window.form.open({ url: master.urlCreate, options: { width: '450px' }, callback: master.actionCallback });
+            app.window.form.open({ url: master.urlCreate, options: { width: '550px' }, callback: master.actionCallback });
         };
         master.edit = function () {
             var id = grd.api.selectedIds()[0];

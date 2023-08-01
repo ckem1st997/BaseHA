@@ -1,13 +1,18 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html lang="en">
 <head>
+    <script>
+        window.onload = function () {
+            if (!sessionStorage['firstLoad']) {
+                sessionStorage['firstLoad'] = true;
+                window.location.reload();
+            }
+        };
+    </script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - BaseHA</title>
-    @*    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/BaseHA.styles.css" asp-append-version="true" />*@
-
 
     <link rel="apple-touch-icon" href="~/Content/global/img/apple-touch-icon.png">
     <link rel="shortcut icon" href="~/Content/global/img/favicon.ico" />
@@ -30,36 +35,23 @@
     <script src="@("/Content/global/plugins/globalize/cultures/globalize.culture.vi-VN.js")"></script>
     <script>$.fn.select2.defaults.set('theme', 'bootstrap');</script>
 
+    @{
+        await Html.RenderPartialAsync("_Enums");
+    }
+    @{
+        await Html.RenderPartialAsync("_LocaleStringResources");
+    }
     <script src="~/Content/bundles/js/app-declares.js?version=1.0.0.0" type="text/javascript"></script>
     <script src="~/Content/bundles/js/admin-declares.js?version=1.0.0.0" type="text/javascript"></script>
+
 </head>
 <body>
-    @*    <header>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-    <div class="container-fluid">
-    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">BaseHA</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-    aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-    <ul class="navbar-nav flex-grow-1">
-    <li class="nav-item">
-    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-    </li>
-    <li class="nav-item">
-    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-    </li>
-    </ul>
-    </div>
-    </div>
-    </nav>
-    </header>*@
-
-
-
     <div class="container page-content">
         <main role="main" class="pb-3">
+            @{
+                await Html.RenderPartialAsync("_Notifications");
+            }
+
             @{
                 await RenderSectionAsync("HeadScripts", false);
             }
@@ -72,10 +64,6 @@
             &copy; 2023 - BaseHA - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
-    @* <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>*@
-
     <!-- Plugins -->
     <script src="~/Content/bundles/js/admin-plugins.js?version=1.0.0.0" type="text/javascript"></script>
     <script src="~/Content/global/plugins/ckeditor/ckeditor.js?version=1.0.0.0" type="text/javascript"></script>
@@ -88,26 +76,20 @@
     <script src="/Content/bundles/js/admin-theme.js?version=1.0.0.0" type="text/javascript"></script>
     <!-- Application Script -->
     <script src="/Content/bundles/js/app-scripts.js?version=1.0.0.0"></script>
+    <script src="/Content/bundles/js/admin-scripts.js?version=1.0.0.0"></script>
 
-    @*    <script src="/Content/bundles/js/admin-scripts.js?version=1.0.0.0"></script>
-    *@
-
-    @*  @if (!workContext.IsEnglishCulture)
-    {
-    <script src="~/Content/global/plugins/plupload/js/i18n/@(currentUiCulture.TwoLetterISOLanguageName).js"></script>
-    <script src="~/Content/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.@(currentUiCulture.TwoLetterISOLanguageName).js"></script>
-    }
-    <script>moment.locale('@currentUiCulture.TwoLetterISOLanguageName');</script>
-    *@
     <script src="~/Content/global/plugins/jquery-validation/localization/messages_vi.min.js"></script>
 
+    @{
+        await Html.RenderPartialAsync("_AppInit");
+    }
 
     <script>
         // admin.urls
-        admin.urls.clearCache = '@Url.Action("ClearCache", "AdminMvcCommon")';
-        admin.urls.breadcrumb = '@Url.Action("Breadcrumb", "AdminMvcCommon")';
+        //admin.urls.clearCache = '@Url.Action("ClearCache", "AdminMvcCommon")';
+        // admin.urls.breadcrumb = '@Url.Action("Breadcrumb", "AdminMvcCommon")';
 
-        app.pjax.init();
+        // app.pjax.init();
         app.init();
         admin.init();
 
@@ -116,8 +98,9 @@
         });
 
     </script>
-
     <div id="__scriptsSection">
+        @await RenderSectionAsync("StartupScripts", false);
+
         @await RenderSectionAsync("Scripts", required: false)
 
     </div>

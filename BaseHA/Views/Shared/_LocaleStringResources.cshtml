@@ -1,0 +1,33 @@
+﻿@using Share.BaseCore.Extensions;
+
+@*TODO: XBase Resource*@
+@{
+    var clientResKeys = new[]
+    {
+        "Common.Alert.Default.Title-Thông báo",
+        "Common.Confirm.Default.Content-Nội dung",
+        "Common.Confirm.Default.Title-Xác nhận",
+        "Common.Deletes.Confirm.Default.Content-Xác nhận xóa",
+        "Common.Deletes.Confirm.Default.Title-Xóa thông tin",
+        "Common.Error-Lỗi",
+        "Common.LoadError-Lỗi tải dữ liệu",
+        "Common.Loading-Đang tải dữ liệu",
+        "Common.MoreData-Tải dữ liệu",
+        "Common.NoData-Không có dữ liệu",
+        "Common.Search-Tìm kiếm",
+        "Common.ShowMore-Hiển thị thêm",
+        "Common.ShowLess-Hiển thị ít",
+        "Common.Windows.Forms.Close.Confirm.Default.Title-Đóng",
+        "Common.Windows.Forms.Close.Confirm.DataMightBeChanged-Đóng",
+    };
+}
+
+<script>
+	window.Res = {
+		@foreach (var key in clientResKeys)
+        {
+            var resourceKey = string.Format("{0}", key.Split('-')[1]);
+        @Html.Raw("\"{0}\": {1},\n".FormatCurrentUI(key.Split('-')[0], "'"+key.Split('-')[1]+"'"))
+		}
+	};
+</script>
