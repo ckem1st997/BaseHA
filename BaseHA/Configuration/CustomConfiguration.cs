@@ -60,6 +60,9 @@ namespace BaseHA.Configuration
                     options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
                 });
 
+            services.AddScoped<DbContext, TDbContext>();
+
+
         }
     }
 }

@@ -28,14 +28,14 @@ namespace BaseHA.CustomClass
             builder.RegisterType<BaseEngine>().As<IEngine>().SingleInstance();
             //
 
-            builder.AddDbContext<FakeDbContext>(DataConnectionHelper.ConnectionStringNames.Warehouse);
+            //builder.AddDbContext<FakeDbContext>(DataConnectionHelper.ConnectionStringNames.Warehouse);
 
 
-            builder.AddRegisterDbContext(true);
-            //
-            // ef core
+            //builder.AddRegisterDbContext(true);
+            ////
+            //// ef core
 
-            builder.AddGeneric(DataConnectionHelper.ConnectionStringNames.Warehouse, DataConnectionHelper.ParameterName);
+            //builder.AddGeneric(DataConnectionHelper.ConnectionStringNames.Warehouse, DataConnectionHelper.ParameterName);
 
         }
     }
