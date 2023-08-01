@@ -36,6 +36,7 @@ using Share.BaseCore.CustomConfiguration;
 using Share.BaseCore.Extensions;
 using System.Configuration;
 using System.Reflection;
+using BaseHA.CustomClass;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -69,6 +70,13 @@ services.AddApiCors();
 //    // Global filters will run first
 //    options.AddFilter<CustomFilter>();
 //});
+
+
+//auto fac
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+builder.Host.ConfigureContainer<ContainerBuilder>(
+   builder => builder.RegisterModule(new WareHouseModule()));
+
 
 var app = builder.Build();
 
