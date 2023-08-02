@@ -2,14 +2,17 @@
 @model Unit
 
 
+@{
+    Layout = null;
+}
 
 
 @if (ViewBag.result != null)
 {
     <p>@ViewBag.result</p>
 }
-<div class="form fixed-layout-form" style="margin: 0 250px;">
-    <form id="editForm" asp-action="Edit" class="form-horizontal">
+<div class="form fixed-layout-form" >
+    <form id="editForm1" data-form-type="ajax" class="form-horizontal">
         <div class="form-body">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>

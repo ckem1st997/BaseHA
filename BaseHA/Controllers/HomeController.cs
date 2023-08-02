@@ -84,16 +84,16 @@ namespace BaseHA.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Delete(IEnumerable<string> id)
+        public async Task<IActionResult> Delete(IEnumerable<string> ids)
         {
-            if (id == null)
+            if (ids == null)
                 return Ok(new ResultMessageResponse()
                 {
                     message = "Thất bại !",
                     success = false
                 });
 
-            var model = _generic.GetList(x => id.Contains(x.Id));
+            var model = _generic.GetList(x => ids.Contains(x.Id));
 
 
             _generic.Delete(model);

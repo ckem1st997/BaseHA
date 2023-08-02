@@ -21,6 +21,8 @@ using Share.BaseCore.CustomConfiguration;
 using BaseHA.Controllers;
 using BaseHA.Infrastructure;
 using Serilog;
+using Newtonsoft.Json.Serialization;
+using Share.BaseCore.Filters;
 
 namespace BaseHA.Configuration
 {
@@ -30,6 +32,20 @@ namespace BaseHA.Configuration
         {
             services.AddCustomConfigurationCoreDB<FakeDbContext>(configuration, "", true);
             services.AddMediatR(Assembly.GetExecutingAssembly());
+
+            services.AddControllers(options =>
+            {
+                options.Filters.Add(typeof(HttpGlobalExceptionFilter));
+                options.Filters.Add(typeof(CustomValidationAttribute));
+            })
+              // .AddApplicationPart(typeof(HomeController).Assembly)
+               .AddJsonOptions(options =>
+               {
+                   options.JsonSerializerOptions.WriteIndented = true;
+                   options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+               }).AddNewtonsoftJson(options =>
+                      options.SerializerSettings.ContractResolver =
+                         new DefaultContractResolver());
 
         }
         public static void AddCustomConfigurationCoreDB<TDbContext>(this IServiceCollection services, IConfiguration configuration, string nameConnect, bool isDbMemory) where TDbContext : DbContext

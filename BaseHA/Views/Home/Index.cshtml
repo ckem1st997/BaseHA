@@ -118,7 +118,7 @@
             urlDetails: '@Url.Action("Details")',
             urlCreate: '@Url.Action("Add")',
             urlEdit: '@Url.Action("Edit")',
-            urlDeletes: '@Url.Action("Deletes")',
+            urlDeletes: '@Url.Action("Delete")',
             urlActivates: '@Url.Action("Activates")',
             urlExport: '@Url.Action("ExportOrder")',
             urlImportExcel: '@Url.Action("ImportExcel")',
@@ -178,7 +178,6 @@
             var searchModel = {
                 Keywords: $keywords.val(),
                 Status: $status.val(),
-                //   LanguageId: "1"
             };
             return searchModel;
         };
@@ -189,23 +188,23 @@
 @section Scripts {
     <script>
 
-        // Lấy thẻ <a> bằng cách sử dụng phương thức querySelector()
-        const editLink = document.querySelector('a[data-action="edit"]');
+        //// Lấy thẻ <a> bằng cách sử dụng phương thức querySelector()
+        //const editLink = document.querySelector('a[data-action="edit"]');
 
-        // Thêm sự kiện click cho thẻ <a>
-        editLink.addEventListener('click', function () {
-            // Xử lý khi thẻ <a> được nhấp
-            console.log('Đã nhấp vào Edit');
+        //// Thêm sự kiện click cho thẻ <a>
+        //editLink.addEventListener('click', function () {
+        //    // Xử lý khi thẻ <a> được nhấp
+        //    console.log('Đã nhấp vào Edit');
 
-            var id = grd.api.selectedIds()[0];
-            console.log(id)
-            if (id) {
-                location.href = `${master.urlEdit}/${id}`;
-                //  app.window.form.open({ url: `${master.urlEdit}/${id}`, options: { width: '450px' }, callback: master.actionCallback });
-            } else {
-                notify({ text: 'Notifies.NoItemsSelected', type: 'info' });
-            }
-        });
+        //    var id = grd.api.selectedIds()[0];
+        //    console.log(id)
+        //    if (id) {
+        //        location.href = `${master.urlEdit}/${id}`;
+        //        //  app.window.form.open({ url: `${master.urlEdit}/${id}`, options: { width: '450px' }, callback: master.actionCallback });
+        //    } else {
+        //        notify({ text: 'Notifies.NoItemsSelected', type: 'info' });
+        //    }
+        //});
 
         //// Lấy thẻ <a> bằng cách sử dụng phương thức querySelector()
         //const addLink = document.querySelector('a[data-action="create"]');
@@ -221,46 +220,46 @@
         //});
 
 
-        // Lấy thẻ <a> bằng cách sử dụng phương thức querySelector()
-        const deleteLink = document.querySelector('a[data-action="deletes"]');
+        //// Lấy thẻ <a> bằng cách sử dụng phương thức querySelector()
+        //const deleteLink = document.querySelector('a[data-action="deletes"]');
 
-        // Thêm sự kiện click cho thẻ <a>
-        deleteLink.addEventListener('click', function () {
-            // Xử lý khi thẻ <a> được nhấp
-            console.log('Đã nhấp vào create');
-            // Gửi yêu cầu Ajax
+        //// Thêm sự kiện click cho thẻ <a>
+        //deleteLink.addEventListener('click', function () {
+        //    // Xử lý khi thẻ <a> được nhấp
+        //    console.log('Đã nhấp vào create');
+        //    // Gửi yêu cầu Ajax
 
 
-            var id = grd.api.selectedIds()[0];
-            console.log(id)
-            if (id) {
-                $.ajax({
-                    type: 'POST',
-                    url: `@Url.Action("Delete")/${id}`,
-                    data: id,
-                    success: function (response) {
-                        // Xử lý kết quả thành công
-                        console.log(response);
-                        if (response === 1) {
-                            notify({ text: 'Thành công !', type: 'success' });
-                            // Hàm sẽ được thực thi sau 1000ms
-                            grd.api.resetPage();
-                        }
-                        else
-                            notify({ text: 'Thất bại !', type: 'success' });
+        //var id = grd.api.selectedIds()[0];
+        //console.log(id)
+        //if (id) {
+        //    $.ajax({
+        //        type: 'POST',
+        //        url: `@Url.Action("Delete")/${id}`,
+        //        data: id,
+        //        success: function (response) {
+        //            // Xử lý kết quả thành công
+        //            console.log(response);
+        //            if (response === 1) {
+        //                notify({ text: 'Thành công !', type: 'success' });
+        //                // Hàm sẽ được thực thi sau 1000ms
+        //                grd.api.resetPage();
+        //            }
+        //            else
+        //                notify({ text: 'Thất bại !', type: 'success' });
 
-                    },
-                    error: function (xhr, status, error) {
-                        // Xử lý lỗi
-                        console.log(error);
-                    }
-                });
+        //        },
+        //        error: function (xhr, status, error) {
+        //            // Xử lý lỗi
+        //            console.log(error);
+        //        }
+        //    });
 
-            } else {
-                notify({ text: 'Notifies.NoItemsSelected', type: 'info' });
-            }
+        //} else {
+        //    notify({ text: 'Notifies.NoItemsSelected', type: 'info' });
+        //}
 
-        });
+        //        });
 
         // Methods
         master.details = function () {

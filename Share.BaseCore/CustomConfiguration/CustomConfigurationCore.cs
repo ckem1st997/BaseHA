@@ -115,6 +115,7 @@ namespace Share.BaseCore.CustomConfiguration
                     options.JsonSerializerOptions.WriteIndented = true;
                     //options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
                 }).AddNewtonsoftJson();
+
         }
 
 
