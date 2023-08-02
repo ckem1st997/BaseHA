@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Share.BaseCore.BaseNop
+namespace Share.BaseCore
 {
     public class BaseEntityGeneric<T>
     {

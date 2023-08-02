@@ -38,6 +38,9 @@ using System.Configuration;
 using System.Reflection;
 using BaseHA.CustomClass;
 
+
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -45,6 +48,9 @@ builder.Services.AddControllersWithViews();
 var services = builder.Services;
 var Configuration = builder.Configuration;
 
+
+
+//
 services.AddMediatR(Assembly.GetExecutingAssembly());
 //services.AddCache(Configuration);
 services.AddCustomConfiguration(Configuration);
@@ -74,6 +80,8 @@ builder.Host.ConfigureContainer<ContainerBuilder>(
 
 var app = builder.Build();
 
+//auto fac
+ILifetimeScope AutofacContainer = app.Services.GetAutofacRoot();
 
 
 
@@ -97,5 +105,5 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-
+app.ConfigureRequestPipeline();
 await app.RunAsync();

@@ -47,7 +47,7 @@ namespace Share.BaseCore.Repositories
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _dbSet = _context.Set<T>();
             _query = _dbSet.AsQueryable();
-            _connectionstring = _context.Database.GetConnectionString() ?? throw new ArgumentNullException("GetConnectionString is null !");
+            _connectionstring = _context.Database.IsInMemory() ? "" : _context.Database.GetConnectionString() ?? throw new ArgumentNullException("GetConnectionString is null !");
         }
 
 
@@ -263,12 +263,12 @@ namespace Share.BaseCore.Repositories
         {
             using var connection = new SqlConnection(_connectionstring);
             return await connection.QueryAsync<T1>(sp, parms, commandType: commandType);
-        }     
-        
+        }
+
         public IEnumerable<T1> Query<T1>(string sp, DynamicParameters parms, System.Data.CommandType commandType = System.Data.CommandType.Text)
         {
             using var connection = new SqlConnection(_connectionstring);
-            return  connection.Query<T1>(sp, parms, commandType: commandType);
+            return connection.Query<T1>(sp, parms, commandType: commandType);
         }
 
         public async Task<GridReader> QueryMultipleAsync(string sp, DynamicParameters parms, System.Data.CommandType commandType = System.Data.CommandType.Text)

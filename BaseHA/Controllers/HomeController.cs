@@ -26,7 +26,7 @@ namespace BaseHA.Controllers
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
-            _generic = EngineContext.Current.Resolve<IRepositoryEF<Unit>>(DataConnectionHelper.ConnectionStringNames.Warehouse);
+            _generic = EngineContext.Current.Resolve<IRepositoryEF<Domain.Entity.Unit>>(DataConnectionHelper.ConnectionStringNames.Warehouse);
             //   this.dapper = EngineContext.Current.Resolve<IDapper>(DataConnectionHelper.ConnectionStringNames.Warehouse);
         }
 

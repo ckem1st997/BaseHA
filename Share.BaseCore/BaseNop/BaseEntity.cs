@@ -1,11 +1,12 @@
 ﻿using MediatR;
+using Share.BaseCore.BaseNop;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Share.BaseCore.BaseNop
+namespace Share.BaseCore
 {
     /// <summary>
     /// // dùng IAggregateRoot là vì: giả sở mình có entity Order, trong Order có Address, List<Product>

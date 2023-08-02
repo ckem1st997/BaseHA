@@ -16,6 +16,9 @@ using Share.BaseCore.Extensions;
 
 namespace BaseHA.CustomClass
 {
+    /// <summary>
+    /// app.ConfigureRequestPipeline(); đăng ký
+    /// </summary>
     public class WareHouseModule : Module
     {
         public WareHouseModule()
