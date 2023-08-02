@@ -103,6 +103,33 @@ namespace BaseHA.Controllers
                 message = "Thành công !",
                 success = res > 0
             });
+        }   
+        
+        
+        [HttpPost]
+        public async Task<IActionResult> Activates(IEnumerable<string> ids, bool active)
+        {
+            if (ids == null)
+                return Ok(new ResultMessageResponse()
+                {
+                    message = "Thất bại !",
+                    success = false
+                });
+
+            var model = _generic.GetList(x => ids.Contains(x.Id));
+            var listUpdate = new List<Unit>();
+            foreach (var item in model.ToList())
+            {
+                item.Inactive=active;
+                listUpdate.Add(item);
+            }
+            _generic.Update(listUpdate);
+            var res = await _generic.SaveChangesConfigureAwaitAsync();
+            return Ok(new ResultMessageResponse()
+            {
+                message = "Thành công !",
+                success = res > 0
+            });
         }
 
 

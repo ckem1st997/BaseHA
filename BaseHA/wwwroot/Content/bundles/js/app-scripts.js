@@ -321,8 +321,8 @@
         },
 
         moreLess: function () {
-            var moreText = '<button class="btn btn-mini"><i class="fa fa-plus mini-button-icon"></i>' +'Common.ShowMore'+ '</button>';
-            var lessText = '<button class="btn btn-mini"><i class="fa fa-minus mini-button-icon"></i>' + 'Common.ShowLess'+ '</button>';
+            var moreText = '<button class="btn btn-mini"><i class="fa fa-plus mini-button-icon"></i>' + Res['Common.ShowMore'] + '</button>';
+            var lessText = '<button class="btn btn-mini"><i class="fa fa-minus mini-button-icon"></i>' + Res['Common.ShowLess'] + '</button>';
 
             return this.each(function () {
                 var el = $(this),
@@ -3056,15 +3056,10 @@ app.plugins.fancytree.initCheckAll = function ($ctx) {
 }
 //TODO: XBase Resources
 app.plugins.fancytree.strings = {
-    //loading: window.Res['Common.Loading'],
-    //loadError: window.Res['Common.LoadError'],
-    //moreData: window.Res['Common.MoreData'],
-    //noData: window.Res['Common.NoData']
-
-    loading:'Loading',
-    loadError:'Common.LoadError',
-    moreData: 'Common.MoreData',
-    noData: 'Common.NoData'
+    loading: window.Res['Common.Loading'],
+    loadError: window.Res['Common.LoadError'],
+    moreData: window.Res['Common.MoreData'],
+    noData: window.Res['Common.NoData']
 };
 app.plugins.fancytree.handlers.selectOnCheckAll = function (event, data) {
     var tree = data.tree;
@@ -3098,7 +3093,7 @@ app.plugins.iconpicker.init = function ($element, icon) {
         placement: 'right',
         rows: 5,
         search: true,
-        searchText: 'Common.Search',
+        searchText: window.Res['Common.Search'],
         selectedClass: 'btn-primary',
         unselectedClass: ''
     });
@@ -3220,7 +3215,7 @@ app.plugins.tab.initAjaxTabs = function ($ctx) {
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 //pane.html('<div class="text-error">Error while loading resource: ' + thrownError + '</div>');
-                pane.html('<div class="text-error">{0}: {1}</div>'.format('Common.Error', thrownError));
+                pane.html('<div class="text-error">{0}: {1}</div>'.format(window.Res['Common.Error'], thrownError));
                 app.plugins.getFunction(tabbable.data("ajax-onfailure"), ["tab", "pane", "xhr", "ajaxOptions", "thrownError"]).apply(this, [newTab, pane, xhr, ajaxOptions, thrownError]);
             },
             complete: function (xhr, status) {
@@ -3387,7 +3382,7 @@ app.window.form.initWindow = function ($winForm) {
     $form.find('.form-actions button[data-dismiss="modal"]').off('click').on('click', function (e) {
         if (confirmClose) {
             app.window.confirm.open({
-                title: 'Common.Windows.Forms.Close.Confirm.Default.Title', text: 'Common.Windows.Forms.Close.Confirm.DataMightBeChanged',
+                title: window.Res['Common.Windows.Forms.Close.Confirm.Default.Title'], text: window.Res['Common.Windows.Forms.Close.Confirm.DataMightBeChanged'],
                 callback: function () {
                     $winForm.data("kendoWindow").close();
                 }
@@ -3484,7 +3479,7 @@ app.window.form.open = function (options) {
                                 if (confirmClose) {
                                     e.preventDefault();
                                     app.window.confirm.open({
-                                        title: 'Common.Windows.Forms.Close.Confirm.Default.Title', text: 'Common.Windows.Forms.Close.Confirm.DataMightBeChanged',
+                                        title: window.Res['Common.Windows.Forms.Close.Confirm.Default.Title'], text: window.Res['Common.Windows.Forms.Close.Confirm.DataMightBeChanged'],
                                         callback: function () {
                                             $winForm.data("kendoWindow").close();
                                         }
@@ -3584,7 +3579,7 @@ app.window.alert.open = function (options) {
     if (!options.type)
         options.type = 'default';
     if (!options.title)
-        options.title = 'Common.Alert.Default.Title';
+        options.title = window.Res['Common.Alert.Default.Title'];
     if (!options.options)
         options.options = {};
     if (!options.options.width)
@@ -3645,9 +3640,9 @@ app.window.confirm.open = function (options) {
     if (!options.type)
         options.type = 'default';
     if (!options.title)
-        options.title = 'Common.Confirm.Default.Title';
+        options.title = window.Res['Common.Confirm.Default.Title'];
     if (!options.text)
-        options.text = 'Common.Confirm.Default.Content';
+        options.text = window.Res['Common.Confirm.Default.Content'];
     if (!options.options)
         options.options = {};
     if (!options.options.width)
@@ -3727,9 +3722,9 @@ app.window.deletes.open = function (options) {
     if (!options.type)
         options.type = 'default';
     if (!options.title)
-        options.title = 'Common.Deletes.Confirm.Default.Title';
+        options.title = window.Res['Common.Deletes.Confirm.Default.Title'];
     if (!options.text)
-        options.text = 'Common.Deletes.Confirm.Default.Content';
+        options.text = window.Res['Common.Deletes.Confirm.Default.Content'];
     if (!options.options)
         options.options = {};
     if (!options.options.width)

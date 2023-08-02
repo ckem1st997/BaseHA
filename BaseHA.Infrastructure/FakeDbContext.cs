@@ -16,6 +16,6 @@ namespace BaseHA.Infrastructure
         }
 
         public virtual DbSet<Unit> Units { get; set; }
-
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)=> optionsBuilder.LogTo(Console.WriteLine);
     }
 }
