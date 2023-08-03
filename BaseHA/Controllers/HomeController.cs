@@ -22,11 +22,11 @@ namespace BaseHA.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IRepositoryEF<Unit> _generic;
+        private readonly IRepositoryEF<WareHouse> _generic;
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
-            _generic = EngineContext.Current.Resolve<IRepositoryEF<Domain.Entity.Unit>>(DataConnectionHelper.ConnectionStringNames.Warehouse);
+            _generic = EngineContext.Current.Resolve<IRepositoryEF<WareHouse>>(DataConnectionHelper.ConnectionStringNames.Warehouse);
             //   this.dapper = EngineContext.Current.Resolve<IDapper>(DataConnectionHelper.ConnectionStringNames.Warehouse);
         }
 
@@ -39,26 +39,7 @@ namespace BaseHA.Controllers
             return randomName;
         }
         public async Task<IActionResult> Index()
-        {
-            var list = new List<Unit>();
-            var l = from i in _generic.Table select i;
-            if (l.Count() < 1)
-            {
-                for (int i = 0; i < 100; i++)
-                {
-                    list.Add(new Unit()
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        UnitName = GenerateRandomName(10),
-                        Code = GenerateRandomName(10),
-                        Inactive = i % 2 == 0,
-                    });
-
-                }
-                await _generic.AddAsync(list);
-            }
-            await _generic.SaveChangesConfigureAwaitAsync();
-
+        {           
             return View();
         }
 
@@ -75,7 +56,7 @@ namespace BaseHA.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(Unit unit)
+        public async Task<IActionResult> Add(WareHouse unit)
         {
             await _generic.AddAsync(unit);
             var res = await _generic.SaveChangesConfigureAwaitAsync();
@@ -121,7 +102,7 @@ namespace BaseHA.Controllers
                 });
 
             var model = _generic.GetList(x => ids.Contains(x.Id));
-            var listUpdate = new List<Unit>();
+            var listUpdate = new List<WareHouse>();
             foreach (var item in model.ToList())
             {
                 item.Inactive=active;
@@ -139,13 +120,13 @@ namespace BaseHA.Controllers
 
         public async Task<IActionResult> Add()
         {
-            return View(new Unit());
+            return View(new WareHouse());
         }
 
 
 
         [HttpPost]
-        public async Task<IActionResult> Edit(Unit unit)
+        public async Task<IActionResult> Edit(WareHouse unit)
         {
             var model = await _generic.GetFirstAsync(unit.Id);
             if (model == null)
@@ -189,7 +170,7 @@ namespace BaseHA.Controllers
 
             var l = from i in _generic.Table select i;
             if (!string.IsNullOrEmpty(searchModel.Keywords))
-                l = from aa in l where aa.UnitName.Contains(searchModel.Keywords) || aa.Code.Contains(searchModel.Keywords) select aa;
+                l = from aa in l where aa.Name.Contains(searchModel.Keywords) || aa.Code.Contains(searchModel.Keywords) select aa;
 
             var data = await l.Skip((searchModel.PageIndex - 1) * searchModel.PageSize).Take(searchModel.PageSize).ToListAsync();
 

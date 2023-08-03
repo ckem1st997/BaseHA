@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -29,7 +30,7 @@ namespace Share.BaseCore.CustomConfiguration
 {
     public static class CustomConfigurationCore
     {
-        public static void AddCustomConfigurationCore<TDbContext, TStartUp>(this IServiceCollection services, IConfiguration configuration, string nameConnect) where TDbContext : DbContext
+        public static void AddCustomConfigurationCore<TDbContext>(this IServiceCollection services, IConfiguration configuration, string nameConnect) where TDbContext : DbContext
         {
             var sqlConnect = configuration.GetConnectionString(nameConnect);
             services.AddDbContextPool<TDbContext>(options =>
@@ -37,17 +38,18 @@ namespace Share.BaseCore.CustomConfiguration
                 options.UseSqlServer(sqlConnect,
                     sqlServerOptionsAction: sqlOptions =>
                     {
-                        sqlOptions.MigrationsAssembly(typeof(TStartUp).GetTypeInfo().Assembly.GetName().Name);
+                        sqlOptions.MigrationsAssembly("sql MigrationsAssembly");
                         // sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
                     });
-                options.LogTo(Log.Information, Microsoft.Extensions.Logging.LogLevel.Information, Microsoft.EntityFrameworkCore.Diagnostics.DbContextLoggerOptions.UtcTime).EnableSensitiveDataLogging();
-                //  options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-            }
-            );
+                options.LogTo(Log.Information, Microsoft.Extensions.Logging.LogLevel.Information, Microsoft.EntityFrameworkCore.Diagnostics.DbContextLoggerOptions.UtcTime).ConfigureWarnings(
+                           b => b.Log(
+                               (RelationalEventId.ConnectionOpened, Microsoft.Extensions.Logging.LogLevel.Information),
+                               (RelationalEventId.ConnectionClosed, Microsoft.Extensions.Logging.LogLevel.Information))).EnableSensitiveDataLogging().EnableDetailedErrors().EnableThreadSafetyChecks().EnableServiceProviderCaching();
+                options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+            });                //  options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
 
             // Register dynamic dbContext
             services.AddScoped<DbContext, TDbContext>();
-
         }
 
         public static void AddGeneric(this IServiceCollection services)

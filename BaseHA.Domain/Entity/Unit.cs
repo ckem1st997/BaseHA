@@ -1,27 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using Share.BaseCore;
-using Share.BaseCore.BaseNop;
 #nullable disable
 
 namespace BaseHA.Domain.Entity
 {
-    public class Unit : BaseEntity
+    public partial class Unit : BaseEntity
     {
         public Unit()
         {
-            Number = 0;
-            Id = Guid.NewGuid().ToString();
+            BeginningWareHouses = new HashSet<BeginningWareHouse>();
+            InwardDetails = new HashSet<InwardDetail>();
+            OutwardDetails = new HashSet<OutwardDetail>();
+
         }
 
-        [Required(ErrorMessage ="Bạn chưa nhập tên")]
         public string UnitName { get; set; }
-
-        [Required(ErrorMessage = "Bạn chưa nhập mã")]
-        public string Code { get; set; }
-        public int Number { get; set; }
         public bool Inactive { get; set; }
+
+        public virtual ICollection<BeginningWareHouse> BeginningWareHouses { get; set; }
+        public virtual ICollection<InwardDetail> InwardDetails { get; set; }
+        public virtual ICollection<OutwardDetail> OutwardDetails { get; set; }
 
     }
 }

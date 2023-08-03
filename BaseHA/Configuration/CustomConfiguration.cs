@@ -31,7 +31,7 @@ namespace BaseHA.Configuration
     {
         public static void AddCustomConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddCustomConfigurationCoreDB<FakeDbContext>(configuration, "", true);
+            services.AddCustomConfigurationCore<FakeDbContext>(configuration, "WarehouseManagementContext");
             services.AddMediatR(Assembly.GetExecutingAssembly());
 
             services.AddControllers(options =>
@@ -39,7 +39,6 @@ namespace BaseHA.Configuration
                 options.Filters.Add(typeof(HttpGlobalExceptionFilter));
                 options.Filters.Add(typeof(CustomValidationAttribute));
             })
-              // .AddApplicationPart(typeof(HomeController).Assembly)
                .AddJsonOptions(options =>
                {
                    options.JsonSerializerOptions.WriteIndented = true;
@@ -49,23 +48,6 @@ namespace BaseHA.Configuration
                          new DefaultContractResolver());
 
         }
-        public static void AddCustomConfigurationCoreDB<TDbContext>(this IServiceCollection services, IConfiguration configuration, string nameConnect, bool isDbMemory) where TDbContext : DbContext
-        {
 
-            var sqlConnect = configuration.GetConnectionString(nameConnect);
-            services.AddDbContextPool<TDbContext>(options =>
-            {
-                options.UseInMemoryDatabase(typeof(TDbContext).ToString());
-                options.LogTo(Log.Information, Microsoft.Extensions.Logging.LogLevel.Information, Microsoft.EntityFrameworkCore.Diagnostics.DbContextLoggerOptions.UtcTime).ConfigureWarnings(
-            b => b.Log(
-                (RelationalEventId.ConnectionOpened, LogLevel.Information),
-                (RelationalEventId.ConnectionClosed, LogLevel.Information))).EnableSensitiveDataLogging().EnableDetailedErrors().EnableThreadSafetyChecks().EnableServiceProviderCaching();
-                options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-            });
-
-            services.AddScoped<DbContext, TDbContext>();
-
-
-        }
     }
 }
