@@ -59,7 +59,7 @@ namespace BaseHA.Configuration
                 options.LogTo(Log.Information, Microsoft.Extensions.Logging.LogLevel.Information, Microsoft.EntityFrameworkCore.Diagnostics.DbContextLoggerOptions.UtcTime).ConfigureWarnings(
             b => b.Log(
                 (RelationalEventId.ConnectionOpened, LogLevel.Information),
-                (RelationalEventId.ConnectionClosed, LogLevel.Information))).EnableSensitiveDataLogging().EnableDetailedErrors().EnableThreadSafetyChecks();
+                (RelationalEventId.ConnectionClosed, LogLevel.Information))).EnableSensitiveDataLogging().EnableDetailedErrors().EnableThreadSafetyChecks().EnableServiceProviderCaching();
                 options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             });
 

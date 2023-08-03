@@ -12,23 +12,23 @@
             <a data-action="create" href="javascript:void(0)" class="btn blue btn-sm"><i class="flaticon2-plus"></i> Add</a>
             <a data-action="edit" href="javascript:void(0)" class="btn yellow btn-sm"><i class="flaticon2-pen"></i> Edit</a>
             <a data-action="deletes" href="javascript:void(0)" class="btn red btn-sm"><i class="flaticon-delete"></i> Deletes</a>
-            @* <button type="button" class="btn purple btn-sm dropdown-toggle" data-toggle="dropdown">
-            <i class="flaticon-more"></i> @T("Common.OtherActions") <i class="fa fa-angle-down"></i>
-            </button>*@
-            @* <ul class="dropdown-menu pull-right" role="menu">
-            <li>
-            <a data-action="activate" href="javascript: void(0);"><i class="fa fa-check font-blue"></i> @T("Common.Activate")</a>
-            </li>
-            <li>
-            <a data-action="deactivate" href="javascript: void(0);"><i class="fa fa-lock font-yellow"></i> @T("Common.Deactivate")</a>
-            </li>
-            <li>
-            <a data-action="export" href="javascript:void(0)"><i class="fa fa-print"></i> @T("Common.ExportData")</a>
-            </li>
-            <li>
-            <a data-action="importexcel" href="javascript:void(0)"><i class="fa fa-file-excel-o"></i> @T("Common.ImportExcel")</a>
-            </li>
-            </ul>*@
+            <button type="button" class="btn purple btn-sm dropdown-toggle" data-toggle="dropdown">
+                <i class="flaticon-more"></i> T("Common.OtherActions") <i class="fa fa-angle-down"></i>
+            </button>
+            <ul class="dropdown-menu pull-right" role="menu">
+                <li>
+                    <a data-action="activate" href="javascript: void(0);"><i class="fa fa-check font-blue"></i> ("Common.Activate")</a>
+                </li>
+                <li>
+                    <a data-action="deactivate" href="javascript: void(0);"><i class="fa fa-lock font-yellow"></i> ("Common.Deactivate")</a>
+                </li>
+                <li>
+                    <a data-action="export" href="javascript:void(0)"><i class="fa fa-print"></i> T("Common.ExportData")</a>
+                </li>
+                <li>
+                    <a data-action="importexcel" href="javascript:void(0)"><i class="fa fa-file-excel-o"></i> T("Common.ImportExcel")</a>
+                </li>
+            </ul>
         </div>
     </div>
 </div>
@@ -187,80 +187,6 @@
 
 @section Scripts {
     <script>
-
-        //// Lấy thẻ <a> bằng cách sử dụng phương thức querySelector()
-        //const editLink = document.querySelector('a[data-action="edit"]');
-
-        //// Thêm sự kiện click cho thẻ <a>
-        //editLink.addEventListener('click', function () {
-        //    // Xử lý khi thẻ <a> được nhấp
-        //    console.log('Đã nhấp vào Edit');
-
-        //    var id = grd.api.selectedIds()[0];
-        //    console.log(id)
-        //    if (id) {
-        //        location.href = `${master.urlEdit}/${id}`;
-        //        //  app.window.form.open({ url: `${master.urlEdit}/${id}`, options: { width: '450px' }, callback: master.actionCallback });
-        //    } else {
-        //        notify({ text: 'Notifies.NoItemsSelected', type: 'info' });
-        //    }
-        //});
-
-        //// Lấy thẻ <a> bằng cách sử dụng phương thức querySelector()
-        //const addLink = document.querySelector('a[data-action="create"]');
-
-        //// Thêm sự kiện click cho thẻ <a>
-        //addLink.addEventListener('click', function () {
-        //    // Xử lý khi thẻ <a> được nhấp
-        //    console.log('Đã nhấp vào create');
-        //    app.window.form.open({ url: master.urlCreate, options: { width: '450px' }, callback: master.actionCallback });
-
-        //   // location.href = `${master.urlCreate}`;
-
-        //});
-
-
-        //// Lấy thẻ <a> bằng cách sử dụng phương thức querySelector()
-        //const deleteLink = document.querySelector('a[data-action="deletes"]');
-
-        //// Thêm sự kiện click cho thẻ <a>
-        //deleteLink.addEventListener('click', function () {
-        //    // Xử lý khi thẻ <a> được nhấp
-        //    console.log('Đã nhấp vào create');
-        //    // Gửi yêu cầu Ajax
-
-
-        //var id = grd.api.selectedIds()[0];
-        //console.log(id)
-        //if (id) {
-        //    $.ajax({
-        //        type: 'POST',
-        //        url: `@Url.Action("Delete")/${id}`,
-        //        data: id,
-        //        success: function (response) {
-        //            // Xử lý kết quả thành công
-        //            console.log(response);
-        //            if (response === 1) {
-        //                notify({ text: 'Thành công !', type: 'success' });
-        //                // Hàm sẽ được thực thi sau 1000ms
-        //                grd.api.resetPage();
-        //            }
-        //            else
-        //                notify({ text: 'Thất bại !', type: 'success' });
-
-        //        },
-        //        error: function (xhr, status, error) {
-        //            // Xử lý lỗi
-        //            console.log(error);
-        //        }
-        //    });
-
-        //} else {
-        //    notify({ text: 'Notifies.NoItemsSelected', type: 'info' });
-        //}
-
-        //        });
-
         // Methods
         master.details = function () {
             var id = grd.api.selectedIds()[0];
@@ -272,7 +198,6 @@
         };
         master.importExcel = function () {
             app.window.form.open({ url: `${master.urlImportExcel}`, options: { width: '620px' } });
-            console.log();
         };
         master.create = function () {
             app.window.form.open({ url: master.urlCreate, options: { width: '550px' }, callback: master.actionCallback });
@@ -361,6 +286,10 @@
         };
         toolbar.actions.init = function () {
             var $toolbar = toolbar.$el;
+            $toolbar.find('a[data-action="edit"]').click(function (e) {
+                master.edit();
+            });
+
             $toolbar.find('a[data-action="export"]').click(function (e) {
                 master.export();
             });
@@ -379,9 +308,9 @@
             grd.actions.init();
         };
         grd.actions.init = function () {
-            // grd.api.initDblClick(master.details);
-            // grd.api.initEdit(master.edit);
-            // grd.api.initActivate(master.activates);
+            grd.api.initDblClick(master.details);
+            grd.api.initEdit(master.edit);
+            grd.api.initActivate(master.activates);
         };
         mnu.init = function () {
             mnu.$el = $(mnu.el);

@@ -68,7 +68,11 @@ namespace BaseHA.Controllers
             return View(res);
         }
 
-
+        public async Task<IActionResult> Details(string id)
+        {
+            var res = await _generic.GetFirstAsyncAsNoTracking(id);
+            return View(res);
+        }
 
         [HttpPost]
         public async Task<IActionResult> Add(Unit unit)
