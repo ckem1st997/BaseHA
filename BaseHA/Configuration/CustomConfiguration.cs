@@ -23,6 +23,7 @@ using BaseHA.Infrastructure;
 using Serilog;
 using Newtonsoft.Json.Serialization;
 using Share.BaseCore.Filters;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace BaseHA.Configuration
 {
@@ -55,7 +56,10 @@ namespace BaseHA.Configuration
             services.AddDbContextPool<TDbContext>(options =>
             {
                 options.UseInMemoryDatabase(typeof(TDbContext).ToString());
-                options.LogTo(Log.Information, Microsoft.Extensions.Logging.LogLevel.Information, Microsoft.EntityFrameworkCore.Diagnostics.DbContextLoggerOptions.UtcTime).EnableSensitiveDataLogging();
+                options.LogTo(Log.Information, Microsoft.Extensions.Logging.LogLevel.Information, Microsoft.EntityFrameworkCore.Diagnostics.DbContextLoggerOptions.UtcTime).ConfigureWarnings(
+            b => b.Log(
+                (RelationalEventId.ConnectionOpened, LogLevel.Information),
+                (RelationalEventId.ConnectionClosed, LogLevel.Information))).EnableSensitiveDataLogging().EnableDetailedErrors().EnableThreadSafetyChecks();
                 options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             });
 

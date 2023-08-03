@@ -16,6 +16,7 @@ using Microsoft.Data.SqlClient;
 using StackExchange.Redis;
 using static Dapper.SqlMapper;
 using Share.BaseCore.BaseNop;
+using Share.BaseCore.DiagnosticListener;
 
 namespace Share.BaseCore.Repositories
 {
@@ -44,6 +45,7 @@ namespace Share.BaseCore.Repositories
 
         public RepositoryEF(DbContext context)
         {
+           // System.Diagnostics.DiagnosticListener.AllListeners.Subscribe(new DiagnosticObserver());
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _dbSet = _context.Set<T>();
             _query = _dbSet.AsQueryable();
