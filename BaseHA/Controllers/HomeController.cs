@@ -81,7 +81,7 @@ namespace BaseHA.Controllers
             var model = _generic.GetList(x => ids.Contains(x.Id));
 
 
-            _generic.Delete(model);
+            _generic.Delete(model.ToList());
             var res = await _generic.SaveChangesConfigureAwaitAsync();
             return Ok(new ResultMessageResponse()
             {

@@ -203,7 +203,7 @@ namespace Share.BaseCore.Repositories
             IEnumerable<T> query = _dbSet;
             if (filter != null)
                 query = query.Where(filter);
-            return query;
+            return query.ToList();
         }
 
         public IQueryable<T> GetBy(Expression<Func<T, bool>> predicate)
