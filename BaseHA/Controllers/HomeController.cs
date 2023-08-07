@@ -1,6 +1,9 @@
-﻿using BaseHA.Domain.Entity;
+﻿using AutoMapper;
+using BaseHA.Application.ModelDto;
+using BaseHA.Application.Serivce;
+using BaseHA.Domain.Entity;
 using BaseHA.Models;
-using BaseHA.Serivce;
+using BaseHA.Models.SearchModel;
 using Kendo.Mvc.UI;
 using MediatR;
 using Microsoft.AspNetCore.Http.Extensions;
@@ -26,10 +29,13 @@ namespace BaseHA.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IWareHouseService _generic;
-        public HomeController(ILogger<HomeController> logger, IWareHouseService generic)
+        private readonly IMapper _mapper;
+
+        public HomeController(ILogger<HomeController> logger, IWareHouseService generic, IMapper mapper)
         {
             _logger = logger;
             _generic = generic;
+            _mapper = mapper;
         }
 
         private static string GenerateRandomName(int length)
@@ -48,19 +54,22 @@ namespace BaseHA.Controllers
         public async Task<IActionResult> Edit(string id)
         {
             var res = await _generic.GetByIdAsync(id);
-            return View(res);
+            var entity = _mapper.Map<WareHouseCommands>(res);
+            return View(entity);
         }
 
         public async Task<IActionResult> Details(string id)
         {
             var res = await _generic.GetByIdAsync($"{id}");
-            return View(res);
+            var entity = _mapper.Map<WareHouseCommands>(res);
+            return View(entity);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(WareHouse unit)
+        public async Task<IActionResult> Add(WareHouseCommands wareHouse)
         {
-            var res = await _generic.InsertAsync(unit);
+            var entity=_mapper.Map<WareHouse>(wareHouse);
+            var res = await _generic.InsertAsync(entity);
             return Ok(new ResultMessageResponse()
             {
                 message = res ? "Thành công !" : "Thất bại !",
@@ -108,13 +117,13 @@ namespace BaseHA.Controllers
 
         public async Task<IActionResult> Add()
         {
-            return View(new WareHouse());
+            return View(new WareHouseCommands());
         }
 
 
 
         [HttpPost]
-        public async Task<IActionResult> Edit(WareHouse unit)
+        public async Task<IActionResult> Edit(WareHouseCommands unit)
         {
             var model = await _generic.GetByIdAsync(unit.Id);
             if (model == null)
@@ -123,7 +132,8 @@ namespace BaseHA.Controllers
                     message = "Không tồn tại bản ghi !",
                     success = false
                 });
-            var res = await _generic.UpdateAsync(unit);
+            var entity = _mapper.Map<WareHouse>(model);
+            var res = await _generic.UpdateAsync(entity);
             return Ok(new ResultMessageResponse()
             {
                 message = res ? "Thành công !" : "Thất bại !",

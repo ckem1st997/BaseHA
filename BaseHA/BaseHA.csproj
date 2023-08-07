@@ -9,14 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Views\Shared\Admin\_HLayout.txt" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Views\Shared\Admin\_HLayout.txt" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="Views\Shared\EditorTemplates\AvatarUpload.cshtml" />
     <None Include="Views\Shared\EditorTemplates\Boolean.cshtml" />
     <None Include="Views\Shared\EditorTemplates\CkEditor.cshtml" />
@@ -35,6 +27,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="11.6.0" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.6.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.18" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.18">
       <PrivateAssets>all</PrivateAssets>

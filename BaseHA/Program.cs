@@ -1,4 +1,3 @@
-using BaseHA.Configuration;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Share.BaseCore.Kafka;
@@ -35,10 +34,9 @@ using Share.BaseCore.CustomConfiguration;
 using Share.BaseCore.Extensions;
 using System.Configuration;
 using System.Reflection;
-using BaseHA.CustomClass;
-
-
-
+using BaseHA.Application.Configuration;
+using BaseHA.Application.CustomClass;
+using BaseHA.Application.AutoMapper.ConfigureServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,8 +44,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 var services = builder.Services;
 var Configuration = builder.Configuration;
-
-
+//
+services.AddMapper();
+services.AddMvc();
 //
 services.AddCustomDI();
 //

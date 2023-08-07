@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 
-namespace BaseHA.Models
+namespace BaseHA.Models.SearchModel
 {
     public enum ActiveStatus
     {
@@ -33,7 +33,7 @@ namespace BaseHA.Models
         {
             GridPageSize = 15;
             GridButtonCount = 5;
-            GridPageSizeOptions = new string[5] { "15","50", "100", "200", "500" };
+            GridPageSizeOptions = new string[5] { "15", "50", "100", "200", "500" };
             RichEditorFlavor = "RichEditor";
         }
     }

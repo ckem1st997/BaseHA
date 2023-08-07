@@ -1,4 +1,4 @@
-﻿namespace BaseHA.Models
+﻿namespace BaseHA.Models.SearchModel
 {
     public class BaseSearchModel
     {

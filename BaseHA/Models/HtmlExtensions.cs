@@ -11,6 +11,7 @@ using System.Text.Encodings.Web;
 using System.Text;
 using System.Web;
 using Kendo.Mvc.UI;
+using BaseHA.Models.SearchModel;
 
 namespace BaseHA.Models
 {

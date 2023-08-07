@@ -1,5 +1,5 @@
 ﻿using BaseHA.Domain.Entity;
-using BaseHA.Models;
+using BaseHA.Models.SearchModel;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Diagnostics.Tracing.Parsers.Kernel;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +10,7 @@ using Share.BaseCore.Extensions;
 using Share.BaseCore.IRepositories;
 using System.Threading.Tasks;
 
-namespace BaseHA.Serivce
+namespace BaseHA.Application.Serivce
 {
     public interface IWareHouseService
     {

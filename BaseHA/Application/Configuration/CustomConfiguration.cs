@@ -22,9 +22,9 @@ using Newtonsoft.Json.Serialization;
 using Share.BaseCore.Filters;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using BaseHA.Domain.ContextSub;
-using BaseHA.Serivce;
+using BaseHA.Application.Serivce;
 
-namespace BaseHA.Configuration
+namespace BaseHA.Application.Configuration
 {
     public static class CustomConfiguration
     {

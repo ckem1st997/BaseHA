@@ -1,10 +1,10 @@
-﻿namespace BaseHA.Models
+﻿namespace BaseHA.Models.SearchModel
 {
     public class WareHouseSearchModel : BaseSearchModel
     {
         public WareHouseSearchModel()
         {
-            this.Keywords = "";
+            Keywords = "";
         }
 
         public ActiveStatus ActiveStatus { get; set; }

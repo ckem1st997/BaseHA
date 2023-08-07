@@ -13,7 +13,7 @@ using Share.BaseCore.Base;
 using Share.BaseCore.Extensions;
 using BaseHA.Domain.ContextSub;
 
-namespace BaseHA.CustomClass
+namespace BaseHA.Application.CustomClass
 {
     /// <summary>
     /// app.ConfigureRequestPipeline(); đăng ký
@@ -30,7 +30,7 @@ namespace BaseHA.CustomClass
             builder.RegisterType<BaseEngine>().As<IEngine>().SingleInstance();
             //
             builder.AddDbContext<WarehouseManagementContext>(DataConnectionHelper.ConnectionStringNames.Warehouse);
-            builder.AddRegisterDbContext(true);           
+            builder.AddRegisterDbContext(true);
             // ef core
             builder.AddGeneric(DataConnectionHelper.ConnectionStringNames.Warehouse, DataConnectionHelper.ParameterName);
 
