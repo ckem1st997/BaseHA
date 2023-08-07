@@ -1,4 +1,4 @@
-﻿namespace Share.BaseCore.BaseNop
+﻿namespace Share.BaseCore.Base
 {
     /// <summary>
     /// A statically compiled "singleton" used to store objects throughout the 

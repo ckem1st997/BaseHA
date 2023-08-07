@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Share.BaseCore.BaseNop;
+using Share.BaseCore.Base;
 
 namespace Share.BaseCore.Authozire
 {

@@ -6,13 +6,12 @@ using Microsoft.EntityFrameworkCore;
 using Share.BaseCore.Behaviors;
 using Share.BaseCore.Repositories;
 using System;
-using BaseHA.Infrastructure;
 using Nest;
 using Share.BaseCore.IRepositories;
 using Share.BaseCore.CustomConfiguration;
-using Share.BaseCore.BaseNop;
+using Share.BaseCore.Base;
 using Share.BaseCore.Extensions;
-
+using BaseHA.Domain.ContextSub;
 
 namespace BaseHA.CustomClass
 {
@@ -31,7 +30,7 @@ namespace BaseHA.CustomClass
             builder.RegisterType<BaseEngine>().As<IEngine>().SingleInstance();
             //
 
-            builder.AddDbContext<FakeDbContext>(DataConnectionHelper.ConnectionStringNames.Warehouse);
+            builder.AddDbContext<WarehouseManagementContext>(DataConnectionHelper.ConnectionStringNames.Warehouse);
 
 
             builder.AddRegisterDbContext(true);

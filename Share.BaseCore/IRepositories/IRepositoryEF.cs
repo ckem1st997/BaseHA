@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
 using static Dapper.SqlMapper;
-using Share.BaseCore.BaseNop;
+using Share.BaseCore.Base;
 
 namespace Share.BaseCore.IRepositories
 {
@@ -22,7 +22,7 @@ namespace Share.BaseCore.IRepositories
         DbConnection GetDbconnection();
         Task<T1> QueryFirstOrDefaultAsync<T1>(string sp, DynamicParameters parms = null, CommandType commandType = CommandType.Text);
         T1 QueryFirst<T1>(string sp, DynamicParameters parm = null, CommandType commandType = CommandType.Text);
-        Task<IEnumerable<T1>> QueryAsync<T1>(string sp, DynamicParameters parms=null, CommandType commandType = CommandType.Text);
+        Task<IEnumerable<T1>> QueryAsync<T1>(string sp, DynamicParameters parms = null, CommandType commandType = CommandType.Text);
         IEnumerable<T1> Query<T1>(string sp, DynamicParameters parms = null, CommandType commandType = CommandType.Text);
         Task<GridReader> QueryMultipleAsync(string sp, DynamicParameters parms = null, CommandType commandType = CommandType.Text);
         GridReader QueryMultiple(string sp, DynamicParameters parms = null, CommandType commandType = CommandType.Text);
@@ -35,40 +35,31 @@ namespace Share.BaseCore.IRepositories
     /// Nếu chạy bất đồng bộ thì Dapper nhanh hơn GetQueryable và Table nhanh hơn 8 lần
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public partial interface IRepositoryEF<T>: IDapperEF where T : BaseEntity
+    public partial interface IRepositoryEF<T> : IDapperEF where T : class
     {
+        //   bool HasIdProperty();
         public DbContext UnitOfWork { get; }
         /// <summary>
         /// không tạo truy vấn lưu mà chỉ tạo khi cần thiết nhanh hơn Table
         /// </summary>
-        IQueryable<T> GetQueryable(bool tracking=false);
+        IQueryable<T> GetQueryable(bool tracking = false);
         IQueryable<T> Table { get; }
-        public IQueryable<T> GetBy(Expression<Func<T, bool>> predicate);
-        public Task<IQueryable<T>> GetByAsync(Expression<Func<T, bool>> predicate);
-        IEnumerable<T> GetList(Func<T, bool> filter = null);
-        Task<T> GetFirstAsync(string id, CancellationToken cancellationToken = default(CancellationToken));
-        Task<T> GetFirstAsyncAsNoTracking(string id, CancellationToken cancellationToken = default(CancellationToken));
+        public IQueryable<T> Where(Expression<Func<T, bool>> predicate);
+        public Task<IQueryable<T>> WhereAsync(Expression<Func<T, bool>> predicate);
+
+        public IQueryable<T> WhereTracking(Expression<Func<T, bool>> predicate);
+        public Task<IQueryable<T>> WhereTrackingAsync(Expression<Func<T, bool>> predicate);
+
+
+        IEnumerable<T> GetList(Func<T, bool> filter);
         Task<T> AddAsync(T entity, CancellationToken cancellationToken = default(CancellationToken));
-        Task AddAsync(IEnumerable<T> entity, CancellationToken cancellationToken = default(CancellationToken));
-        Task<IEnumerable<T>> ListAllAsync();
-        Task<IEnumerable<T>> ListByListId(IEnumerable<string> ids);
         void Update(T entity);
         void Update(IEnumerable<T> entity);
         public Task<bool> UpdateAsync(T entity, CancellationToken cancellationToken = default(CancellationToken));
 
         void Delete(T entity);
         void Delete(IEnumerable<T> entity);
-        void BulkInsert(IList<T> listEntity);
-        Task BulkInsertAsync(IList<T> listEntity, CancellationToken cancellationToken = default(CancellationToken));
-        void BulkUpdate(IList<T> listEntity);
-        Task BulkUpdateAsync(IList<T> listEntity, CancellationToken cancellationToken = default(CancellationToken));
-        void BulkDelete(IList<T> listEntity);
-        Task<int> BulkDeleteEditOnDeleteAsync(IEnumerable<string> listEntity, CancellationToken cancellationToken = default(CancellationToken));
-
-        Task BulkInsertOrUpdateAsync(IList<T> listEntity, CancellationToken cancellationToken = default(CancellationToken));
-
-
         Task<int> SaveChangesConfigureAwaitAsync(bool configure = false, CancellationToken cancellationToken = default(CancellationToken));
-       
+
     }
 }

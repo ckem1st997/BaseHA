@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
-using Share.BaseCore.BaseNop;
+using Share.BaseCore.Base;
 using Share.BaseCore.Extensions;
 using System;
 using System.Collections.Generic;

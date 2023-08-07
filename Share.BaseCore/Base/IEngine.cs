@@ -4,7 +4,7 @@ using Autofac.Core;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Share.BaseCore.BaseNop
+namespace Share.BaseCore.Base
 {
     /// <summary>
     /// Classes implementing this interface can serve as a portal for the various services composing the Nop engine. 

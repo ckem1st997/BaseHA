@@ -15,13 +15,13 @@ using Confluent.Kafka;
 using Microsoft.Data.SqlClient;
 using StackExchange.Redis;
 using static Dapper.SqlMapper;
-using Share.BaseCore.BaseNop;
+using Share.BaseCore.Base;
 using Share.BaseCore.DiagnosticListener;
+using System.Reflection;
 
 namespace Share.BaseCore.Repositories
 {
-    public class RepositoryEF<T> : IRepositoryEF<T>
-        where T : BaseEntity, new()
+    public class RepositoryEF<T> : IRepositoryEF<T> where T : class
     {
 
         //  _rep = EngineContext.Current.Resolve<IRepositoryEF<Domain.Entity.WareHouse>>(DataConnectionHelper.ConnectionStringNames.Warehouse);
@@ -36,7 +36,14 @@ namespace Share.BaseCore.Repositories
         {
             get { return _context; }
         }
+        //public bool HasIdProperty()
+        //{
+        //    Type type = typeof(T);
+        //    PropertyInfo idProperty = type.GetProperty("Id");
+        //    PropertyInfo idPropertyDelete = type.GetProperty("Ondelete");
 
+        //    return idProperty != null && idPropertyDelete != null;
+        //}
         public IQueryable<T> GetQueryable(bool tracking = false)
         {
             return tracking ? _query : _query.AsNoTracking();
@@ -45,7 +52,9 @@ namespace Share.BaseCore.Repositories
 
         public RepositoryEF(DbContext context)
         {
-           // System.Diagnostics.DiagnosticListener.AllListeners.Subscribe(new DiagnosticObserver());
+            //if (!HasIdProperty())
+            //    throw new BaseException("Entity not BaseEnity");
+            // System.Diagnostics.DiagnosticListener.AllListeners.Subscribe(new DiagnosticObserver());
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _dbSet = _context.Set<T>();
             _query = _dbSet.AsQueryable();
@@ -72,38 +81,11 @@ namespace Share.BaseCore.Repositories
         }
 
 
-        public virtual async Task<T> GetFirstAsync(string id, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-            return await _dbSet.FirstOrDefaultAsync(x => x.Id.Equals(id) && !x.OnDelete);
-        }
-
-        public virtual async Task<T> GetFirstAsyncAsNoTracking(string id, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-
-            return await _dbSet.AsNoTracking().FirstOrDefaultAsync(x => x.Id.Equals(id) && !x.OnDelete);
-        }
-
-        public virtual async Task<IEnumerable<T>> ListAllAsync()
-        {
-            return await _dbSet.Where(x => !string.IsNullOrEmpty(x.Id)).AsNoTracking().ToListAsync();
-        }
-
-        public async Task<IEnumerable<T>> ListByListId(IEnumerable<string> ids)
-        {
-            if (ids == null) throw new ArgumentNullException(nameof(ids));
-            var res = await _dbSet.Where(x => ids.ToList().Contains(x.Id)).ToListAsync();
-            return res;
-        }
-
         public virtual void Update(T entity)
         {
             if (entity is null)
                 throw new BaseException(nameof(entity));
             _dbSet.Update(entity);
-
-
         }
 
         public virtual async Task<bool> UpdateAsync(T entity, CancellationToken cancellationToken = default(CancellationToken))
@@ -140,65 +122,8 @@ namespace Share.BaseCore.Repositories
             }
             return AutoSaveChanges;
         }
-        public void BulkInsert(IList<T> listEntity)
-        {
-            if (listEntity is null)
-                throw new BaseException(nameof(listEntity));
-            _context.BulkInsert(listEntity);
-        }
 
-        public async Task BulkInsertAsync(IList<T> listEntity, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-
-            if (listEntity is null)
-                throw new BaseException(nameof(listEntity));
-            var sb = new StringBuilder();
-            await _context.BulkInsertAsync(listEntity);
-        }
-
-        public void BulkUpdate(IList<T> listEntity)
-        {
-            if (listEntity is null)
-                throw new BaseException(nameof(listEntity));
-            _context.BulkUpdate(listEntity);
-        }
-
-        public async Task BulkUpdateAsync(IList<T> listEntity, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-
-            if (listEntity is null)
-                throw new BaseException(nameof(listEntity));
-            await _context.BulkUpdateAsync(listEntity);
-        }
-
-        public void BulkDelete(IList<T> listEntity)
-        {
-            if (listEntity is null)
-                throw new BaseException(nameof(listEntity));
-            _context.BulkDelete(listEntity);
-        }
-
-        public async Task<int> BulkDeleteEditOnDeleteAsync(IEnumerable<string> listIds, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-
-            if (listIds is null)
-                throw new BaseException(nameof(listIds));
-            return await _dbSet.Where(x => listIds.Contains(x.Id)).BatchUpdateAsync(x => new T { OnDelete = true });
-        }
-
-        public async Task BulkInsertOrUpdateAsync(IList<T> listEntity, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-
-            if (listEntity is null)
-                throw new BaseException(nameof(listEntity));
-            await _context.BulkInsertOrUpdateAsync(listEntity);
-        }
-
-        public IEnumerable<T> GetList(Func<T, bool> filter = null)
+        public IEnumerable<T> GetList(Func<T, bool> filter)
         {
             IEnumerable<T> query = _dbSet;
             if (filter != null)
@@ -206,14 +131,25 @@ namespace Share.BaseCore.Repositories
             return query.ToList();
         }
 
-        public IQueryable<T> GetBy(Expression<Func<T, bool>> predicate)
+        public IQueryable<T> Where(Expression<Func<T, bool>> predicate)
         {
             return _query.AsNoTracking().Where(predicate);
         }
 
-        public async Task<IQueryable<T>> GetByAsync(Expression<Func<T, bool>> predicate)
+        public async Task<IQueryable<T>> WhereAsync(Expression<Func<T, bool>> predicate)
         {
             return await Task.FromResult(_query.AsNoTracking().Where(predicate));
+        }
+
+
+        public IQueryable<T> WhereTracking(Expression<Func<T, bool>> predicate)
+        {
+            return _query.Where(predicate);
+        }
+
+        public async Task<IQueryable<T>> WhereTrackingAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await Task.FromResult(_query.Where(predicate));
         }
 
 
@@ -292,29 +228,7 @@ namespace Share.BaseCore.Repositories
         {
             GC.SuppressFinalize(this);
         }
+
     }
-    //    try {
-    //    context.Add(myNewEntity);
-    //   var result = context.SaveChanges();
-    //    if(result==0){
-    //       dbTransaction.Rollback();
-    //        ... return  error
-    //}
-    //otherEntity.RefId = myNewEntity.Id;
-    //context.Update(otherEntity);
-    //// some other inserts and updates
-    //result = context.SaveChanges();
-    //if (result == 0)
-    //{
-    //    dbTransaction.Rollback();
-    //    ... return error
-    //     }
-    //dbTransaction.Commit();
-    //}
-    //catch
-    //{
-    //    dbTransaction.Rollback();
-    //    throw;
-    //}
 
 }

@@ -1,8 +1,8 @@
 ﻿namespace BaseHA.Models
 {
-    public class UnitSearchModel : BaseSearchModel
+    public class WareHouseSearchModel : BaseSearchModel
     {
-        public UnitSearchModel()
+        public WareHouseSearchModel()
         {
             this.Keywords = "";
         }
@@ -12,7 +12,7 @@
     }
 
 
-   
 
-    
+
+
 }

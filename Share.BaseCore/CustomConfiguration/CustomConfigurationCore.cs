@@ -13,7 +13,7 @@ using Microsoft.OpenApi.Models;
 using Nest;
 using Serilog;
 using Share.BaseCore.Authozire;
-using Share.BaseCore.BaseNop;
+using Share.BaseCore.Base;
 using Share.BaseCore.Extensions;
 using Share.BaseCore.Filters;
 using Share.BaseCore.IRepositories;
@@ -45,7 +45,7 @@ namespace Share.BaseCore.CustomConfiguration
                            b => b.Log(
                                (RelationalEventId.ConnectionOpened, Microsoft.Extensions.Logging.LogLevel.Information),
                                (RelationalEventId.ConnectionClosed, Microsoft.Extensions.Logging.LogLevel.Information))).EnableSensitiveDataLogging().EnableDetailedErrors().EnableThreadSafetyChecks().EnableServiceProviderCaching();
-                options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+                // options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             });                //  options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
 
             // Register dynamic dbContext

@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Share.BaseCore.BaseNop
+namespace Share.BaseCore.Base
 {
     /// <summary>
     /// </summary>

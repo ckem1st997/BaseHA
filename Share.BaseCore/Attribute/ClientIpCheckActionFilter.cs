@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 using Share.BaseCore.Authozire;
-using Share.BaseCore.BaseNop;
+using Share.BaseCore.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;

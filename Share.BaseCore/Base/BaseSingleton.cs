@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Share.BaseCore.BaseNop
+namespace Share.BaseCore.Base
 {
     /// <summary>
     /// Provides access to all "singletons" stored by <see cref="Singleton{T}"/>.

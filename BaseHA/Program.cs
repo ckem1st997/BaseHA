@@ -1,5 +1,4 @@
 using BaseHA.Configuration;
-using BaseHA.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Share.BaseCore.Kafka;
@@ -49,7 +48,8 @@ var services = builder.Services;
 var Configuration = builder.Configuration;
 
 
-
+//
+services.AddCustomDI();
 //
 services.AddMediatR(Assembly.GetExecutingAssembly());
 //services.AddCache(Configuration);

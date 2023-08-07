@@ -45,6 +45,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BaseHA.Domain\BaseHA.Domain.csproj" />
     <ProjectReference Include="..\Share.BaseCore\Share.BaseCore.csproj" />
   </ItemGroup>
 

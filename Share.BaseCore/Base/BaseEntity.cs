@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Share.BaseCore.BaseNop;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +20,12 @@ namespace Share.BaseCore
     // thay vì entity cha và các entity con xử lý riêng biệt
     /// </summary>
     public class BaseEntity : BaseEntityGeneric<string>
+    {
+        public bool OnDelete { get; set; }
+    }
+
+
+    public interface IBaseEntity : IBaseEntityGeneric<string>
     {
         public bool OnDelete { get; set; }
     }

@@ -1,4 +1,4 @@
-using Share.BaseCore.BaseNop;
+using Share.BaseCore.Base;
 using Share.BaseCore.IRepositories;
 using System;
 
@@ -22,7 +22,7 @@ namespace Share.BaseCore.Extensions
         }
 
 
-        public static IRepositoryEF<T> ResolveRepository<T>(string ConnectionStringNames) where T : BaseEntity
+        public static IRepositoryEF<T> ResolveRepository<T>(string ConnectionStringNames) where T : class, IBaseEntity
         {
             return EngineContext.Current.Resolve<IRepositoryEF<T>>(ConnectionStringNames);
         }

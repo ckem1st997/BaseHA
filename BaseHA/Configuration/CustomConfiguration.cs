@@ -13,17 +13,16 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
-
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-
 using Share.BaseCore.CustomConfiguration;
 using BaseHA.Controllers;
-using BaseHA.Infrastructure;
 using Serilog;
 using Newtonsoft.Json.Serialization;
 using Share.BaseCore.Filters;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using BaseHA.Domain.ContextSub;
+using BaseHA.Serivce;
 
 namespace BaseHA.Configuration
 {
@@ -31,7 +30,7 @@ namespace BaseHA.Configuration
     {
         public static void AddCustomConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddCustomConfigurationCore<FakeDbContext>(configuration, "WarehouseManagementContext");
+            services.AddCustomConfigurationCore<WarehouseManagementContext>(configuration, "WarehouseManagementContext");
             services.AddMediatR(Assembly.GetExecutingAssembly());
 
             services.AddControllers(options =>
@@ -49,5 +48,10 @@ namespace BaseHA.Configuration
 
         }
 
+
+        public static void AddCustomDI(this IServiceCollection services)
+        {
+            services.AddScoped<IWareHouseService, WareHouseService>();
+        }
     }
 }

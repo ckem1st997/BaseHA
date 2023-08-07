@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Share.BaseCore.BaseNop
+namespace Share.BaseCore.Base
 {
     public static class MimeTypes
     {

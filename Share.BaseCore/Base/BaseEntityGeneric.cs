@@ -15,4 +15,12 @@ namespace Share.BaseCore
         [Key]
         public T Id { get; set; }
     }
+    public interface IBaseEntityGeneric<T>
+    {
+        /// <summary>
+        /// Gets or sets the entity identifier
+        /// </summary>
+        [Key]
+        public T Id { get; set; }
+    }
 }

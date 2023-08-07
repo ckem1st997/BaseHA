@@ -45,21 +45,31 @@
     <script src="~/Content/bundles/js/admin-declares.js?version=1.0.0.0" type="text/javascript"></script>
 
 </head>
-<body>
-    <div class="container page-content">
-        <main role="main" class="pb-3">
-            @{
-             //   await Html.RenderPartialAsync("_Notifications");
-            }
-           @* @{
-                await Html.RenderPartialAsync("~/Views/Shared/Admin/_PjaxStartup.cshtml");
-            }*@
+<body class="h-layout page-quick-sidebar-over-content page-content-white page-md page-full-width">
 
-            @{
-                await RenderSectionAsync("HeadScripts", false);
-            }
-            @RenderBody()
-        </main>
+    <!-- Loader -->
+    <div class="page-loader">
+        <svg class="amz-spinner" width="65px" height="65px" viewBox="0 0 66 66">
+            <circle class="path" fill="none" stroke-width="2" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
+        </svg>
+    </div>
+    <!-- Header -->
+    <div class="clearfix"> </div>
+
+
+
+    <div class="container page-content">
+        @{
+            //   await Html.RenderPartialAsync("_Notifications");
+        }
+        @* @{
+        await Html.RenderPartialAsync("~/Views/Shared/Admin/_PjaxStartup.cshtml");
+        }*@
+
+        @{
+            await RenderSectionAsync("HeadScripts", false);
+        }
+        @RenderBody()
     </div>
 
     <footer class="border-top footer text-muted">

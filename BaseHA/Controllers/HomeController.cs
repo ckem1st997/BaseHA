@@ -1,18 +1,21 @@
 ﻿using BaseHA.Domain.Entity;
-using BaseHA.Infrastructure;
 using BaseHA.Models;
+using BaseHA.Serivce;
 using Kendo.Mvc.UI;
+using MediatR;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Nest;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Share.BaseCore;
 using Share.BaseCore.Attribute;
-using Share.BaseCore.BaseNop;
+using Share.BaseCore.Base;
 using Share.BaseCore.Extensions;
 using Share.BaseCore.IRepositories;
 using StackExchange.Redis;
+using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Reflection;
@@ -22,12 +25,11 @@ namespace BaseHA.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IRepositoryEF<WareHouse> _generic;
-        public HomeController(ILogger<HomeController> logger)
+        private readonly IWareHouseService _generic;
+        public HomeController(ILogger<HomeController> logger, IWareHouseService generic)
         {
             _logger = logger;
-            _generic = EngineContext.Current.Resolve<IRepositoryEF<WareHouse>>(DataConnectionHelper.ConnectionStringNames.Warehouse);
-            //   this.dapper = EngineContext.Current.Resolve<IDapper>(DataConnectionHelper.ConnectionStringNames.Warehouse);
+            _generic = generic;
         }
 
         private static string GenerateRandomName(int length)
@@ -39,31 +41,30 @@ namespace BaseHA.Controllers
             return randomName;
         }
         public async Task<IActionResult> Index()
-        {           
+        {
             return View();
         }
 
         public async Task<IActionResult> Edit(string id)
         {
-            var res = await _generic.GetFirstAsyncAsNoTracking(id);
+            var res = await _generic.GetByIdAsync(id);
             return View(res);
         }
 
         public async Task<IActionResult> Details(string id)
         {
-            var res = await _generic.GetFirstAsyncAsNoTracking(id);
+            var res = await _generic.GetByIdAsync($"{id}");
             return View(res);
         }
 
         [HttpPost]
         public async Task<IActionResult> Add(WareHouse unit)
         {
-            await _generic.AddAsync(unit);
-            var res = await _generic.SaveChangesConfigureAwaitAsync();
+            var res = await _generic.InsertAsync(unit);
             return Ok(new ResultMessageResponse()
             {
-                message = "Thành công !",
-                success = res > 0
+                message = res ? "Thành công !" : "Thất bại !",
+                success = res
             });
         }
 
@@ -78,19 +79,15 @@ namespace BaseHA.Controllers
                     success = false
                 });
 
-            var model = _generic.GetList(x => ids.Contains(x.Id));
-
-
-            _generic.Delete(model.ToList());
-            var res = await _generic.SaveChangesConfigureAwaitAsync();
+            var res = await _generic.DeletesAsync(ids);
             return Ok(new ResultMessageResponse()
             {
-                message = "Thành công !",
-                success = res > 0
+                message = res ? "Thành công !" : "Thất bại !",
+                success = res
             });
-        }   
-        
-        
+        }
+
+
         [HttpPost]
         public async Task<IActionResult> Activates(IEnumerable<string> ids, bool active)
         {
@@ -100,20 +97,11 @@ namespace BaseHA.Controllers
                     message = "Thất bại !",
                     success = false
                 });
-
-            var model = _generic.GetList(x => ids.Contains(x.Id));
-            var listUpdate = new List<WareHouse>();
-            foreach (var item in model.ToList())
-            {
-                item.Inactive=active;
-                listUpdate.Add(item);
-            }
-            _generic.Update(listUpdate);
-            var res = await _generic.SaveChangesConfigureAwaitAsync();
+            var res = await _generic.ActivatesAsync(ids, active);
             return Ok(new ResultMessageResponse()
             {
-                message = "Thành công !",
-                success = res > 0
+                message = res ? "Thành công !" : "Thất bại !",
+                success = res
             });
         }
 
@@ -128,19 +116,18 @@ namespace BaseHA.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(WareHouse unit)
         {
-            var model = await _generic.GetFirstAsync(unit.Id);
+            var model = await _generic.GetByIdAsync(unit.Id);
             if (model == null)
                 return Ok(new ResultMessageResponse()
                 {
                     message = "Không tồn tại bản ghi !",
                     success = false
                 });
-            _generic.Update(unit);
-            var res = await _generic.SaveChangesConfigureAwaitAsync();
+            var res = await _generic.UpdateAsync(unit);
             return Ok(new ResultMessageResponse()
             {
-                message = "Thành công !",
-                success = res > 0
+                message = res ? "Thành công !" : "Thất bại !",
+                success = res
             });
         }
 
@@ -161,23 +148,16 @@ namespace BaseHA.Controllers
         /// <returns></returns>
         [IgnoreAntiforgeryToken]
         [HttpPost]
-        public async Task<IActionResult> Get([DataSourceRequest] DataSourceRequest request, UnitSearchModel searchModel)
+        public async Task<IActionResult> Get([DataSourceRequest] DataSourceRequest request, WareHouseSearchModel searchModel)
         {
 
             searchModel.BindRequest(request);
-
-            var res = new List<Unit>();
-
-            var l = from i in _generic.Table select i;
-            if (!string.IsNullOrEmpty(searchModel.Keywords))
-                l = from aa in l where aa.Name.Contains(searchModel.Keywords) || aa.Code.Contains(searchModel.Keywords) select aa;
-
-            var data = await l.Skip((searchModel.PageIndex - 1) * searchModel.PageSize).Take(searchModel.PageSize).ToListAsync();
+            var data = await _generic.GetAsync(searchModel);
 
             var result = new DataSourceResult
             {
-                Data = data,
-                Total = await l.CountAsync()
+                Data = data.Lists,
+                Total = data.Count
             };
 
             return Ok(result);
