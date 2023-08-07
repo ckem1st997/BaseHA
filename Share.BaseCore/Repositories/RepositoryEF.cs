@@ -44,7 +44,7 @@ namespace Share.BaseCore.Repositories
 
         //    return idProperty != null && idPropertyDelete != null;
         //}
-        public IQueryable<T> GetQueryable(bool tracking = false)
+        public IQueryable<T> GetQueryable(bool tracking = true)
         {
             return tracking ? _query : _query.AsNoTracking();
         }

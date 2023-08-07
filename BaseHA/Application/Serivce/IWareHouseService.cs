@@ -61,7 +61,7 @@ namespace BaseHA.Application.Serivce
             if (ids == null)
                 throw new ArgumentNullException(nameof(ids));
 
-            var list = await _generic.Table.Where(x => ids.Contains(x.Id) && x.OnDelete == false).ToListAsync();
+            var list = await _generic.GetQueryable().Where(x => ids.Contains(x.Id) && x.OnDelete == false).ToListAsync();
 
             if (list == null)
                 throw new ArgumentNullException("list is null !");
@@ -76,8 +76,6 @@ namespace BaseHA.Application.Serivce
             var l = from i in _generic.Table where i.OnDelete == false select i;
             if (!string.IsNullOrEmpty(ctx.Keywords))
                 l = from aa in l where aa.Name.Contains(ctx.Keywords) || aa.Code.Contains(ctx.Keywords) select aa;
-
-            var data = await l.Skip((ctx.PageIndex - 1) * ctx.PageSize).Take(ctx.PageSize).ToListAsync();
             PagedList<WareHouse> res = new PagedList<WareHouse>();
             await res.Result(ctx.PageSize, (ctx.PageIndex - 1) * ctx.PageSize, l);
             return res;

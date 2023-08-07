@@ -17,11 +17,10 @@ namespace BaseHA.Application.Validations.ConfigureServices
 {
     public static class ServiceValidator
     {
-        [Obsolete]
         public static void AddValidator(this IServiceCollection services)
         {
             services.AddFluentValidation();
-            services.AddScoped<IValidator<WareHouseCommands>, WareHouseCommandValidator>();
+            services.AddTransient<IValidator<WareHouseCommands>, WareHouseCommandValidator>();
             services.AddScoped<IValidator<BaseSearchModel>, BaseSearchModelValidator>();
 
         }

@@ -42,7 +42,7 @@ namespace Share.BaseCore.IRepositories
         /// <summary>
         /// không tạo truy vấn lưu mà chỉ tạo khi cần thiết nhanh hơn Table
         /// </summary>
-        IQueryable<T> GetQueryable(bool tracking = false);
+        IQueryable<T> GetQueryable(bool tracking = true);
         IQueryable<T> Table { get; }
         public IQueryable<T> Where(Expression<Func<T, bool>> predicate);
         public Task<IQueryable<T>> WhereAsync(Expression<Func<T, bool>> predicate);

@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using BaseHA.Domain.Entity;
+using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace BaseHA.Domain.ContextSub
 {
@@ -18,7 +20,8 @@ namespace BaseHA.Domain.ContextSub
             : base(options)
         {
         }
-
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    => optionsBuilder.LogTo(Console.WriteLine, LogLevel.Information, DbContextLoggerOptions.UtcTime).EnableSensitiveDataLogging();
         public virtual DbSet<Audit> Audit { get; set; }
         public virtual DbSet<AuditCouncil> AuditCouncil { get; set; }
         public virtual DbSet<AuditDetail> AuditDetail { get; set; }

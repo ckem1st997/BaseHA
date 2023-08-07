@@ -35,8 +35,9 @@ using Share.BaseCore.Extensions;
 using System.Configuration;
 using System.Reflection;
 using BaseHA.Application.Configuration;
-using BaseHA.Application.CustomClass;
+using BaseHA.Application.ModuleAutoFac;
 using BaseHA.Application.AutoMapper.ConfigureServices;
+using BaseHA.Application.Validations.ConfigureServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,6 +48,7 @@ var Configuration = builder.Configuration;
 //
 services.AddMapper();
 services.AddMvc();
+services.AddValidator();
 //
 services.AddCustomDI();
 //

@@ -13,7 +13,7 @@ using Share.BaseCore.Base;
 using Share.BaseCore.Extensions;
 using BaseHA.Domain.ContextSub;
 
-namespace BaseHA.Application.CustomClass
+namespace BaseHA.Application.ModuleAutoFac
 {
     /// <summary>
     /// app.ConfigureRequestPipeline(); đăng ký

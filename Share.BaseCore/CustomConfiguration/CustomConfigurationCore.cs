@@ -25,6 +25,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace Share.BaseCore.CustomConfiguration
 {
@@ -40,11 +41,8 @@ namespace Share.BaseCore.CustomConfiguration
                     {
                         sqlOptions.MigrationsAssembly("sql MigrationsAssembly");
                     });
-                options.LogTo(Log.Information, Microsoft.Extensions.Logging.LogLevel.Information, Microsoft.EntityFrameworkCore.Diagnostics.DbContextLoggerOptions.UtcTime).ConfigureWarnings(
-                           b => b.Log(
-                               (RelationalEventId.ConnectionOpened, Microsoft.Extensions.Logging.LogLevel.Information),
-                               (RelationalEventId.ConnectionClosed, Microsoft.Extensions.Logging.LogLevel.Information))).EnableSensitiveDataLogging().EnableDetailedErrors().EnableThreadSafetyChecks().EnableServiceProviderCaching();});               
-
+                options.LogTo(Log.Information, LogLevel.Information, DbContextLoggerOptions.UtcTime).EnableSensitiveDataLogging();
+            });
             // Register dynamic dbContext
             services.AddScoped<DbContext, TDbContext>();
         }
