@@ -29,14 +29,9 @@ namespace BaseHA.CustomClass
             builder.RegisterType<HttpContextAccessor>().As<IHttpContextAccessor>().InstancePerLifetimeScope();
             builder.RegisterType<BaseEngine>().As<IEngine>().SingleInstance();
             //
-
             builder.AddDbContext<WarehouseManagementContext>(DataConnectionHelper.ConnectionStringNames.Warehouse);
-
-
-            builder.AddRegisterDbContext(true);
-            //
+            builder.AddRegisterDbContext(true);           
             // ef core
-
             builder.AddGeneric(DataConnectionHelper.ConnectionStringNames.Warehouse, DataConnectionHelper.ParameterName);
 
         }

@@ -52,7 +52,7 @@ namespace BaseHA.Serivce
 
             list.ForEach(x => x.Inactive = active);
 
-            _generic.Update(list);
+            //  _generic.Update(list);
             return await _generic.SaveChangesConfigureAwaitAsync() > 0;
         }
 
@@ -67,7 +67,7 @@ namespace BaseHA.Serivce
                 throw new ArgumentNullException("list is null !");
 
             list.ForEach(x => x.OnDelete = true);
-            _generic.Update(list);
+            //  _generic.Update(list);
             return await _generic.SaveChangesConfigureAwaitAsync() > 0;
         }
 

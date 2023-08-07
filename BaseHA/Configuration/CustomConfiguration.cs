@@ -32,7 +32,11 @@ namespace BaseHA.Configuration
         {
             services.AddCustomConfigurationCore<WarehouseManagementContext>(configuration, "WarehouseManagementContext");
             services.AddMediatR(Assembly.GetExecutingAssembly());
-
+            //services.Configure<ApiBehaviorOptions>(options =>
+            //{
+            //    options.SuppressModelStateInvalidFilter = true;
+            //});
+            //services.AddOptions();
             services.AddControllers(options =>
             {
                 options.Filters.Add(typeof(HttpGlobalExceptionFilter));

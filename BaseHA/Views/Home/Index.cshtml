@@ -235,6 +235,8 @@
                         if (!msg.HasError) {
                             master.actionCallback();
                         }
+                        if (msg && msg.message)
+                            notify({ text: msg.message, type: msg.success ? 'success' : 'info' });
                         app.ui.loader(grd.api.element, false);
                     },
                     error: function (jqXhr, textStatus, errorThrown) {
@@ -242,7 +244,7 @@
                     }
                 });
             } else {
-                notify({ text: 'Notifies.NoItemsSelected', type: 'info' });
+                notify({ text: 'Bạn chưa chọn bảng ghi nào !', type: 'info' });
             }
         };
         master.refresh = function () {
@@ -383,7 +385,7 @@
             return `<a data-action="edit" href="javascript:void(0)">${name}</a>`;
         };
         grd.tmp.activate = function (activate) {
-            return activate ? '<i data-action="deactivate" class="fa fa-check green pointer"></i>' : '<i data-action="activate" class="fa fa-lock yellow pointer"></i>';
+            return !activate ? '<i data-action="deactivate" class="fa fa-check green pointer"></i>' : '<i data-action="activate" class="fa fa-lock yellow pointer"></i>';
         };
 
         // Startup

@@ -39,14 +39,11 @@ namespace Share.BaseCore.CustomConfiguration
                     sqlServerOptionsAction: sqlOptions =>
                     {
                         sqlOptions.MigrationsAssembly("sql MigrationsAssembly");
-                        // sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
                     });
                 options.LogTo(Log.Information, Microsoft.Extensions.Logging.LogLevel.Information, Microsoft.EntityFrameworkCore.Diagnostics.DbContextLoggerOptions.UtcTime).ConfigureWarnings(
                            b => b.Log(
                                (RelationalEventId.ConnectionOpened, Microsoft.Extensions.Logging.LogLevel.Information),
-                               (RelationalEventId.ConnectionClosed, Microsoft.Extensions.Logging.LogLevel.Information))).EnableSensitiveDataLogging().EnableDetailedErrors().EnableThreadSafetyChecks().EnableServiceProviderCaching();
-                // options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-            });                //  options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+                               (RelationalEventId.ConnectionClosed, Microsoft.Extensions.Logging.LogLevel.Information))).EnableSensitiveDataLogging().EnableDetailedErrors().EnableThreadSafetyChecks().EnableServiceProviderCaching();});               
 
             // Register dynamic dbContext
             services.AddScoped<DbContext, TDbContext>();
@@ -99,28 +96,6 @@ namespace Share.BaseCore.CustomConfiguration
         }
 
 
-        public static void AddConfigurationCoreFilter<TStartup>(this IServiceCollection services)
-        {
-            services.Configure<ApiBehaviorOptions>(options =>
-            {
-                options.SuppressModelStateInvalidFilter = true;
-            });
-            services.AddOptions();
-            services.AddControllers(options =>
-            {
-                options.Filters.Add(typeof(HttpGlobalExceptionFilter));
-                options.Filters.Add(typeof(CustomValidationAttribute));
-            })
-                .AddApplicationPart(typeof(TStartup).Assembly)
-                .AddJsonOptions(options =>
-                {
-                    options.JsonSerializerOptions.WriteIndented = true;
-                    //options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
-                }).AddNewtonsoftJson();
-
-        }
-
-
         public static void AddSwaggerCore(this IServiceCollection services)
         {
             services.AddSwaggerGen(c =>
@@ -128,95 +103,6 @@ namespace Share.BaseCore.CustomConfiguration
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
             });
         }
-
-
-
-
-
-        /// <summary>
-        /// Add generic repository services to the .NET Dependency Injection container.
-        /// </summary>
-        /// <typeparam name="TDbContext">Your EF Core <see cref="DbContext"/>.</typeparam>
-        /// <param name="services">The type to be extended.</param>
-        /// <param name="lifetime">The life time of the service.</param>
-        /// <returns>Retruns <see cref="IServiceCollection"/>.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="services"/> is <see langword="null"/>.</exception>
-        //public static IServiceCollection AddGenericRepository<TDbContext>(
-        //    this IServiceCollection services,
-        //    ServiceLifetime lifetime = ServiceLifetime.Scoped)
-        //    where TDbContext : DbContext
-        //{
-        //    if (services == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(services));
-        //    }
-
-        //    services.Add(new ServiceDescriptor(
-        //        typeof(IGenericRepository),
-        //        serviceProvider =>
-        //        {
-        //            TDbContext dbContext = ActivatorUtilities.CreateInstance<TDbContext>(serviceProvider);
-        //            return new Repository<TDbContext>(dbContext);
-        //        },
-        //        lifetime));
-
-        //    services.Add(new ServiceDescriptor(
-        //       typeof(IGenericRepository<TDbContext>),
-        //       serviceProvider =>
-        //       {
-        //           TDbContext dbContext = ActivatorUtilities.CreateInstance<TDbContext>(serviceProvider);
-        //           return new Repository<TDbContext>(dbContext);
-        //       },
-        //       lifetime));
-
-        //    return services;
-        //}
-
-
-
-
-        /// <summary>
-        /// Add generic query repository services to the .NET Dependency Injection container.
-        /// </summary>
-        /// <typeparam name="TDbContext">Your EF Core <see cref="DbContext"/>.</typeparam>
-        /// <param name="services">The type to be extended.</param>
-        /// <param name="lifetime">The life time of the service.</param>
-        /// <returns>Retruns <see cref="IServiceCollection"/>.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="services"/> is <see langword="null"/>.</exception>
-        //public static IServiceCollection AddQueryRepository<TDbContext>(
-        //    this IServiceCollection services,
-        //    ServiceLifetime lifetime = ServiceLifetime.Scoped)
-        //    where TDbContext : DbContext
-        //{
-        //    if (services == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(services));
-        //    }
-
-        //    services.Add(new ServiceDescriptor(
-        //        typeof(IQueryRepository),
-        //        serviceProvider =>
-        //        {
-        //            TDbContext dbContext = ActivatorUtilities.CreateInstance<TDbContext>(serviceProvider);
-        //            dbContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
-        //            return new QueryRepository<TDbContext>(dbContext);
-        //        },
-        //        lifetime));
-
-        //    services.Add(new ServiceDescriptor(
-        //        typeof(IQueryRepository<TDbContext>),
-        //        serviceProvider =>
-        //        {
-        //            TDbContext dbContext = ActivatorUtilities.CreateInstance<TDbContext>(serviceProvider);
-        //            dbContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
-        //            return new QueryRepository<TDbContext>(dbContext);
-        //        },
-        //        lifetime));
-
-        //    return services;
-        //}
-
-
     }
 }
 
