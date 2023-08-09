@@ -18,32 +18,16 @@ using static Dapper.SqlMapper;
 using Share.BaseCore.Base;
 using Share.BaseCore.DiagnosticListener;
 using System.Reflection;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace Share.BaseCore.Repositories
 {
     public class RepositoryEF<T> : IRepositoryEF<T> where T : BaseEntity
     {
-
-        //  _rep = EngineContext.Current.Resolve<IRepositoryEF<Domain.Entity.WareHouse>>(DataConnectionHelper.ConnectionStringNames.Warehouse);
-
         private readonly DbContext _context;
         private readonly DbSet<T> _dbSet;
         private readonly IQueryable<T> _query;
         private readonly string _connectionstring;
-
-
-        public DbContext UnitOfWork
-        {
-            get { return _context; }
-        }
-        //public bool HasIdProperty()
-        //{
-        //    Type type = typeof(T);
-        //    PropertyInfo idProperty = type.GetProperty("Id");
-        //    PropertyInfo idPropertyDelete = type.GetProperty("Ondelete");
-
-        //    return idProperty != null && idPropertyDelete != null;
-        //}
         public IQueryable<T> GetQueryable(bool tracking = true)
         {
             return tracking ? _query : _query.AsNoTracking();
@@ -52,9 +36,6 @@ namespace Share.BaseCore.Repositories
 
         public RepositoryEF(DbContext context)
         {
-            //if (!HasIdProperty())
-            //    throw new BaseException("Entity not BaseEnity");
-            // System.Diagnostics.DiagnosticListener.AllListeners.Subscribe(new DiagnosticObserver());
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _dbSet = _context.Set<T>();
             _query = _dbSet.AsQueryable();
@@ -113,6 +94,7 @@ namespace Share.BaseCore.Repositories
 
         public bool AutoSaveChanges { get; set; } = true;
 
+        public DatabaseFacade Database => _context.Database;
 
         protected virtual async Task<bool> SaveChanges(CancellationToken cancellationToken)
         {
@@ -227,6 +209,40 @@ namespace Share.BaseCore.Repositories
         public void Dispose()
         {
             GC.SuppressFinalize(this);
+        }
+
+        public async Task<IEnumerable<T>> DeteleSoftDelete(IEnumerable<string> ids, CancellationToken cancellationToken = default)
+        {
+            if (!ids.Any())
+                throw new BaseException("Danh sách mã xoá rỗng !");
+            var list = await _query.Where(x => ids.Contains(x.Id) && !x.OnDelete).ToListAsync();
+            if (!list.Any())
+                throw new BaseException("Danh sách cần xoá không tồn tại !");
+            list.ForEach(x =>
+           {
+               x.OnDelete = true;
+           });
+            return list;
+        }
+
+        public async Task<T> DeteleSoftDelete(string id, CancellationToken cancellationToken = default)
+        {
+            if (string.IsNullOrEmpty(id))
+                throw new BaseException("Mã xoá rỗng !");
+            var entity = await _query.FirstOrDefaultAsync(x => x.Id.Equals(id));
+            if (entity == null)
+                throw new BaseException("Danh sách cần xoá không tồn tại !");
+            entity.OnDelete = true;
+            return entity;
+        }
+
+        public async Task<T?> GetByIdsync(string id, CancellationToken cancellationToken = default, bool Tracking = true)
+        {
+            if (string.IsNullOrEmpty(id))
+                throw new BaseException("Chưa nhập mã định danh !");
+            if (!Tracking)
+                return await _dbSet.AsNoTracking().FirstOrDefaultAsync(x => x.Id.Equals(id));
+            return await _dbSet.FirstOrDefaultAsync(x => x.Id.Equals(id));
         }
 
     }

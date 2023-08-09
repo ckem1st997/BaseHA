@@ -61,13 +61,14 @@ namespace BaseHA.Application.Serivce
             if (ids == null)
                 throw new ArgumentNullException(nameof(ids));
 
-            var list = await _generic.GetQueryable().Where(x => ids.Contains(x.Id) && x.OnDelete == false).ToListAsync();
+            //var list = await _generic.GetQueryable().Where(x => ids.Contains(x.Id) && x.OnDelete == false).ToListAsync();
 
-            if (list == null)
-                throw new ArgumentNullException("list is null !");
+            //if (list == null)
+            //    throw new ArgumentNullException("list is null !");
 
-            list.ForEach(x => x.OnDelete = true);
+            //list.ForEach(x => x.OnDelete = true);
             //  _generic.Update(list);
+            await _generic.DeteleSoftDelete(ids);
             return await _generic.SaveChangesConfigureAwaitAsync() > 0;
         }
 
@@ -85,7 +86,7 @@ namespace BaseHA.Application.Serivce
         {
             if (id == null)
                 throw new ArgumentNullException("id is null !");
-            return await _generic.Table.FirstOrDefaultAsync(x => id.Equals(x.Id) && !x.OnDelete);
+            return await _generic.GetByIdsync(id);
 
         }
 

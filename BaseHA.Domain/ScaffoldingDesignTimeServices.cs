@@ -1,6 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore.Design;
+﻿using EntityFrameworkCore.Scaffolding.Handlebars;
+using Google.Protobuf.WellKnownTypes;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Scaffolding;
+using Microsoft.EntityFrameworkCore.Scaffolding.Internal;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,15 +19,71 @@ namespace BaseHA.Domain
     {
         public void ConfigureDesignTimeServices(IServiceCollection services)
         {
+            services.AddSingleton<ICSharpEntityTypeGenerator, MyHbsCSharpEntityTypeGenerator>();
             services.AddHandlebarsScaffolding(options =>
             {
                 // Add custom template data
                 options.TemplateData = new Dictionary<string, object>
     {
         { "models-namespace", "Share.BaseCore" },
-        { "base-class", "BaseEntity" }
+        { "base-class", "BaseEntity" },
+
     };
+
             });
+
+        }
+    }
+    public class MyHbsCSharpEntityTypeGenerator : HbsCSharpEntityTypeGenerator
+    {
+        private readonly IOptions<HandlebarsScaffoldingOptions> _options;
+
+        public MyHbsCSharpEntityTypeGenerator(IAnnotationCodeGenerator annotationCodeGenerator, ICSharpHelper cSharpHelper, IEntityTypeTemplateService entityTypeTemplateService, IEntityTypeTransformationService entityTypeTransformationService, IOptions<HandlebarsScaffoldingOptions> options) : base(annotationCodeGenerator, cSharpHelper, entityTypeTemplateService, entityTypeTransformationService, options)
+        {
+            _options = options;
+        }
+
+        protected override void GenerateProperties(IEntityType entityType)
+        {
+            var properties = new List<Dictionary<string, object>>();
+            foreach (var property in entityType.GetProperties().OrderBy(p => p.GetColumnName()))
+            {
+                Console.WriteLine(property.Name);
+                PropertyAnnotationsData = new List<Dictionary<string, object>>();
+
+                if (UseDataAnnotations)
+                {
+                    GeneratePropertyDataAnnotations(property);
+                }
+
+                var propertyType = CSharpHelper.Reference(property.ClrType);
+                if (_options?.Value == null
+                    && property.IsNullable
+                    && !propertyType.EndsWith("?"))
+                {
+                    propertyType += "?";
+                }
+                // Code elided for clarity
+                properties.Add(new Dictionary<string, object>
+      {
+
+              // Add new item to template data
+                    { "property-isprimarykey", property.IsPrimaryKey() },
+                    { "property-not-id", property.Name.Equals("Id")==false },
+                    { "property-not-delete",property.Name.Equals("OnDelete")==false }
+      });
+            }
+
+            var transformedProperties = EntityTypeTransformationService.TransformProperties(entityType, properties);
+
+            // Add to transformed properties
+            for (int i = 0; i < transformedProperties.Count; i++)
+            {
+                transformedProperties[i].Add("property-isprimarykey", properties[i]["property-isprimarykey"]);
+                Console.Write(transformedProperties[i]);
+            }
+
+            TemplateData.Add("properties", transformedProperties);
         }
     }
 }

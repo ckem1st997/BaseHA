@@ -13,6 +13,7 @@ using Dapper;
 using Microsoft.EntityFrameworkCore;
 using static Dapper.SqlMapper;
 using Share.BaseCore.Base;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace Share.BaseCore.IRepositories
 {
@@ -37,29 +38,27 @@ namespace Share.BaseCore.IRepositories
     /// <typeparam name="T"></typeparam>
     public partial interface IRepositoryEF<T> : IDapperEF where T : BaseEntity
     {
-        //   bool HasIdProperty();
-        public DbContext UnitOfWork { get; }
         /// <summary>
         /// không tạo truy vấn lưu mà chỉ tạo khi cần thiết nhanh hơn Table
         /// </summary>
         IQueryable<T> GetQueryable(bool tracking = true);
         IQueryable<T> Table { get; }
+        DatabaseFacade Database { get; }
         public IQueryable<T> Where(Expression<Func<T, bool>> predicate);
         public Task<IQueryable<T>> WhereAsync(Expression<Func<T, bool>> predicate);
 
         public IQueryable<T> WhereTracking(Expression<Func<T, bool>> predicate);
         public Task<IQueryable<T>> WhereTrackingAsync(Expression<Func<T, bool>> predicate);
-
-
+        Task<T?> GetByIdsync(string id, CancellationToken cancellationToken = default(CancellationToken), bool Tracking = true);
         IEnumerable<T> GetList(Func<T, bool> filter);
         Task<T> AddAsync(T entity, CancellationToken cancellationToken = default(CancellationToken));
         void Update(T entity);
         void Update(IEnumerable<T> entity);
         public Task<bool> UpdateAsync(T entity, CancellationToken cancellationToken = default(CancellationToken));
-
         void Delete(T entity);
         void Delete(IEnumerable<T> entity);
         Task<int> SaveChangesConfigureAwaitAsync(bool configure = false, CancellationToken cancellationToken = default(CancellationToken));
-
+        Task<IEnumerable<T>> DeteleSoftDelete(IEnumerable<string> ids, CancellationToken cancellationToken = default(CancellationToken));
+        Task<T> DeteleSoftDelete(string id, CancellationToken cancellationToken = default(CancellationToken));
     }
 }
