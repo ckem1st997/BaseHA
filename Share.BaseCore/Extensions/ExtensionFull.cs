@@ -22,7 +22,7 @@ namespace Share.BaseCore.Extensions
         }
 
 
-        public static IRepositoryEF<T> ResolveRepository<T>(string ConnectionStringNames) where T : class, IBaseEntity
+        public static IRepositoryEF<T> ResolveRepository<T>(string ConnectionStringNames) where T : BaseEntity
         {
             return EngineContext.Current.Resolve<IRepositoryEF<T>>(ConnectionStringNames);
         }

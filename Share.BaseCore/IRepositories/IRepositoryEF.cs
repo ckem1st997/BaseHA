@@ -35,7 +35,7 @@ namespace Share.BaseCore.IRepositories
     /// Nếu chạy bất đồng bộ thì Dapper nhanh hơn GetQueryable và Table nhanh hơn 8 lần
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public partial interface IRepositoryEF<T> : IDapperEF where T : class
+    public partial interface IRepositoryEF<T> : IDapperEF where T : BaseEntity
     {
         //   bool HasIdProperty();
         public DbContext UnitOfWork { get; }

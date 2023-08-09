@@ -21,7 +21,7 @@ using System.Reflection;
 
 namespace Share.BaseCore.Repositories
 {
-    public class RepositoryEF<T> : IRepositoryEF<T> where T : class
+    public class RepositoryEF<T> : IRepositoryEF<T> where T : BaseEntity
     {
 
         //  _rep = EngineContext.Current.Resolve<IRepositoryEF<Domain.Entity.WareHouse>>(DataConnectionHelper.ConnectionStringNames.Warehouse);

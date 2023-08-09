@@ -21,8 +21,8 @@ using Serilog;
 using Newtonsoft.Json.Serialization;
 using Share.BaseCore.Filters;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using BaseHA.Domain.ContextSub;
 using BaseHA.Application.Serivce;
+using BaseHA.Domain.Contexts;
 
 namespace BaseHA.Application.Configuration
 {
@@ -30,7 +30,7 @@ namespace BaseHA.Application.Configuration
     {
         public static void AddCustomConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddCustomConfigurationCore<WarehouseManagementContext>(configuration, "WarehouseManagementContext");
+            services.AddCustomConfigurationCore<WareHouseContext>(configuration, "WarehouseManagementContext");
             services.AddMediatR(Assembly.GetExecutingAssembly());
             //services.Configure<ApiBehaviorOptions>(options =>
             //{

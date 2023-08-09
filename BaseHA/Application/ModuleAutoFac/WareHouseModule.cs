@@ -11,7 +11,7 @@ using Share.BaseCore.IRepositories;
 using Share.BaseCore.CustomConfiguration;
 using Share.BaseCore.Base;
 using Share.BaseCore.Extensions;
-using BaseHA.Domain.ContextSub;
+using BaseHA.Domain.Contexts;
 
 namespace BaseHA.Application.ModuleAutoFac
 {
@@ -29,7 +29,7 @@ namespace BaseHA.Application.ModuleAutoFac
             builder.RegisterType<HttpContextAccessor>().As<IHttpContextAccessor>().InstancePerLifetimeScope();
             builder.RegisterType<BaseEngine>().As<IEngine>().SingleInstance();
             //
-            builder.AddDbContext<WarehouseManagementContext>(DataConnectionHelper.ConnectionStringNames.Warehouse);
+            builder.AddDbContext<WareHouseContext>(DataConnectionHelper.ConnectionStringNames.Warehouse);
             builder.AddRegisterDbContext(true);
             // ef core
             builder.AddGeneric(DataConnectionHelper.ConnectionStringNames.Warehouse, DataConnectionHelper.ParameterName);
