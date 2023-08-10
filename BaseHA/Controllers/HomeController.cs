@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BaseHA.Application.AutoMapper.WareHouses;
 using BaseHA.Application.ModelDto;
 using BaseHA.Application.Serivce;
 using BaseHA.Domain.Entity;
@@ -132,9 +133,7 @@ namespace BaseHA.Controllers
                     message = "Không tồn tại bản ghi !",
                     success = false
                 });
-            var entity = _mapper.Map<WareHouse>(unit);
-            entity.Id = model.Id;
-            entity.OnDelete = unit.Ondelete;
+            var entity = _mapper.Map(unit, model);
             var res = await _generic.UpdateAsync(entity);
             return Ok(new ResultMessageResponse()
             {

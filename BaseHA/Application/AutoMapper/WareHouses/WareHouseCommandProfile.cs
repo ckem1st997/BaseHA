@@ -13,6 +13,10 @@ namespace BaseHA.Application.AutoMapper.WareHouses
     {
         public WareHouseCommandProfile()
         {
+            // ForAllMaps(CommonProfile.AllMapsAction);
+
+
+
             CreateMap<WareHouseCommands, WareHouse>()
                 .ForMember(x => x.OutwardToWareHouses, opt => opt.Ignore())
                 .ForMember(x => x.OutwardToWareHouses, opt => opt.Ignore())
@@ -27,6 +31,54 @@ namespace BaseHA.Application.AutoMapper.WareHouses
             CreateMap<WareHouse, WareHouseCommands>();
             //
 
+        }
+    }
+
+    public static class MappingExtensions
+    {
+
+        public static WareHouseCommands ToModel(this WareHouse entity)
+        {
+            return AutoMapperConfiguration.Mapper.Map<WareHouse, WareHouseCommands>(entity);
+        }
+
+        public static WareHouse ToEntity(this WareHouseCommands model)
+        {
+            return AutoMapperConfiguration.Mapper.Map<WareHouseCommands, WareHouse>(model);
+        }
+
+        public static WareHouse ToEntity(this WareHouseCommands model, WareHouse destination)
+        {
+            return AutoMapperConfiguration.Mapper.Map(model, destination);
+        }
+
+    }
+    /// <summary>
+    /// AutoMapper configuration
+    /// </summary>
+    public static class AutoMapperConfiguration
+    {
+        /// <summary>
+        /// Mapper
+        /// </summary>
+        public static IMapper Mapper { get; private set; }
+
+        /// <summary>
+        /// Mapper configuration
+        /// </summary>
+        public static MapperConfiguration MapperConfiguration { get; private set; }
+
+        // Custom-AutoMapper: AddProfile theo từng Project, cần Profile nào thì add Profile đó
+        public static IList<Profile> Profiles = new List<Profile>();
+
+        /// <summary>
+        /// Initialize mapper
+        /// </summary>
+        /// <param name="config">Mapper configuration</param>
+        public static void Init(MapperConfiguration config)
+        {
+            MapperConfiguration = config;
+            Mapper = config.CreateMapper();
         }
     }
 }

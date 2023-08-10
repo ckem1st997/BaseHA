@@ -116,7 +116,7 @@ namespace BaseHA.Application.Serivce
         {
             if (entity == null)
                 throw new ArgumentNullException(nameof(entity));
-            _generic.Update(entity);
+            //_generic.Update(entity);
             return await _generic.SaveChangesConfigureAwaitAsync() > 0;
         }
     }

@@ -38,6 +38,8 @@ using BaseHA.Application.Configuration;
 using BaseHA.Application.ModuleAutoFac;
 using BaseHA.Application.AutoMapper.ConfigureServices;
 using BaseHA.Application.Validations.ConfigureServices;
+using BaseHA.Application.AutoMapper.WareHouses;
+using AutoMapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -71,7 +73,9 @@ services.AddApiCors();
 //    // Global filters will run first
 //    options.AddFilter<CustomFilter>();
 //});
-
+AutoMapperConfiguration.Profiles.AddRange(new Profile[]
+  {                new WareHouseCommandProfile(),
+  });
 
 //auto fac
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());

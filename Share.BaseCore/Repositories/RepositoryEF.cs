@@ -241,8 +241,8 @@ namespace Share.BaseCore.Repositories
             if (string.IsNullOrEmpty(id))
                 throw new BaseException("Chưa nhập mã định danh !");
             if (!Tracking)
-                return await _dbSet.AsNoTracking().FirstOrDefaultAsync(x => x.Id.Equals(id));
-            return await _dbSet.FirstOrDefaultAsync(x => x.Id.Equals(id));
+                return await _query.AsNoTracking().FirstOrDefaultAsync(x => x.Id.Equals(id));
+            return await _query.FirstOrDefaultAsync(x => x.Id.Equals(id));
         }
 
     }

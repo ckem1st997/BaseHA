@@ -52,6 +52,10 @@ namespace Share.BaseCore.IRepositories
         Task<T?> GetByIdsync(string id, CancellationToken cancellationToken = default(CancellationToken), bool Tracking = false);
         IEnumerable<T> GetList(Func<T, bool> filter);
         Task<T> AddAsync(T entity, CancellationToken cancellationToken = default(CancellationToken));
+        /// <summary>
+        /// hàm này sẽ update tất cả các trường, nếu muốn tận dụng tracking thì hãy bỏ update và dùng savechange
+        /// </summary>
+        /// <param name="entity"></param>
         void Update(T entity);
         void Update(IEnumerable<T> entity);
         public Task<bool> UpdateAsync(T entity, CancellationToken cancellationToken = default(CancellationToken));
