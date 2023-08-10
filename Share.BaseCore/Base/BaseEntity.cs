@@ -19,9 +19,10 @@ namespace Share.BaseCore
     // nói đơn giản là chỉ có một entity cha xử lý các entity con
     // thay vì entity cha và các entity con xử lý riêng biệt
     /// </summary>
-    public class BaseEntity : BaseEntityGeneric<string>
+    public abstract class BaseEntity : BaseEntityGeneric<string>
     {
-        public bool OnDelete { get; set; }
+        public abstract bool OnDelete { get; set; }
+        // public abstract string Id { get; set; }
     }
 
 

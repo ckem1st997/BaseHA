@@ -22,7 +22,6 @@ namespace BaseHA.Domain.Contexts
         public virtual DbSet<OutwardDetail> OutwardDetails { get; set; } = null!;
         public virtual DbSet<SerialWareHouse> SerialWareHouses { get; set; } = null!;
         public virtual DbSet<Unit> Units { get; set; } = null!;
-        public virtual DbSet<VWareHouseLedger> VWareHouseLedgers { get; set; } = null!;
         public virtual DbSet<Vendor> Vendors { get; set; } = null!;
         public virtual DbSet<WareHouse> WareHouses { get; set; } = null!;
         public virtual DbSet<WareHouseItem> WareHouseItems { get; set; } = null!;
@@ -39,9 +38,12 @@ namespace BaseHA.Domain.Contexts
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+                optionsBuilder.LogTo(Log.Information, LogLevel.Information, DbContextLoggerOptions.UtcTime).EnableSensitiveDataLogging().EnableDetailedErrors().EnableServiceProviderCaching();
+                optionsBuilder.LogTo(Console.WriteLine, LogLevel.Information, DbContextLoggerOptions.UtcTime).EnableSensitiveDataLogging().EnableDetailedErrors().EnableServiceProviderCaching();
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+
                 optionsBuilder.UseSqlServer("Data Source=desktop-itlr9t6;Initial Catalog=WarehouseManagement;Integrated Security=True");
             }
         }
@@ -680,67 +682,6 @@ namespace BaseHA.Domain.Contexts
                     .HasDefaultValueSql("('')");
 
                 entity.Property(e => e.UnitName).HasMaxLength(255);
-            });
-
-            modelBuilder.Entity<VWareHouseLedger>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.ToView("vWareHouseLedger");
-
-                entity.Property(e => e.CustomerId)
-                    .HasMaxLength(36)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.CustomerName).HasMaxLength(255);
-
-                entity.Property(e => e.DepartmentId)
-                    .HasMaxLength(36)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.DepartmentName).HasMaxLength(255);
-
-                entity.Property(e => e.EmployeeId)
-                    .HasMaxLength(36)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.EmployeeName).HasMaxLength(255);
-
-                entity.Property(e => e.Id)
-                    .HasMaxLength(36)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.ItemId)
-                    .HasMaxLength(36)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.ProjectId)
-                    .HasMaxLength(36)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.ProjectName).HasMaxLength(255);
-
-                entity.Property(e => e.Quantity).HasColumnType("decimal(15, 2)");
-
-                entity.Property(e => e.StationId)
-                    .HasMaxLength(36)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.StationName).HasMaxLength(255);
-
-                entity.Property(e => e.UnitId)
-                    .HasMaxLength(36)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.VoucherCode)
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.VoucherDate).HasPrecision(0);
-
-                entity.Property(e => e.WareHouseId)
-                    .HasMaxLength(36)
-                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<Vendor>(entity =>

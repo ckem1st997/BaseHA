@@ -13,7 +13,7 @@ namespace BaseHA.Domain.Entity
         }
 
 
-        public string Id { get; set; } = default!;
+        public override string Id { get; set; } = default!;
 
 
         public string VoucherCode { get; set; } = default!;
@@ -40,13 +40,11 @@ namespace BaseHA.Domain.Entity
         public string? ModifiedBy { get; set; }
 
 
-        public bool OnDelete { get; set; }
+        public override bool OnDelete { get; set; } = default!;
 
 
-    public virtual WareHouse WareHouse { get; set; } = null!;
-        public virtual ICollection<AuditCouncil>
-    AuditCouncils { get; set; }
-        public virtual ICollection<AuditDetail>
-    AuditDetails { get; set; }
+        public virtual WareHouse WareHouse { get; set; } = null!;
+        public virtual ICollection<AuditCouncil> AuditCouncils { get; set; }
+        public virtual ICollection<AuditDetail> AuditDetails { get; set; }
     }
 }

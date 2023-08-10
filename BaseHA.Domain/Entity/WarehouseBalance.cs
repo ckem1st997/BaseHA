@@ -7,7 +7,7 @@ namespace BaseHA.Domain.Entity
     public partial class WarehouseBalance: BaseEntity
     {
 
-        public string Id { get; set; } = default!;
+        public override string Id { get; set; } = default!;
 
 
         public string ItemId { get; set; } = default!;
@@ -22,7 +22,7 @@ namespace BaseHA.Domain.Entity
         public decimal Amount { get; set; }
 
 
-        public bool OnDelete { get; set; }
+        public override bool OnDelete { get; set; } = default!;
 
     }
 }

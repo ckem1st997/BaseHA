@@ -7,7 +7,7 @@ namespace BaseHA.Domain.Entity
     public partial class WareHouseItemUnit: BaseEntity
     {
 
-        public string Id { get; set; } = default!;
+        public override string Id { get; set; } = default!;
 
 
         public string ItemId { get; set; } = default!;
@@ -22,10 +22,10 @@ namespace BaseHA.Domain.Entity
         public bool? IsPrimary { get; set; }
 
 
-        public bool OnDelete { get; set; }
+        public override bool OnDelete { get; set; } = default!;
 
 
-    public virtual WareHouseItem Item { get; set; } = null!;
-    public virtual Unit Unit { get; set; } = null!;
+        public virtual WareHouseItem Item { get; set; } = null!;
+        public virtual Unit Unit { get; set; } = null!;
     }
 }

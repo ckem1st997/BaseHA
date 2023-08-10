@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace Share.BaseCore
 {
-    public class BaseEntityGeneric<T>
+    public abstract class BaseEntityGeneric<T>
     {
         /// <summary>
         /// Gets or sets the entity identifier
         /// </summary>
         [Key]
-        public T Id { get; set; }
+        public abstract T Id { get; set; }
     }
     public interface IBaseEntityGeneric<T>
     {

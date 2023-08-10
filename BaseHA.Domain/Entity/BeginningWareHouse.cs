@@ -7,7 +7,7 @@ namespace BaseHA.Domain.Entity
     public partial class BeginningWareHouse: BaseEntity
     {
 
-        public string Id { get; set; } = default!;
+        public override string Id { get; set; } = default!;
 
 
         public string WareHouseId { get; set; } = default!;
@@ -37,11 +37,11 @@ namespace BaseHA.Domain.Entity
         public string? ModifiedBy { get; set; }
 
 
-        public bool OnDelete { get; set; }
+        public override bool OnDelete { get; set; } = default!;
 
 
-    public virtual WareHouseItem Item { get; set; } = null!;
-    public virtual Unit Unit { get; set; } = null!;
-    public virtual WareHouse WareHouse { get; set; } = null!;
+        public virtual WareHouseItem Item { get; set; } = null!;
+        public virtual Unit Unit { get; set; } = null!;
+        public virtual WareHouse WareHouse { get; set; } = null!;
     }
 }

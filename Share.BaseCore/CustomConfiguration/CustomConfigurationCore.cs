@@ -34,7 +34,7 @@ namespace Share.BaseCore.CustomConfiguration
         public static void AddCustomConfigurationCore<TDbContext>(this IServiceCollection services, IConfiguration configuration, string nameConnect) where TDbContext : DbContext
         {
             var sqlConnect = configuration.GetConnectionString(nameConnect);
-            services.AddDbContextPool<TDbContext>(options =>
+            services.AddDbContext<TDbContext>(options =>
             {
                 options.UseSqlServer(sqlConnect,
                     sqlServerOptionsAction: sqlOptions =>
@@ -42,6 +42,7 @@ namespace Share.BaseCore.CustomConfiguration
                         sqlOptions.MigrationsAssembly("sql MigrationsAssembly");
                     });
                 options.LogTo(Log.Information, LogLevel.Information, DbContextLoggerOptions.UtcTime).EnableSensitiveDataLogging();
+                //  options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             });
             // Register dynamic dbContext
             services.AddScoped<DbContext, TDbContext>();

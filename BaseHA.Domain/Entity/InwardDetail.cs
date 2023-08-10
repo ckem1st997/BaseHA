@@ -12,7 +12,7 @@ namespace BaseHA.Domain.Entity
         }
 
 
-        public string Id { get; set; } = default!;
+        public override string Id { get; set; } = default!;
 
 
         public string InwardId { get; set; } = default!;
@@ -69,7 +69,7 @@ namespace BaseHA.Domain.Entity
         public string? CustomerName { get; set; }
 
 
-        public bool OnDelete { get; set; }
+        public override bool OnDelete { get; set; } = default!;
 
 
         public string? AccountMore { get; set; }
@@ -81,10 +81,9 @@ namespace BaseHA.Domain.Entity
         public string? Status { get; set; }
 
 
-    public virtual Inward Inward { get; set; } = null!;
-    public virtual WareHouseItem Item { get; set; } = null!;
-    public virtual Unit Unit { get; set; } = null!;
-        public virtual ICollection<SerialWareHouse>
-    SerialWareHouses { get; set; }
+        public virtual Inward Inward { get; set; } = null!;
+        public virtual WareHouseItem Item { get; set; } = null!;
+        public virtual Unit Unit { get; set; } = null!;
+        public virtual ICollection<SerialWareHouse> SerialWareHouses { get; set; }
     }
 }

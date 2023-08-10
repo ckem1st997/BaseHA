@@ -7,7 +7,7 @@ namespace BaseHA.Domain.Entity
     public partial class AuditCouncil: BaseEntity
     {
 
-        public string Id { get; set; } = default!;
+        public override string Id { get; set; } = default!;
 
 
         public string AuditId { get; set; } = default!;
@@ -22,9 +22,9 @@ namespace BaseHA.Domain.Entity
         public string? Role { get; set; }
 
 
-        public bool OnDelete { get; set; }
+        public override bool OnDelete { get; set; } = default!;
 
 
-    public virtual Audit Audit { get; set; } = null!;
+        public virtual Audit Audit { get; set; } = null!;
     }
 }

@@ -20,10 +20,9 @@
 {{{nav-property-annotation}}}
 {{/each}}
 {{#if nav-property-collection}}
-        public virtual ICollection<{{nav-property-type}}>
-    {{nav-property-name}} { get; set; }
+        public virtual ICollection<{{nav-property-type}}> {{nav-property-name}} { get; set; }
     {{else}}
-    public virtual {{nav-property-type}} {{nav-property-name}} { get; set; }{{#if nullable-reference-types}}{{#unless nav-property-isnullable}} = null!;{{/unless}}{{/if}}
+        public virtual {{nav-property-type}} {{nav-property-name}} { get; set; }{{#if nullable-reference-types}}{{#unless nav-property-isnullable}} = null!;{{/unless}}{{/if}}
     {{/if}}
     {{/each}}
     {{/if}}

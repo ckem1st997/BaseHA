@@ -236,7 +236,7 @@ namespace Share.BaseCore.Repositories
             return entity;
         }
 
-        public async Task<T?> GetByIdsync(string id, CancellationToken cancellationToken = default, bool Tracking = true)
+        public async Task<T?> GetByIdsync(string id, CancellationToken cancellationToken = default, bool Tracking = false)
         {
             if (string.IsNullOrEmpty(id))
                 throw new BaseException("Chưa nhập mã định danh !");

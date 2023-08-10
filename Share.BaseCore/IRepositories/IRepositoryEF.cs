@@ -49,7 +49,7 @@ namespace Share.BaseCore.IRepositories
 
         public IQueryable<T> WhereTracking(Expression<Func<T, bool>> predicate);
         public Task<IQueryable<T>> WhereTrackingAsync(Expression<Func<T, bool>> predicate);
-        Task<T?> GetByIdsync(string id, CancellationToken cancellationToken = default(CancellationToken), bool Tracking = true);
+        Task<T?> GetByIdsync(string id, CancellationToken cancellationToken = default(CancellationToken), bool Tracking = false);
         IEnumerable<T> GetList(Func<T, bool> filter);
         Task<T> AddAsync(T entity, CancellationToken cancellationToken = default(CancellationToken));
         void Update(T entity);

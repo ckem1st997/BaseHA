@@ -13,7 +13,7 @@ namespace BaseHA.Domain.Entity
         }
 
 
-        public string Id { get; set; } = default!;
+        public override string Id { get; set; } = default!;
 
 
         public string Code { get; set; } = default!;
@@ -37,12 +37,10 @@ namespace BaseHA.Domain.Entity
         public bool Inactive { get; set; }
 
 
-        public bool OnDelete { get; set; }
+        public override bool OnDelete { get; set; } = default!;
 
 
-        public virtual ICollection<Inward>
-    Inwards { get; set; }
-        public virtual ICollection<WareHouseItem>
-    WareHouseItems { get; set; }
+        public virtual ICollection<Inward> Inwards { get; set; }
+        public virtual ICollection<WareHouseItem> WareHouseItems { get; set; }
     }
 }

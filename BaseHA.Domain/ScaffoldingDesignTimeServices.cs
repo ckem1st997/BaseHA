@@ -1,5 +1,6 @@
 ﻿using EntityFrameworkCore.Scaffolding.Handlebars;
 using Google.Protobuf.WellKnownTypes;
+using HandlebarsDotNet;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -7,6 +8,7 @@ using Microsoft.EntityFrameworkCore.Scaffolding;
 using Microsoft.EntityFrameworkCore.Scaffolding.Internal;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Share.BaseCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -19,7 +21,7 @@ namespace BaseHA.Domain
     {
         public void ConfigureDesignTimeServices(IServiceCollection services)
         {
-            services.AddSingleton<ICSharpEntityTypeGenerator, MyHbsCSharpEntityTypeGenerator>();
+            //  services.AddSingleton<ICSharpEntityTypeGenerator, MyHbsCSharpEntityTypeGenerator>();
             services.AddHandlebarsScaffolding(options =>
             {
                 // Add custom template data
@@ -29,61 +31,74 @@ namespace BaseHA.Domain
         { "base-class", "BaseEntity" },
 
     };
-
+                // Generate both context and entities
+                options.GenerateComments = true;
+                options.ExcludedTables= new List<string>()
+                {
+                    "VWareHouseLedger"
+                };
             });
+            //// Add Handlebars transformer for Country property
+            services.AddHandlebarsTransformers(
+                propertyTransformer: p =>
+
+                    p.PropertyName.Equals("Id")
+                        ? new EntityPropertyInfo("override " +p.PropertyType, "Id", false)
+                        : (p.PropertyName.Equals("OnDelete") ? new EntityPropertyInfo("override " + p.PropertyType, p.PropertyName, false) : new EntityPropertyInfo(p.PropertyType, p.PropertyName, p.PropertyIsNullable)));
 
         }
     }
-    public class MyHbsCSharpEntityTypeGenerator : HbsCSharpEntityTypeGenerator
-    {
-        private readonly IOptions<HandlebarsScaffoldingOptions> _options;
 
-        public MyHbsCSharpEntityTypeGenerator(IAnnotationCodeGenerator annotationCodeGenerator, ICSharpHelper cSharpHelper, IEntityTypeTemplateService entityTypeTemplateService, IEntityTypeTransformationService entityTypeTransformationService, IOptions<HandlebarsScaffoldingOptions> options) : base(annotationCodeGenerator, cSharpHelper, entityTypeTemplateService, entityTypeTransformationService, options)
-        {
-            _options = options;
-        }
+    //public class MyHbsCSharpEntityTypeGenerator : HbsCSharpEntityTypeGenerator
+    //{
+    //    private readonly IOptions<HandlebarsScaffoldingOptions> _options;
 
-        protected override void GenerateProperties(IEntityType entityType)
-        {
-            var properties = new List<Dictionary<string, object>>();
-            foreach (var property in entityType.GetProperties().OrderBy(p => p.GetColumnName()))
-            {
-                Console.WriteLine(property.Name);
-                PropertyAnnotationsData = new List<Dictionary<string, object>>();
+    //    public MyHbsCSharpEntityTypeGenerator(IAnnotationCodeGenerator annotationCodeGenerator, ICSharpHelper cSharpHelper, IEntityTypeTemplateService entityTypeTemplateService, IEntityTypeTransformationService entityTypeTransformationService, IOptions<HandlebarsScaffoldingOptions> options) : base(annotationCodeGenerator, cSharpHelper, entityTypeTemplateService, entityTypeTransformationService, options)
+    //    {
+    //        _options = options;
+    //    }
 
-                if (UseDataAnnotations)
-                {
-                    GeneratePropertyDataAnnotations(property);
-                }
+    //    protected override void GenerateProperties(IEntityType entityType)
+    //    {
+    //        var properties = new List<Dictionary<string, object>>();
+    //        foreach (var property in entityType.GetProperties().OrderBy(p => p.GetColumnName()))
+    //        {
+    //            Console.WriteLine(property.Name);
+    //            PropertyAnnotationsData = new List<Dictionary<string, object>>();
 
-                var propertyType = CSharpHelper.Reference(property.ClrType);
-                if (_options?.Value == null
-                    && property.IsNullable
-                    && !propertyType.EndsWith("?"))
-                {
-                    propertyType += "?";
-                }
-                // Code elided for clarity
-                properties.Add(new Dictionary<string, object>
-      {
+    //            if (UseDataAnnotations)
+    //            {
+    //                GeneratePropertyDataAnnotations(property);
+    //            }
 
-              // Add new item to template data
-                    { "property-isprimarykey", property.IsPrimaryKey() },
-                    { "property-not-id", property.Name.Equals("Id")==false },
-                    { "property-not-delete",property.Name.Equals("OnDelete")==false }
-      });
-            }
+    //            var propertyType = CSharpHelper.Reference(property.ClrType);
+    //            if (_options?.Value == null
+    //                && property.IsNullable
+    //                && !propertyType.EndsWith("?"))
+    //            {
+    //                propertyType += "?";
+    //            }
+    //            // Code elided for clarity
+    //            properties.Add(new Dictionary<string, object>
+    //  {
 
-            var transformedProperties = EntityTypeTransformationService.TransformProperties(entityType, properties);
+    //          // Add new item to template data
+    //                { "property-isprimarykey", property.IsPrimaryKey() },
+    //                { "property-not-id", property.Name.Equals("Id")==false },
+    //                { "property-not-delete",property.Name.Equals("OnDelete")==false }
+    //  });
+    //        }
 
-            // Add to transformed properties
-            for (int i = 0; i < transformedProperties.Count; i++)
-            {
-                transformedProperties[i].Add("property-isprimarykey", properties[i]["property-isprimarykey"]);
-                Console.Write(transformedProperties[i]);
-            }
+    //        var transformedProperties = EntityTypeTransformationService.TransformProperties(entityType, properties);
 
-            TemplateData.Add("properties", transformedProperties);
-        }
-    }
+    //        // Add to transformed properties
+    //        for (int i = 0; i < transformedProperties.Count; i++)
+    //        {
+    //            transformedProperties[i].Add("property-isprimarykey", properties[i]["property-isprimarykey"]);
+    //            Console.Write(transformedProperties[i]);
+    //        }
+
+    //        TemplateData.Add("properties", transformedProperties);
+    //    }
+    //}
 }

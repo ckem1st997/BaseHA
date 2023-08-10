@@ -19,7 +19,7 @@ namespace BaseHA.Domain.Entity
         }
 
 
-        public string Id { get; set; } = default!;
+        public override string Id { get; set; } = default!;
 
 
         public string Code { get; set; } = default!;
@@ -49,27 +49,19 @@ namespace BaseHA.Domain.Entity
         public bool? Inactive { get; set; }
 
 
-        public bool OnDelete { get; set; }
+        public override bool OnDelete { get; set; } = default!;
 
 
-    public virtual WareHouseItemCategory? Category { get; set; }
-    public virtual Unit Unit { get; set; } = null!;
-    public virtual Vendor? Vendor { get; set; }
-        public virtual ICollection<AuditDetailSerial>
-    AuditDetailSerials { get; set; }
-        public virtual ICollection<AuditDetail>
-    AuditDetails { get; set; }
-        public virtual ICollection<BeginningWareHouse>
-    BeginningWareHouses { get; set; }
-        public virtual ICollection<InwardDetail>
-    InwardDetails { get; set; }
-        public virtual ICollection<OutwardDetail>
-    OutwardDetails { get; set; }
-        public virtual ICollection<SerialWareHouse>
-    SerialWareHouses { get; set; }
-        public virtual ICollection<WareHouseItemUnit>
-    WareHouseItemUnits { get; set; }
-        public virtual ICollection<WareHouseLimit>
-    WareHouseLimits { get; set; }
+        public virtual WareHouseItemCategory? Category { get; set; }
+        public virtual Unit Unit { get; set; } = null!;
+        public virtual Vendor? Vendor { get; set; }
+        public virtual ICollection<AuditDetailSerial> AuditDetailSerials { get; set; }
+        public virtual ICollection<AuditDetail> AuditDetails { get; set; }
+        public virtual ICollection<BeginningWareHouse> BeginningWareHouses { get; set; }
+        public virtual ICollection<InwardDetail> InwardDetails { get; set; }
+        public virtual ICollection<OutwardDetail> OutwardDetails { get; set; }
+        public virtual ICollection<SerialWareHouse> SerialWareHouses { get; set; }
+        public virtual ICollection<WareHouseItemUnit> WareHouseItemUnits { get; set; }
+        public virtual ICollection<WareHouseLimit> WareHouseLimits { get; set; }
     }
 }

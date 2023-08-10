@@ -24,9 +24,10 @@ namespace BaseHA.Application.Serivce
 
         Task<PagedList<WareHouse>> GetAsync(WareHouseSearchModel ctx);
 
-        Task<WareHouse> GetByIdAsync(string id);
+        Task<WareHouse> GetByIdAsync(string id, bool tracking = false);
 
         Task<bool> ActivatesAsync(IEnumerable<string> ids, bool active);
+        Task<bool> SaveAsync();
     }
 
 
@@ -82,11 +83,11 @@ namespace BaseHA.Application.Serivce
             return res;
         }
 
-        public async Task<WareHouse> GetByIdAsync(string id)
+        public async Task<WareHouse> GetByIdAsync(string id, bool tracking = false)
         {
             if (id == null)
                 throw new ArgumentNullException("id is null !");
-            return await _generic.GetByIdsync(id);
+            return await _generic.GetByIdsync(id, Tracking: tracking);
 
         }
 
@@ -103,6 +104,11 @@ namespace BaseHA.Application.Serivce
             if (entities == null)
                 throw new ArgumentNullException(nameof(entities));
             _generic.Update(entities);
+            return await _generic.SaveChangesConfigureAwaitAsync() > 0;
+        }
+
+        public async Task<bool> SaveAsync()
+        {
             return await _generic.SaveChangesConfigureAwaitAsync() > 0;
         }
 

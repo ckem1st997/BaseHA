@@ -12,7 +12,7 @@ namespace BaseHA.Domain.Entity
         }
 
 
-        public string Id { get; set; } = default!;
+        public override string Id { get; set; } = default!;
 
 
         public string? VoucherCode { get; set; }
@@ -57,7 +57,7 @@ namespace BaseHA.Domain.Entity
         public string? ModifiedBy { get; set; }
 
 
-        public bool OnDelete { get; set; }
+        public override bool OnDelete { get; set; } = default!;
 
 
         public string? DeliverPhone { get; set; }
@@ -81,9 +81,8 @@ namespace BaseHA.Domain.Entity
         public string? Voucher { get; set; }
 
 
-    public virtual Vendor? Vendor { get; set; }
-    public virtual WareHouse WareHouse { get; set; } = null!;
-        public virtual ICollection<InwardDetail>
-    InwardDetails { get; set; }
+        public virtual Vendor? Vendor { get; set; }
+        public virtual WareHouse WareHouse { get; set; } = null!;
+        public virtual ICollection<InwardDetail> InwardDetails { get; set; }
     }
 }

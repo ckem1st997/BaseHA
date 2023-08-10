@@ -7,7 +7,7 @@ namespace BaseHA.Domain.Entity
     public partial class AuditDetailSerial: BaseEntity
     {
 
-        public string Id { get; set; } = default!;
+        public override string Id { get; set; } = default!;
 
 
         public string ItemId { get; set; } = default!;
@@ -19,10 +19,10 @@ namespace BaseHA.Domain.Entity
         public string? AuditDetailId { get; set; }
 
 
-        public bool OnDelete { get; set; }
+        public override bool OnDelete { get; set; } = default!;
 
 
-    public virtual AuditDetail? AuditDetail { get; set; }
-    public virtual WareHouseItem Item { get; set; } = null!;
+        public virtual AuditDetail? AuditDetail { get; set; }
+        public virtual WareHouseItem Item { get; set; } = null!;
     }
 }

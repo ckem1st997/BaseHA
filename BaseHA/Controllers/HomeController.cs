@@ -68,7 +68,7 @@ namespace BaseHA.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(WareHouseCommands wareHouse)
         {
-            var entity=_mapper.Map<WareHouse>(wareHouse);
+            var entity = _mapper.Map<WareHouse>(wareHouse);
             var res = await _generic.InsertAsync(entity);
             return Ok(new ResultMessageResponse()
             {
@@ -125,14 +125,16 @@ namespace BaseHA.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(WareHouseCommands unit)
         {
-            var model = await _generic.GetByIdAsync(unit.Id);
+            var model = await _generic.GetByIdAsync(unit.Id, true);
             if (model == null)
                 return Ok(new ResultMessageResponse()
                 {
                     message = "Không tồn tại bản ghi !",
                     success = false
                 });
-            var entity = _mapper.Map<WareHouse>(model);
+            var entity = _mapper.Map<WareHouse>(unit);
+            entity.Id = model.Id;
+            entity.OnDelete = unit.Ondelete;
             var res = await _generic.UpdateAsync(entity);
             return Ok(new ResultMessageResponse()
             {
