@@ -27,7 +27,7 @@ namespace BaseHA.Application.Serivce
         Task<WareHouse> GetByIdAsync(string id, bool tracking = false);
 
         Task<bool> ActivatesAsync(IEnumerable<string> ids, bool active);
-        Task<bool> SaveAsync();
+        Task<IList<SelectListItem>> GetSelectListItem();
     }
 
 
@@ -91,6 +91,18 @@ namespace BaseHA.Application.Serivce
 
         }
 
+        public async Task<IList<SelectListItem>> GetSelectListItem()
+        {
+            var q = from i in _generic.Table
+                    where !i.OnDelete
+                    select new SelectListItem
+                    {
+                        Text = $"{i.Code}-{i.Name}",
+                        Value = i.Id
+                    };
+            return await q.ToListAsync();
+        }
+
         public async Task<bool> InsertAsync(WareHouse entity)
         {
             if (entity == null)
@@ -104,11 +116,6 @@ namespace BaseHA.Application.Serivce
             if (entities == null)
                 throw new ArgumentNullException(nameof(entities));
             _generic.Update(entities);
-            return await _generic.SaveChangesConfigureAwaitAsync() > 0;
-        }
-
-        public async Task<bool> SaveAsync()
-        {
             return await _generic.SaveChangesConfigureAwaitAsync() > 0;
         }
 

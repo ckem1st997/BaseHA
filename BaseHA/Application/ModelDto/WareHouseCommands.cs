@@ -1,4 +1,5 @@
 ﻿using BaseHA.Domain.Entity;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BaseHA.Application.ModelDto
 {
@@ -12,6 +13,7 @@ namespace BaseHA.Application.ModelDto
             OutwardToWareHouses = new HashSet<Outward>();
             OutwardWareHouses = new HashSet<Outward>();
             WareHouseLimits = new HashSet<WareHouseLimit>();
+            AvailableWareHouses = new List<SelectListItem>();
         }
         public string Code { get; set; }
         public string Name { get; set; }
@@ -27,5 +29,6 @@ namespace BaseHA.Application.ModelDto
         public virtual ICollection<Outward> OutwardToWareHouses { get; set; }
         public virtual ICollection<Outward> OutwardWareHouses { get; set; }
         public virtual ICollection<WareHouseLimit> WareHouseLimits { get; set; }
+        public virtual IList<SelectListItem> AvailableWareHouses { get; set; }
     }
 }

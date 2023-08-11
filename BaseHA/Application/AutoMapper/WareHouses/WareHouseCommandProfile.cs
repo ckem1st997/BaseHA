@@ -24,11 +24,12 @@ namespace BaseHA.Application.AutoMapper.WareHouses
                 .ForMember(x => x.Audits, opt => opt.Ignore())
                 .ForMember(x => x.Inwards, opt => opt.Ignore())
                 //.ForMember(x => x.OnDelete, opt => opt.Ignore())
-                .ForMember(x => x.Id, opt => opt.Ignore())
+                //.ForMember(x => x.Id, opt => opt.Ignore())
                 .ForMember(x => x.WareHouseLimits, opt => opt.Ignore());
 
 
-            CreateMap<WareHouse, WareHouseCommands>();
+            CreateMap<WareHouse, WareHouseCommands>()
+                .ForMember(x => x.AvailableWareHouses, opt => opt.Ignore());
             //
 
         }
