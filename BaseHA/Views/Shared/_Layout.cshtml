@@ -54,22 +54,264 @@
         </svg>
     </div>
     <!-- Header -->
+    <div class="page-header navbar navbar-static-top">
+        <div class="page-header-inner">
+            <div class="page-logo">
+                <a href="/Admin">
+                    <img src="https://cdn.htc-itc.vn/Content/global/img/logo_new.png" alt="logo" class="logo-default">
+                </a>
+            </div>
+            <div id="admin_hMenu" class="hor-menu hor-menu-light hidden-sm hidden-xs">
+                <ul class="nav navbar-nav">
+                    <li class="classic-menu-dropdown active">
+                        <a href="/Admin">
+                            <i class="fa flaticon-home-1"></i>
+                            <span class="navbar-label">Trang chủ</span>
+                            <span class="selected"></span>
+                        </a>
+                        <ul class="dropdown-menu pull-left">
+                            <li>
+                                <a href="/Admin/Home/ViewStationByArea">
+                                    <i class=""></i> Tài nguyên trạm
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="classic-menu-dropdown">
+                        <a href="javascript:;" data-hover="megamenu-dropdown" data-close-others="true" class="hover-initialized" aria-expanded="false">
+                            <i class="fa flaticon2-warning"></i>
+                            <span class="navbar-label">Ticket</span>
+                        </a>
+                        <ul class="dropdown-menu pull-left">
+                            <li>
+                                <a href="/Admin/ProblemTicket">
+                                    <i class=""></i> Ticket sự cố
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/Admin/ProblemTicket/viewIndexHTE">
+                                    <i class=""></i> Ticket sự cố (HTE)
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/Admin/StationTicket">
+                                    <i class=""></i> Ticket trạm
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/Admin/StationTicket/viewIndexHTE">
+                                    <i class=""></i> Ticket trạm (HTE)
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/Admin/TroubleTicket">
+                                    <i class=""></i> Ticket vấn đề
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="classic-menu-dropdown">
+                        <a href="javascript:;">
+                            <i class="fa flaticon2-send-1"></i>
+                            <span class="navbar-label">FTTH</span>
+                        </a>
+                        <ul class="dropdown-menu pull-left">
+                            <li>
+                                <a href="/Admin/ParitcularFtth">
+                                    <i class=""></i> Sự cố lẻ
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/Admin/WideFtth">
+                                    <i class=""></i> Sự cố diện rộng
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/Admin/FtthProject">
+                                    <i class=""></i> Dự án
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/Admin/FtthCustomer">
+                                    <i class=""></i> Khách hàng
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="classic-menu-dropdown">
+                        <a href="javascript:;" data-hover="megamenu-dropdown" data-close-others="true" class="hover-initialized" aria-expanded="false">
+                            <i class="fa flaticon-list-3"></i>
+                            <span class="navbar-label">Danh mục</span>
+                        </a>
+                        <ul class="dropdown-menu pull-left">
+                            <li>
+                                <a href="/Admin/Channel">
+                                    <i class=""></i> Danh sách kênh
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/Admin/ChannelCategory">
+                                    <i class=""></i> Loại kênh
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/Admin/NetworkLink">
+                                    <i class=""></i> Danh sách link mạng
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/Admin/NetworkLinkCategory">
+                                    <i class=""></i> Loại link mạng
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/Admin/Device">
+                                    <i class=""></i> Danh sách thiết bị
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/Admin/DeviceCategory">
+                                    <i class=""></i> Loại thiết bị
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/Admin/Station">
+                                    <i class=""></i> Danh sách trạm
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/Admin/StationCategory">
+                                    <i class=""></i> Loại trạm
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="classic-menu-dropdown">
+                        <a href="javascript:;" data-hover="megamenu-dropdown" data-close-others="true" class="hover-initialized" aria-expanded="false">
+                            <i class="fa fa-get-pocket" aria-hidden="true"></i>
+                            <span class="navbar-label">CR</span>
+                        </a>
+                        <ul class="dropdown-menu pull-left">
+                            <li>
+                                <a href="/Admin/CRPartner">
+                                    <i class=""></i> CR Đối tác
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/Admin/CRMx">
+                                    <i class=""></i> CR xin tác động MX lấy tuyến
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/Admin/CRHTC">
+                                    <i class=""></i> CR HTC
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/Admin/CRStation">
+                                    <i class=""></i> CR ra và vào trạm
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="classic-menu-dropdown">
+                        <a href="/Admin/CSIssue">
+                            <i class="fa fa-phone" aria-hidden="true"></i>
+                            <span class="navbar-label">CS</span>
+                        </a>
+                    </li>
+                    <li class="classic-menu-dropdown">
+                        <a href="/Admin/Report">
+                            <i class="fa flaticon2-chart"></i>
+                            <span class="navbar-label">Báo cáo</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <a href="javascript:;" class="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse" style="display: none">
+                <span></span>
+            </a>
+            <div class="top-menu">
+                <ul class="nav navbar-nav">
+                    <form id="form-languageselector" class="hide" action="/Admin/Common/LanguageSelected" method="post" data-ajax="true" data-ajax-complete="onLanguageChangedRequestCompleted();">
+                        <input type="hidden" id="userlanguage" value="1">
+                    </form>
+                    <li class="dropdown dropdown-language">
+                        <a href="javascript:;" class="dropdown-toggle" title="Vietnamese" data-toggle="dropdown" aria-expanded="false">
+                            <img alt="Vietnamese" src="https://cdn.htc-itc.vn/Content/global/img/flags/vn.svg">
+                            <span class="langname">VI</span>
+                            <i class="fa fa-angle-down"></i>
+                        </a>
+                        <ul id="language-selector" class="dropdown-menu dropdown-menu-default" style="left: -100px">
+                            <li disabled="">
+                                <a href="javascript:;" data-lang-id="1">
+                                    <img alt="Vietnamese" src="https://cdn.htc-itc.vn/Content/global/img/flags/vn.svg">
+                                    Vietnamese
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:;" data-lang-id="2">
+                                    <img alt="English" src="https://cdn.htc-itc.vn/Content/global/img/flags/us.svg">
+                                    English
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <script>
+                        $(document).ready(function () {
+
+                            $("#language-selector > li:not(.disabled) > a").click(function () {
+                                var el = $(this);
+                                var langId = el.data("lang-id");
+                                $("#userlanguage").val(langId);
+                                $("#form-languageselector").submit();
+                            });
+                        });
+
+                        function onLanguageChangedRequestCompleted() {
+                            location.reload();
+                        }
+                    </script>
+                    <li class="dropdown dropdown-user">
+                        <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                            <i class="icon-user"></i>
+                            <span class="username username-hide-on-mobile">
+                                demo-ticket
+                            </span>
+                            <i class="fa fa-angle-down"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-default" style="left: -28px">
+                            <li>
+                                <a href="javascript:document.getElementById('logoutForm').submit()">
+                                    <i class="fa fa-sign-out"></i> Đăng xuất
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
     <div class="clearfix"> </div>
 
+    <!-- Container -->
+    <div class="page-container">
+        <div class="page-sidebar-wrapper">
+            <div class="page-sidebar navbar-collapse collapse">
+                <div class="page-sidebar-wrapper">
+                    @*@{ Html.RenderAction("_MobileMenu", "Common"); }*@
+                </div>
+            </div>
+        </div>
+        <div class="page-content-wrapper">
+            <div class="page-content" style="margin-left: 0 !important">
 
-
-    <div class="container page-content">
-        @{
-            //   await Html.RenderPartialAsync("_Notifications");
-        }
-        @* @{
-        await Html.RenderPartialAsync("~/Views/Shared/Admin/_PjaxStartup.cshtml");
-        }*@
-
-        @{
-            await RenderSectionAsync("HeadScripts", false);
-        }
-        @RenderBody()
+                @{
+                    await RenderSectionAsync("HeadScripts", false);
+                }
+                @RenderBody()
+            </div>
+        </div>
     </div>
 
     <footer class="border-top footer text-muted">
