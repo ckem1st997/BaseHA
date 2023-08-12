@@ -14,6 +14,7 @@ using Nest;
 using Serilog;
 using Share.BaseCore.Authozire;
 using Share.BaseCore.Base;
+using Share.BaseCore.Enums;
 using Share.BaseCore.Extensions;
 using Share.BaseCore.Filters;
 using Share.BaseCore.IRepositories;
@@ -31,18 +32,32 @@ namespace Share.BaseCore.CustomConfiguration
 {
     public static class CustomConfigurationCore
     {
-        public static void AddCustomConfigurationCore<TDbContext>(this IServiceCollection services, IConfiguration configuration, string nameConnect) where TDbContext : DbContext
+        public static void AddCustomConfigurationCore<TDbContext>(this IServiceCollection services, IConfiguration configuration, string nameConnect, DbType dbType = DbType.MSSQL) where TDbContext : DbContext
         {
             var sqlConnect = configuration.GetConnectionString(nameConnect);
             services.AddDbContext<TDbContext>(options =>
             {
-                options.UseSqlServer(sqlConnect,
-                    sqlServerOptionsAction: sqlOptions =>
-                    {
-                        sqlOptions.MigrationsAssembly("sql MigrationsAssembly");
-                    });
+                switch (dbType)
+                {
+                    case DbType.MSSQL:
+                        options.UseSqlServer(sqlConnect,
+                  sqlServerOptionsAction: sqlOptions =>
+                  {
+                      sqlOptions.MigrationsAssembly("sql MigrationsAssembly");
+                  });
+                        break;
+                    case DbType.Oracle:
+                        options.UseOracle(sqlConnect,
+                       oracleOptionsAction: sqlOptions =>
+                       {
+                           sqlOptions.MigrationsAssembly("sql MigrationsAssembly");
+                       });
+                        break;
+                    default:
+                        break;
+                }
+
                 options.LogTo(Log.Information, LogLevel.Information, DbContextLoggerOptions.UtcTime).EnableSensitiveDataLogging();
-                //  options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             });
             // Register dynamic dbContext
             services.AddScoped<DbContext, TDbContext>();
