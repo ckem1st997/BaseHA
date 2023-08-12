@@ -56,6 +56,7 @@ namespace BaseHA.Controllers
         {
             var res = await _generic.GetByIdAsync(id);
             var entity = _mapper.Map<WareHouseCommands>(res);
+            entity.AvailableWareHouses = await _generic.GetSelectListItem();
             return View(entity);
         }
 
@@ -118,7 +119,9 @@ namespace BaseHA.Controllers
 
         public async Task<IActionResult> Add()
         {
-            return View(new WareHouseCommands());
+            var model = new WareHouseCommands();
+            model.AvailableWareHouses = await _generic.GetSelectListItem();
+            return View(model);
         }
 
 
