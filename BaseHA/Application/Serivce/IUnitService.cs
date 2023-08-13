@@ -12,32 +12,31 @@ using System.Threading.Tasks;
 
 namespace BaseHA.Application.Serivce
 {
-    public interface IWareHouseService
+    public interface IUnitService
     {
-        Task<bool> InsertAsync(WareHouse entity);
+        Task<bool> InsertAsync(Unit entity);
 
-        Task<bool> InsertWHAsync(IEnumerable<WareHouse> entities);
+        Task<bool> InsertAsync(IEnumerable<Unit> entities);
 
-        Task<bool> UpdateAsync(WareHouse entity);
+        Task<bool> UpdateAsync(Unit entity);
 
         Task<bool> DeletesAsync(IEnumerable<string> ids);
 
-        Task<PagedList<WareHouse>> GetAsync(WareHouseSearchModel ctx);
+        Task<PagedList<Unit>> GetAsync(UnitSearchModel ctx);
 
-        Task<WareHouse> GetByIdAsync(string id, bool tracking = false);
+        Task<Unit> GetByIdAsync(string id, bool tracking = false);
 
         Task<bool> ActivatesAsync(IEnumerable<string> ids, bool active);
-        Task<IList<SelectListItem>> GetSelectListItem();
     }
 
 
-    public class WareHouseService : IWareHouseService
+    public class UnitService : IUnitService
     {
-        private readonly IRepositoryEF<WareHouse> _generic;
+        private readonly IRepositoryEF<Unit> _generic;
 
-        public WareHouseService()
+        public UnitService()
         {
-            _generic = EngineContext.Current.Resolve<IRepositoryEF<WareHouse>>(DataConnectionHelper.ConnectionStringNames.Warehouse);
+            _generic = EngineContext.Current.Resolve<IRepositoryEF<Unit>>(DataConnectionHelper.ConnectionStringNames.Warehouse);
 
         }
 
@@ -52,8 +51,6 @@ namespace BaseHA.Application.Serivce
                 return false;
 
             list.ForEach(x => x.Inactive = active);
-
-            //  _generic.Update(list);
             return await _generic.SaveChangesConfigureAwaitAsync() > 0;
         }
 
@@ -61,49 +58,29 @@ namespace BaseHA.Application.Serivce
         {
             if (ids == null)
                 throw new ArgumentNullException(nameof(ids));
-
-            //var list = await _generic.GetQueryable().Where(x => ids.Contains(x.Id) && x.OnDelete == false).ToListAsync();
-
-            //if (list == null)
-            //    throw new ArgumentNullException("list is null !");
-
-            //list.ForEach(x => x.OnDelete = true);
-            //  _generic.Update(list);
             await _generic.DeteleSoftDelete(ids);
             return await _generic.SaveChangesConfigureAwaitAsync() > 0;
         }
 
-        public async Task<PagedList<WareHouse>> GetAsync(WareHouseSearchModel ctx)
+        public async Task<PagedList<Unit>> GetAsync(UnitSearchModel ctx)
         {
             var l = from i in _generic.Table select i;
             if (!string.IsNullOrEmpty(ctx.Keywords))
-                l = from aa in l where aa.Name.Contains(ctx.Keywords) || aa.Code.Contains(ctx.Keywords) select aa;
-            PagedList<WareHouse> res = new PagedList<WareHouse>();
+                l = from aa in l where aa.UnitName.Contains(ctx.Keywords) select aa;
+            PagedList<Unit> res = new PagedList<Unit>();
             await res.Result(ctx.PageSize, (ctx.PageIndex - 1) * ctx.PageSize, l);
             return res;
         }
 
-        public async Task<WareHouse> GetByIdAsync(string id, bool tracking = false)
+        public async Task<Unit> GetByIdAsync(string id, bool tracking = false)
         {
             if (id == null)
                 throw new ArgumentNullException("id is null !");
             return await _generic.GetByIdsync(id, Tracking: tracking);
 
         }
-
-        public async Task<IList<SelectListItem>> GetSelectListItem()
-        {
-            var q = from i in _generic.Table
-                    where !i.OnDelete
-                    select new SelectListItem
-                    {
-                        Text = $"{i.Code}-{i.Name}",
-                        Value = i.Id
-                    };
-            return await q.ToListAsync();
-        }
-
-        public async Task<bool> InsertAsync(WareHouse entity)
+      
+        public async Task<bool> InsertAsync(Unit entity)
         {
             if (entity == null)
                 throw new ArgumentNullException(nameof(entity));
@@ -111,7 +88,7 @@ namespace BaseHA.Application.Serivce
             return await _generic.SaveChangesConfigureAwaitAsync() > 0;
         }
 
-        public async Task<bool> InsertWHAsync(IEnumerable<WareHouse> entities)
+        public async Task<bool> InsertAsync(IEnumerable<Unit> entities)
         {
             if (entities == null)
                 throw new ArgumentNullException(nameof(entities));
@@ -119,7 +96,7 @@ namespace BaseHA.Application.Serivce
             return await _generic.SaveChangesConfigureAwaitAsync() > 0;
         }
 
-        public async Task<bool> UpdateAsync(WareHouse entity)
+        public async Task<bool> UpdateAsync(Unit entity)
         {
             if (entity == null)
                 throw new ArgumentNullException(nameof(entity));

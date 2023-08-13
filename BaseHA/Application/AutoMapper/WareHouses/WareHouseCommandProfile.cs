@@ -32,6 +32,25 @@ namespace BaseHA.Application.AutoMapper.WareHouses
                 .ForMember(x => x.AvailableWareHouses, opt => opt.Ignore());
             //
 
+            #region Unit
+
+            CreateMap<UnitCommands, Unit>()
+               .ForMember(x => x.WareHouseLimits, opt => opt.Ignore())
+               .ForMember(x => x.WareHouseItemUnits, opt => opt.Ignore())
+               .ForMember(x => x.BeginningWareHouses, opt => opt.Ignore())
+               .ForMember(x => x.WareHouseItems, opt => opt.Ignore())
+               .ForMember(x => x.InwardDetails, opt => opt.Ignore())
+               .ForMember(x => x.OutwardDetails, opt => opt.Ignore())
+               .ForMember(x => x.WareHouseLimits, opt => opt.Ignore());
+
+
+            CreateMap<Unit, UnitCommands>();
+                //.ForMember(x => x.AvailableWareHouses, opt => opt.Ignore());
+
+            #endregion
+
+
+
         }
     }
 
