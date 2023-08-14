@@ -56,6 +56,7 @@ namespace BaseHA.Application.Configuration
         public static void AddCustomDI(this IServiceCollection services)
         {
             services.AddScoped<IWareHouseService, WareHouseService>();
+            services.AddScoped<IVendorService, VendorService>();
         }
     }
 }
