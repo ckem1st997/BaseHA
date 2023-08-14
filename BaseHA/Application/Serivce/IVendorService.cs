@@ -1,43 +1,38 @@
 ﻿using BaseHA.Domain.Entity;
 using BaseHA.Models.SearchModel;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Diagnostics.Tracing.Parsers.Kernel;
 using Microsoft.EntityFrameworkCore;
-using Nest;
-using NuGet.Packaging.Signing;
 using Share.BaseCore.Base;
 using Share.BaseCore.Extensions;
 using Share.BaseCore.IRepositories;
-using System.Threading.Tasks;
 
 namespace BaseHA.Application.Serivce
 {
-    public interface IWareHouseService
+    public interface IVendorService
     {
-        Task<bool> InsertAsync(WareHouse entity);
+        Task<bool> InsertAsync(Vendor entity);
 
-        Task<bool> InsertWHAsync(IEnumerable<WareHouse> entities);
+        Task<bool> InsertWHAsync(IEnumerable<Vendor> entities);
 
-        Task<bool> UpdateAsync(WareHouse entity);
+        Task<bool> UpdateAsync(Vendor entity);
 
         Task<bool> DeletesAsync(IEnumerable<string> ids);
 
-        Task<PagedList<WareHouse>> GetAsync(WareHouseSearchModel ctx);
+        Task<PagedList<Vendor>> GetAsync(VendorSearchModel ctx);
 
-        Task<WareHouse> GetByIdAsync(string id, bool tracking = false);
+        Task<Vendor> GetByIdAsync(string id, bool tracking = false);
 
         Task<bool> ActivatesAsync(IEnumerable<string> ids, bool active);
         Task<IList<SelectListItem>> GetSelectListItem();
     }
 
-
-    public class WareHouseService : IWareHouseService
+    public class VendorService : IVendorService
     {
-        private readonly IRepositoryEF<WareHouse> _generic;
+        private readonly IRepositoryEF<Vendor> _generic;
 
-        public WareHouseService()
+        public VendorService()
         {
-            _generic = EngineContext.Current.Resolve<IRepositoryEF<WareHouse>>(DataConnectionHelper.ConnectionStringNames.Warehouse);
+            _generic = EngineContext.Current.Resolve<IRepositoryEF<Vendor   >>(DataConnectionHelper.ConnectionStringNames.Warehouse);
 
         }
 
@@ -73,17 +68,17 @@ namespace BaseHA.Application.Serivce
             return await _generic.SaveChangesConfigureAwaitAsync() > 0;
         }
 
-        public async Task<PagedList<WareHouse>> GetAsync(WareHouseSearchModel ctx)
+        public async Task<PagedList<Vendor>> GetAsync(VendorSearchModel ctx)
         {
-            var l = from i in _generic.Table select i;
+            var l = from i in _generic.Table where i.OnDelete == false select i;
             if (!string.IsNullOrEmpty(ctx.Keywords))
                 l = from aa in l where aa.Name.Contains(ctx.Keywords) || aa.Code.Contains(ctx.Keywords) select aa;
-            PagedList<WareHouse> res = new PagedList<WareHouse>();
+            PagedList<Vendor> res = new PagedList<Vendor>();
             await res.Result(ctx.PageSize, (ctx.PageIndex - 1) * ctx.PageSize, l);
             return res;
         }
 
-        public async Task<WareHouse> GetByIdAsync(string id, bool tracking = false)
+        public async Task<Vendor> GetByIdAsync(string id, bool tracking = false)
         {
             if (id == null)
                 throw new ArgumentNullException("id is null !");
@@ -103,7 +98,7 @@ namespace BaseHA.Application.Serivce
             return await q.ToListAsync();
         }
 
-        public async Task<bool> InsertAsync(WareHouse entity)
+        public async Task<bool> InsertAsync(Vendor entity)
         {
             if (entity == null)
                 throw new ArgumentNullException(nameof(entity));
@@ -111,7 +106,7 @@ namespace BaseHA.Application.Serivce
             return await _generic.SaveChangesConfigureAwaitAsync() > 0;
         }
 
-        public async Task<bool> InsertWHAsync(IEnumerable<WareHouse> entities)
+        public async Task<bool> InsertWHAsync(IEnumerable<Vendor> entities)
         {
             if (entities == null)
                 throw new ArgumentNullException(nameof(entities));
@@ -119,11 +114,11 @@ namespace BaseHA.Application.Serivce
             return await _generic.SaveChangesConfigureAwaitAsync() > 0;
         }
 
-        public async Task<bool> UpdateAsync(WareHouse entity)
+        public async Task<bool> UpdateAsync(Vendor entity)
         {
             if (entity == null)
                 throw new ArgumentNullException(nameof(entity));
-            _generic.Update(entity);
+            //_generic.Update(entity);
             return await _generic.SaveChangesConfigureAwaitAsync() > 0;
         }
     }
