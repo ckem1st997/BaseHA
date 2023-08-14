@@ -81,6 +81,9 @@ namespace BaseHA.Domain.Entity
         public string? Voucher { get; set; }
 
 
+        public int? Viewer { get; set; }
+
+
         public virtual WareHouse? ToWareHouse { get; set; }
         public virtual WareHouse WareHouse { get; set; } = null!;
         public virtual ICollection<OutwardDetail> OutwardDetails { get; set; }

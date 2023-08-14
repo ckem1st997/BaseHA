@@ -38,13 +38,13 @@ namespace BaseHA.Domain.Contexts
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-                optionsBuilder.LogTo(Log.Information, LogLevel.Information, DbContextLoggerOptions.UtcTime).EnableSensitiveDataLogging().EnableDetailedErrors().EnableServiceProviderCaching();
-                optionsBuilder.LogTo(Console.WriteLine, LogLevel.Information, DbContextLoggerOptions.UtcTime).EnableSensitiveDataLogging().EnableDetailedErrors().EnableServiceProviderCaching();
+                optionsBuilder.LogTo(Log.Information, LogLevel.Information, DbContextLoggerOptions.UtcTime).EnableSensitiveDataLogging().EnableDetailedErrors();
+                optionsBuilder.LogTo(Console.WriteLine, LogLevel.Information, DbContextLoggerOptions.UtcTime).EnableSensitiveDataLogging().EnableDetailedErrors();
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
 
-                optionsBuilder.UseSqlServer("Data Source=desktop-itlr9t6;Initial Catalog=WarehouseManagement;Integrated Security=True");
+                optionsBuilder.UseSqlServer("Data Source=ADMIN;Initial Catalog=WarehouseManagement;Integrated Security=True");
             }
         }
 
@@ -313,6 +313,8 @@ namespace BaseHA.Domain.Contexts
                     .HasMaxLength(36)
                     .IsUnicode(false);
 
+                entity.Property(e => e.Viewer).HasDefaultValueSql("((0))");
+
                 entity.Property(e => e.Voucher)
                     .HasMaxLength(50)
                     .IsUnicode(false);
@@ -498,6 +500,8 @@ namespace BaseHA.Domain.Contexts
                 entity.Property(e => e.ToWareHouseId)
                     .HasMaxLength(36)
                     .IsUnicode(false);
+
+                entity.Property(e => e.Viewer).HasDefaultValueSql("((0))");
 
                 entity.Property(e => e.Voucher)
                     .HasMaxLength(50)

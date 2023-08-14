@@ -31,4 +31,6 @@ namespace BaseHA.Application.ModelDto
         public virtual ICollection<WareHouseLimit> WareHouseLimits { get; set; }
         public virtual IList<SelectListItem> AvailableWareHouses { get; set; }
     }
+
+
 }
