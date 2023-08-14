@@ -147,7 +147,7 @@ namespace BaseHA.Controllers
         /// <returns></returns>
         [IgnoreAntiforgeryToken]
         [HttpPost]
-        public async Task<IActionResult> Get([DataSourceRequest] DataSourceRequest request, WareHouseSearchModel searchModel)
+        public async Task<IActionResult> Get([DataSourceRequest] DataSourceRequest request, VendorSearchModel searchModel)
         {
 
             searchModel.BindRequest(request);

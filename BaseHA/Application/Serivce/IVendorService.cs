@@ -18,7 +18,7 @@ namespace BaseHA.Application.Serivce
 
         Task<bool> DeletesAsync(IEnumerable<string> ids);
 
-        Task<PagedList<Vendor>> GetAsync(WareHouseSearchModel ctx);
+        Task<PagedList<Vendor>> GetAsync(VendorSearchModel ctx);
 
         Task<Vendor> GetByIdAsync(string id, bool tracking = false);
 
@@ -68,7 +68,7 @@ namespace BaseHA.Application.Serivce
             return await _generic.SaveChangesConfigureAwaitAsync() > 0;
         }
 
-        public async Task<PagedList<Vendor>> GetAsync(WareHouseSearchModel ctx)
+        public async Task<PagedList<Vendor>> GetAsync(VendorSearchModel ctx)
         {
             var l = from i in _generic.Table where i.OnDelete == false select i;
             if (!string.IsNullOrEmpty(ctx.Keywords))
