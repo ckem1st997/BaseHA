@@ -21,6 +21,8 @@ namespace BaseHA.Application.Validations.ConfigureServices
         {
             services.AddFluentValidation();
             services.AddTransient<IValidator<WareHouseCommands>, WareHouseCommandValidator>();
+            services.AddTransient<IValidator<VendorCommands>, VendorCommandValidator>();
+
             services.AddScoped<IValidator<BaseSearchModel>, BaseSearchModelValidator>();
 
         }
