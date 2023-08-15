@@ -23,6 +23,7 @@ namespace BaseHA.Application.Serivce
         Task<Vendor> GetByIdAsync(string id, bool tracking = false);
 
         Task<bool> ActivatesAsync(IEnumerable<string> ids, bool active);
+        
         Task<IList<SelectListItem>> GetSelectListItem();
     }
 
@@ -32,7 +33,7 @@ namespace BaseHA.Application.Serivce
 
         public VendorService()
         {
-            _generic = EngineContext.Current.Resolve<IRepositoryEF<Vendor   >>(DataConnectionHelper.ConnectionStringNames.Warehouse);
+            _generic = EngineContext.Current.Resolve<IRepositoryEF<Vendor>>(DataConnectionHelper.ConnectionStringNames.Warehouse);
 
         }
 
@@ -70,9 +71,9 @@ namespace BaseHA.Application.Serivce
 
         public async Task<PagedList<Vendor>> GetAsync(VendorSearchModel ctx)
         {
-            var l = from i in _generic.Table where i.OnDelete == false select i;
+            var l = from i in _generic.Table select i; // where i.OnDelete == false select i;
             if (!string.IsNullOrEmpty(ctx.Keywords))
-                l = from aa in l where aa.Name.Contains(ctx.Keywords) || aa.Code.Contains(ctx.Keywords) select aa;
+                l = from aa in l where aa.Name.Contains(ctx.Keywords) || aa.Code.Contains(ctx.Keywords) || aa.Phone.Contains(ctx.Keywords) select aa;
             PagedList<Vendor> res = new PagedList<Vendor>();
             await res.Result(ctx.PageSize, (ctx.PageIndex - 1) * ctx.PageSize, l);
             return res;

@@ -6,9 +6,9 @@ namespace BaseHA.Domain.Entity
 {
     public partial class Vendor: BaseEntity
     {
-        public Vendor()
+        public Vendor() //nha cung cap
         {
-            Inwards = new HashSet<Inward>();
+            Inwards = new HashSet<Inward>();    //dsach phieu nhap
             WareHouseItems = new HashSet<WareHouseItem>();
         }
 
@@ -39,7 +39,7 @@ namespace BaseHA.Domain.Entity
 
         public override bool OnDelete { get; set; } = default!;
 
-
+        //virtual Icollection: thuoc tinh dieu huong
         public virtual ICollection<Inward> Inwards { get; set; }
         public virtual ICollection<WareHouseItem> WareHouseItems { get; set; }
     }

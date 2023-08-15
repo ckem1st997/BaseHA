@@ -19,7 +19,7 @@ namespace BaseHA.Application.ModelDto
         public string? Email { get; set; }
         public string? ContactPerson { get; set;}
 
-        public bool Inactive { get; set; } = false;
+        public bool Inactive { get; set; } = false; //trang thai hoat dong
 
         public virtual ICollection<Inward> Inwards { get; set; }
         public virtual ICollection<WareHouseItem> WareHouseItems { get; set; }

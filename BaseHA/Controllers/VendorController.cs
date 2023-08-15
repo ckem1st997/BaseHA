@@ -137,7 +137,6 @@ namespace BaseHA.Controllers
         }
 
 
-
         #region List
         /// <summary>
         /// Lấy về danh sách dữ liệu phân trang

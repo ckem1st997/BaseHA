@@ -61,7 +61,7 @@
         </form>
     </div>
     <div class="row full-height">
-        @(Html.Kendo().Grid<VendorCommands>()
+        @(Html.Kendo().Grid<Vendor>()
             .Name("grd")
             .HtmlAttributes(new { style = "height: 100%" })
             .Columns(columns =>
@@ -71,9 +71,10 @@
                 columns.Bound(x => x.Name).ClientTemplate("#=grd.tmp.name(Name)#").Width(100).Title("Tên");
                 columns.Bound(x => x.Code).Width(100).Title("Mã");
                @*  columns.Bound(x => x.Address).ClientTemplate("#=grd.tmp.address(Address)#").Width(100).Title("Địa chỉ");
-                columns.Bound(x => x.Phone).Width(100).Title("Số điện thoại");
+                
                 columns.Bound(x => x.Email).Width(100).Title("Email");
                 columns.Bound(x => x.ContactPerson).Width(100).Title("contact"); *@
+                columns.Bound(x => x.Phone).Width(100).Title("Số điện thoại");
                 columns.Bound(x => x.Inactive).ClientTemplate("#=grd.tmp.activate(!Inactive)#").Width(100).Title("Kích hoạt");
             })
             .DataSource(dataSource => dataSource
