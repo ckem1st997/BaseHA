@@ -8,32 +8,32 @@ using Share.BaseCore.IRepositories;
 
 namespace BaseHA.Application.Serivce
 {
-    public interface IVendorService
+    public interface IUnitService
     {
-        Task<bool> InsertAsync(Vendor entity);
+        Task<bool> InsertAsync(Unit entity);
 
-        Task<bool> InsertWHAsync(IEnumerable<Vendor> entities);
+        Task<bool> InsertWHAsync(IEnumerable<Unit> entities);
 
-        Task<bool> UpdateAsync(Vendor entity);
+        Task<bool> UpdateAsync(Unit entity);
 
         Task<bool> DeletesAsync(IEnumerable<string> ids);
 
-        Task<PagedList<Vendor>> GetAsync(VendorSearchModel ctx);
+        Task<PagedList<Unit>> GetAsync(UnitSearchModel ctx);
 
-        Task<Vendor> GetByIdAsync(string id, bool tracking = false);
+        Task<Unit> GetByIdAsync(string id, bool tracking = false);
 
         Task<bool> ActivatesAsync(IEnumerable<string> ids, bool active);
         
-       Task<IList<SelectListItem>> GetSelectListItem();
+        //Task<IList<SelectListItem>> GetSelectListItem();
     }
 
-    public class VendorService : IVendorService
+    public class UnitService : IUnitService
     {
-        private readonly IRepositoryEF<Vendor> _generic;
+        private readonly IRepositoryEF<Unit> _generic;
 
-        public VendorService()
+        public UnitService()
         {
-            _generic = EngineContext.Current.Resolve<IRepositoryEF<Vendor>>(DataConnectionHelper.ConnectionStringNames.Warehouse);
+            _generic = EngineContext.Current.Resolve<IRepositoryEF<Unit>>(DataConnectionHelper.ConnectionStringNames.Warehouse);
 
         }
 
@@ -69,19 +69,17 @@ namespace BaseHA.Application.Serivce
             return await _generic.SaveChangesConfigureAwaitAsync() > 0;
         }
 
-        public async Task<PagedList<Vendor>> GetAsync(VendorSearchModel ctx)
+        public async Task<PagedList<Unit>> GetAsync(UnitSearchModel ctx)
         {
-            var l = from i in _generic.Table  where i.OnDelete == false select i;
+            var l = from i in _generic.Table where i.OnDelete == false select i;
             if (!string.IsNullOrEmpty(ctx.Keywords))
-                l = from aa in l where aa.Name.Contains(ctx.Keywords) || aa.Code.Contains(ctx.Keywords) || aa.Phone.Contains(ctx.Keywords) 
-                                || aa.Address.Contains(ctx.Keywords) || aa.Email.Contains(ctx.Keywords) || aa.ContactPerson.Contains(ctx.Keywords) 
-                                select aa;
-            PagedList<Vendor> res = new PagedList<Vendor>();
-            await res.Result(ctx.PageSize, (ctx.PageIndex - 1) * ctx.PageSize, l);
+                l = from aa in l where aa.UnitName.Contains(ctx.Keywords) select aa;
+            PagedList<Unit> res = new PagedList<Unit>();
+            await res.Result(   ctx.PageSize, (ctx.PageIndex - 1) * ctx.PageSize, l);
             return res;
         }
 
-        public async Task<Vendor> GetByIdAsync(string id, bool tracking = false)
+        public async Task<Unit> GetByIdAsync(string id, bool tracking = false)
         {
             if (id == null)
                 throw new ArgumentNullException("id is null !");
@@ -95,13 +93,13 @@ namespace BaseHA.Application.Serivce
                     where !i.OnDelete
                     select new SelectListItem
                     {
-                        Text = $"{i.Code}-{i.Name}",
+                        Text = $"{i.UnitName}",
                         Value = i.Id
                     };
             return await q.ToListAsync();
         }
 
-        public async Task<bool> InsertAsync(Vendor entity)
+        public async Task<bool> InsertAsync(Unit entity)
         {
             if (entity == null)
                 throw new ArgumentNullException(nameof(entity));
@@ -109,7 +107,7 @@ namespace BaseHA.Application.Serivce
             return await _generic.SaveChangesConfigureAwaitAsync() > 0;
         }
 
-        public async Task<bool> InsertWHAsync(IEnumerable<Vendor> entities)
+        public async Task<bool> InsertWHAsync(IEnumerable<Unit> entities)
         {
             if (entities == null)
                 throw new ArgumentNullException(nameof(entities));
@@ -117,7 +115,7 @@ namespace BaseHA.Application.Serivce
             return await _generic.SaveChangesConfigureAwaitAsync() > 0;
         }
 
-        public async Task<bool> UpdateAsync(Vendor entity)
+        public async Task<bool> UpdateAsync(Unit entity)
         {
             if (entity == null)
                 throw new ArgumentNullException(nameof(entity));

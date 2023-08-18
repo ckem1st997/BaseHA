@@ -15,8 +15,6 @@ namespace BaseHA.Application.AutoMapper.WareHouses
         {
             // ForAllMaps(CommonProfile.AllMapsAction);
 
-
-
             CreateMap<WareHouseCommands, WareHouse>()
                 .ForMember(x => x.OutwardToWareHouses, opt => opt.Ignore())
                 .ForMember(x => x.OutwardToWareHouses, opt => opt.Ignore())
@@ -31,17 +29,32 @@ namespace BaseHA.Application.AutoMapper.WareHouses
             CreateMap<WareHouse, WareHouseCommands>()
                 .ForMember(x => x.AvailableWareHouses, opt => opt.Ignore());
             //
-            #region Vendor
+            /*  #region Vendor
 
-            CreateMap<VendorCommands, Vendor>()
+              CreateMap<VendorCommands, Vendor>()
+                 .ForMember(x => x.WareHouseItems, opt => opt.Ignore())
+                 .ForMember(x => x.Inwards, opt => opt.Ignore());
+
+
+              CreateMap<Vendor, VendorCommands>()
+                  .ForMember(x => x.AvailableWareHouses, opt => opt.Ignore());
+
+              #endregion*/
+         /*   #region Unit
+
+            CreateMap<UnitCommands, Unit>()
                .ForMember(x => x.WareHouseItems, opt => opt.Ignore())
-               .ForMember(x => x.Inwards, opt => opt.Ignore());
+               .ForMember(x => x.InwardDetails, opt => opt.Ignore())
+               .ForMember(x => x.OutwardDetails, opt => opt.Ignore())
+               .ForMember(x => x.WareHouseItemUnits, opt => opt.Ignore())
+               .ForMember(x => x.WareHouseLimits, opt => opt.Ignore())
+               .ForMember(x => x.BeginningWareHouses, opt => opt.Ignore());
 
 
-            CreateMap<Vendor, VendorCommands>()
-                .ForMember(x => x.AvailableWareHouses, opt => opt.Ignore());
+            CreateMap<Unit, UnitCommands>();
+               //.ForMember(x => x.AvailableWareHouses, opt => opt.Ignore());
 
-            #endregion
+            #endregion*/
 
         }
     }
@@ -65,20 +78,34 @@ namespace BaseHA.Application.AutoMapper.WareHouses
         }
 
         //
-        public static VendorCommands ToModel(this Vendor entity)
+        /*  public static VendorCommands ToModel(this Vendor entity)
+          {
+              return AutoMapperConfiguration.Mapper.Map<Vendor, VendorCommands>(entity);
+          }
+
+          public static Vendor ToEntity(this VendorCommands model)
+          {
+              return AutoMapperConfiguration.Mapper.Map< VendorCommands, Vendor>(model);
+          }
+
+          public static Vendor ToEntity(this VendorCommands model, Vendor destination)
+          {
+              return AutoMapperConfiguration.Mapper.Map(model, destination);
+          }*/
+       /* public static UnitCommands ToModel(this Unit entity)
         {
-            return AutoMapperConfiguration.Mapper.Map<Vendor, VendorCommands>(entity);
+            return AutoMapperConfiguration.Mapper.Map<Unit, UnitCommands>(entity);
         }
 
-        public static Vendor ToEntity(this VendorCommands model)
+        public static Unit ToEntity(this UnitCommands model)
         {
-            return AutoMapperConfiguration.Mapper.Map< VendorCommands, Vendor>(model);
+            return AutoMapperConfiguration.Mapper.Map<UnitCommands, Unit>(model);
         }
 
-        public static Vendor ToEntity(this VendorCommands model, Vendor destination)
+        public static Unit ToEntity(this UnitCommands model, Unit destination)
         {
             return AutoMapperConfiguration.Mapper.Map(model, destination);
-        }
+        }*/
 
     }
     /// <summary>

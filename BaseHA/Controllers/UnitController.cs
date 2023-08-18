@@ -11,27 +11,27 @@ using System.Diagnostics;
 
 namespace BaseHA.Controllers
 {
-    public class VendorController : Controller
+    public class UnitController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IVendorService _generic;
+        private readonly IUnitService _generic;
         private readonly IMapper _mapper;
 
-        public VendorController(ILogger<HomeController> logger, IVendorService generic, IMapper mapper)
+        public UnitController(ILogger<HomeController> logger, IUnitService generic, IMapper mapper)
         {
             _logger = logger;
             _generic = generic;
             _mapper = mapper;
         }
 
-        private static string GenerateRandomName(int length)
+       /* private static string GenerateRandomName(int length)
         {
             Random random = new Random();
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             string randomName = new string(Enumerable.Repeat(chars, length)
                 .Select(s => s[random.Next(s.Length)]).ToArray());
             return randomName;
-        }
+        }*/
         public async Task<IActionResult> Index()
         {
             return View();
@@ -40,22 +40,22 @@ namespace BaseHA.Controllers
         public async Task<IActionResult> Edit(string id)
         {
             var res = await _generic.GetByIdAsync(id);
-            var entity = _mapper.Map<VendorCommands>(res);
-            entity.AvailableWareHouses = await _generic.GetSelectListItem();
+            var entity = _mapper.Map<UnitCommands>(res);
+            //entity.AvailableWareHouses = await _generic.GetSelectListItem();
             return View(entity);
         }
 
         public async Task<IActionResult> Details(string id)
         {
             var res = await _generic.GetByIdAsync($"{id}");
-            var entity = _mapper.Map<VendorCommands>(res);
+            var entity = _mapper.Map<UnitCommands>(res);
             return View(entity);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(VendorCommands vendor)
+        public async Task<IActionResult> Add(UnitCommands wareHouse)
         {
-            var entity = _mapper.Map<Vendor>(vendor);
+            var entity = _mapper.Map<Unit>(wareHouse);
             var res = await _generic.InsertAsync(entity);
             return Ok(new ResultMessageResponse()
             {
@@ -104,15 +104,15 @@ namespace BaseHA.Controllers
 
         public async Task<IActionResult> Add()
         {
-            var model = new VendorCommands();
-            model.AvailableWareHouses = await _generic.GetSelectListItem();
+            var model = new UnitCommands();
+           // model.AvailableWareHouses = await _generic.GetSelectListItem();
             return View(model);
         }
 
 
 
         [HttpPost]
-        public async Task<IActionResult> Edit(VendorCommands unit)
+        public async Task<IActionResult> Edit(UnitCommands unit)
         {
             var model = await _generic.GetByIdAsync(unit.Id, true);
             if (model == null)
@@ -137,6 +137,7 @@ namespace BaseHA.Controllers
         }
 
 
+
         #region List
         /// <summary>
         /// Lấy về danh sách dữ liệu phân trang
@@ -146,11 +147,18 @@ namespace BaseHA.Controllers
         /// <returns></returns>
         [IgnoreAntiforgeryToken]
         [HttpPost]
-        public async Task<IActionResult> Get([DataSourceRequest] DataSourceRequest request, VendorSearchModel searchModel)
+        public async Task<IActionResult> Get([DataSourceRequest] DataSourceRequest request, UnitSearchModel searchModel)
         {
 
             searchModel.BindRequest(request);
             var data = await _generic.GetAsync(searchModel);
+
+            var dataList = new List<UnitCommands>();
+            foreach (var item in data.Lists)
+            {
+                var model = _mapper.Map<UnitCommands>(item);
+                dataList.Add(model);
+            }
 
             var result = new DataSourceResult
             {
@@ -169,6 +177,5 @@ namespace BaseHA.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
     }
 }

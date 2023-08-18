@@ -30,7 +30,6 @@ namespace BaseHA.Application.Serivce
         Task<IList<SelectListItem>> GetSelectListItem();
     }
 
-
     public class WareHouseService : IWareHouseService
     {
         private readonly IRepositoryEF<WareHouse> _generic;

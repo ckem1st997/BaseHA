@@ -1,7 +1,7 @@
 ﻿@using BaseHA.Application.ModelDto;
 @using BaseHA.Domain.Entity;
 @using BaseHA.Models.SearchModel;
-@model VendorSearchModel
+@model UnitSearchModel
 
 @{
     var setting = new AdminAreaSettings();
@@ -61,26 +61,22 @@
         </form>
     </div>
     <div class="row full-height">
-        @(Html.Kendo().Grid<Vendor>()
+        @(Html.Kendo().Grid<Unit>()
             .Name("grd")
             .HtmlAttributes(new { style = "height: 100%" })
             .Columns(columns =>
             {
                 columns.Select().Width(30);
                 columns.Bound(x => x.Id).Width(300).Hidden();
-                columns.Bound(x => x.Name).ClientTemplate("#=grd.tmp.name(Name)#").Width(100).Title("Tên");
-                columns.Bound(x => x.Code).Width(100).Title("Mã");
-                columns.Bound(x => x.Address).ClientTemplate("#=grd.tmp.name(Address)#").Width(100).Title("Địa chỉ");
-                columns.Bound(x => x.Email).Width(100).Title("Email");
-                columns.Bound(x => x.ContactPerson).Width(100).Title("contact");
-                columns.Bound(x => x.Phone).ClientTemplate("#=grd.tmp.name(Phone)#").Width(100).Title("Phone");
+                columns.Bound(x => x.UnitName).ClientTemplate("#=grd.tmp.name(UnitName)#").Width(100).Title("Tên");
+ 
                 columns.Bound(x => x.Inactive).ClientTemplate("#=grd.tmp.activate(!Inactive)#").Width(100).Title("Kích hoạt");
             })
             .DataSource(dataSource => dataSource
             .Ajax()
             .ServerOperation(true)
             .PageSize(setting.GridPageSize)
-            .Read(read => read.Action("Get", "Vendor").Data("grd.data"))
+            .Read(read => read.Action("Get", "Unit").Data("grd.data"))
             )
             .NoRecords()
             .Scrollable(scr => scr.Enabled(true))

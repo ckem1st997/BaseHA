@@ -57,6 +57,7 @@ namespace BaseHA.Application.Configuration
         {
             services.AddScoped<IWareHouseService, WareHouseService>();
             services.AddScoped<IVendorService, VendorService>();
+            services.AddScoped<IUnitService, UnitService>();
         }
     }
 }
