@@ -23,6 +23,7 @@ using Share.BaseCore.Filters;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using BaseHA.Application.Serivce;
 using BaseHA.Domain.Contexts;
+using Autofac.Core;
 
 namespace BaseHA.Application.Configuration
 {
@@ -58,6 +59,7 @@ namespace BaseHA.Application.Configuration
             services.AddScoped<IWareHouseService, WareHouseService>();
             services.AddScoped<IUnitService, UnitService>();
             services.AddScoped<IVendorService, VendorService>();
+            services.AddScoped<IBeginningWareHouseService, BeginningWareHouseService>();
         }
     }
 }

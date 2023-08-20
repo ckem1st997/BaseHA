@@ -46,13 +46,13 @@ namespace Share.BaseCore.CustomConfiguration
                       sqlOptions.MigrationsAssembly("sql MigrationsAssembly");
                   });
                         break;
-                    case DbType.Oracle:
+                   /* case DbType.Oracle:
                         options.UseOracle(sqlConnect,
                        oracleOptionsAction: sqlOptions =>
                        {
                            sqlOptions.MigrationsAssembly("sql MigrationsAssembly");
                        });
-                        break;
+                        break;*/
                     default:
                         break;
                 }
