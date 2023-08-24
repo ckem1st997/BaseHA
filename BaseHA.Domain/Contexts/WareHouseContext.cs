@@ -16,10 +16,12 @@ namespace BaseHA.Domain.Contexts
         public virtual DbSet<AuditDetail> AuditDetails { get; set; } = null!;
         public virtual DbSet<AuditDetailSerial> AuditDetailSerials { get; set; } = null!;
         public virtual DbSet<BeginningWareHouse> BeginningWareHouses { get; set; } = null!;
+        public virtual DbSet<Chat> Chats { get; set; } = null!;
         public virtual DbSet<Inward> Inwards { get; set; } = null!;
         public virtual DbSet<InwardDetail> InwardDetails { get; set; } = null!;
         public virtual DbSet<Outward> Outwards { get; set; } = null!;
         public virtual DbSet<OutwardDetail> OutwardDetails { get; set; } = null!;
+        public virtual DbSet<QnA> QnAs { get; set; } = null!;
         public virtual DbSet<SerialWareHouse> SerialWareHouses { get; set; } = null!;
         public virtual DbSet<Unit> Units { get; set; } = null!;
         public virtual DbSet<Vendor> Vendors { get; set; } = null!;
@@ -44,7 +46,7 @@ namespace BaseHA.Domain.Contexts
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
 
-                optionsBuilder.UseSqlServer("Data Source=ADMIN;Initial Catalog=WarehouseManagement;Integrated Security=True");
+                optionsBuilder.UseSqlServer("Data Source=desktop-itlr9t6;Initial Catalog=WarehouseManagement;Integrated Security=True");
             }
         }
 
@@ -258,6 +260,59 @@ namespace BaseHA.Domain.Contexts
                     .HasConstraintName("FK_BeginningWareHouses_PK_WareHouse");
             });
 
+            modelBuilder.Entity<Chat>(entity =>
+            {
+                entity.ToTable("Chat");
+
+                entity.Property(e => e.Id).HasMaxLength(255);
+
+                entity.Property(e => e.Content).HasColumnName("content");
+
+                entity.Property(e => e.ConversationId)
+                    .HasMaxLength(255)
+                    .HasColumnName("conversation_id");
+
+                entity.Property(e => e.ConversationType).HasColumnName("conversation_type");
+
+                entity.Property(e => e.LastAgentUserId).HasColumnName("last_agent_user_id");
+
+                entity.Property(e => e.MessageIndex).HasColumnName("message_index");
+
+                entity.Property(e => e.MsgId)
+                    .HasMaxLength(255)
+                    .HasColumnName("msg_id");
+
+                entity.Property(e => e.OnDelete).HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.RequesterId).HasColumnName("requester_id");
+
+                entity.Property(e => e.SenderAgentId).HasColumnName("sender_agent_id");
+
+                entity.Property(e => e.SenderAgentName)
+                    .HasMaxLength(255)
+                    .HasColumnName("sender_agent_name");
+
+                entity.Property(e => e.SenderVisitorId).HasColumnName("sender_visitor_id");
+
+                entity.Property(e => e.SenderVisitorName)
+                    .HasMaxLength(255)
+                    .HasColumnName("sender_visitor_name");
+
+                entity.Property(e => e.ServiceId).HasColumnName("service_id");
+
+                entity.Property(e => e.StartTime)
+                    .HasMaxLength(255)
+                    .HasColumnName("start_time");
+
+                entity.Property(e => e.TicketId).HasColumnName("ticket_id");
+
+                entity.Property(e => e.Time)
+                    .HasMaxLength(255)
+                    .HasColumnName("time");
+
+                entity.Property(e => e.Type).HasColumnName("type");
+            });
+
             modelBuilder.Entity<Inward>(entity =>
             {
                 entity.ToTable("Inward");
@@ -312,8 +367,6 @@ namespace BaseHA.Domain.Contexts
                 entity.Property(e => e.VendorId)
                     .HasMaxLength(36)
                     .IsUnicode(false);
-
-                entity.Property(e => e.Viewer).HasDefaultValueSql("((0))");
 
                 entity.Property(e => e.Voucher)
                     .HasMaxLength(50)
@@ -501,8 +554,6 @@ namespace BaseHA.Domain.Contexts
                     .HasMaxLength(36)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Viewer).HasDefaultValueSql("((0))");
-
                 entity.Property(e => e.Voucher)
                     .HasMaxLength(50)
                     .IsUnicode(false);
@@ -628,6 +679,11 @@ namespace BaseHA.Domain.Contexts
                     .HasForeignKey(d => d.UnitId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_OutwardDetails_PK_Unit");
+            });
+
+            modelBuilder.Entity<QnA>(entity =>
+            {
+                entity.ToTable("QnA");
             });
 
             modelBuilder.Entity<SerialWareHouse>(entity =>
