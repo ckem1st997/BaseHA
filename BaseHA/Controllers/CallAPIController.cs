@@ -25,7 +25,7 @@ namespace BaseHA.Controllers
         [HttpGet("call-api1")]
         public async Task<IActionResult> IndexAsync1111()
         {
-            var list = _generic.GetList(x => x.Id != null && x.MessageIndex !=null && !x.Content.Contains("thoát hộp thoại")).OrderBy(x => x.ConversationId);
+            var list = _generic.GetList(x => x.Id != null && x.MessageIndex !=null && !x.Content.Contains("thoát hộp thoại")).OrderBy(x => x.ConversationId).ThenBy(x => x.MessageIndex);
             //foreach (var item in list.)
             //{
                 
