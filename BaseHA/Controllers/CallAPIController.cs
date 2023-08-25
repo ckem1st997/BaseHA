@@ -25,16 +25,51 @@ namespace BaseHA.Controllers
         [HttpGet("call-api1")]
         public async Task<IActionResult> IndexAsync1111()
         {
-            var list = _generic.GetList(x => x.Id != null && x.MessageIndex !=null && !x.Content.Contains("thoát hộp thoại")).OrderBy(x => x.ConversationId).ThenBy(x => x.MessageIndex);
-            //foreach (var item in list.)
-            //{
-                
-            //}
-            return Ok(list);
+            var listUpdate = new List<QnA>();
+            var list = _generic.GetList(x => x.Id != null && x.MessageIndex != null && !x.Content.Contains("hội thoại")).OrderBy(x => x.ConversationId).ThenBy(x => x.MessageIndex);
+            var ConversationIdCHeck = list.FirstOrDefault().ConversationId;
+            var tempMode = new QnA();
+            foreach (var item in list)
+            {
+                if (item.ConversationId.Equals(ConversationIdCHeck))
+                {
+                    // nếu đoạn này là của khách hàng
+                    if (!string.IsNullOrEmpty(item.SenderVisitorName) && item.SenderVisitorId.HasValue)
+                    {
+                        tempMode.Question = tempMode.Answer + "." + item.Content;
+                    }
+                    // nếu đoạn này là của nhân viên
+                    else if (!string.IsNullOrEmpty(item.SenderAgentName) && item.SenderAgentId.HasValue)
+                    {
+                        tempMode.Answer = tempMode.Answer + "." + item.Content;
+                    }
+                }
+                else
+                {
+                    ConversationIdCHeck = item.ConversationId;
+                    tempMode.Id = Guid.NewGuid().ToString();
+                    await _genericq.AddAsync(tempMode);
+                    var res = await _genericq.SaveChangesConfigureAwaitAsync();
+
+                    tempMode.Question = "";
+                    tempMode.Answer = "";
+                    // nếu đoạn này là của khách hàng
+                    if (!string.IsNullOrEmpty(item.SenderVisitorName) && item.SenderVisitorId.HasValue)
+                    {
+                        tempMode.Question = tempMode.Answer + "." + item.Content;
+                    }
+                    // nếu đoạn này là của nhân viên
+                    else if (!string.IsNullOrEmpty(item.SenderAgentName) && item.SenderAgentId.HasValue)
+                    {
+                        tempMode.Answer = tempMode.Answer + "." + item.Content;
+                    }
+                }
+            }
+            return Ok(list.Count());
         }
 
 
-            [HttpGet("call-api")]
+        [HttpGet("call-api")]
         public async Task<IActionResult> IndexAsync()
         {
             var date = new DateTime(2021, 3, 1);
@@ -48,7 +83,7 @@ namespace BaseHA.Controllers
                 dateFrom = date.AddDays(29).ToString("yyyy-MM-dd");
                 Console.Write(dateTo);
 
-                string apiUrl = "https://api.caresoft.vn/hanoicomputer/api/v1/chats/messages?start_time_since=" + dateTo + "T00:00:00Z&conserstation_type=3&start_time_to=" + dateFrom + "T00:00:00Z"; // Điền URL của API vào đây
+                string apiUrl = "https://api.caresoft.vn/hanoicomputer/api/v1/chats/messages?start_time_since=" + dateTo + "T00:00:00Z&conserstation_type=0&start_time_to=" + dateFrom + "T00:00:00Z"; // Điền URL của API vào đây
                 string accessToken = "1FRvLEuRQgf5gdE"; // Điền access token của bạn vào đây
 
                 using (HttpClient client = new HttpClient())
@@ -67,7 +102,7 @@ namespace BaseHA.Controllers
                             {
                                 await _generic.AddAsync(new Domain.Entity.Chat()
                                 {
-                                    Id=item.id.ToString(),
+                                    Id = Guid.NewGuid().ToString(),
                                     Content = item.content,
                                     ConversationId = item.conversation_id,
                                     ConversationType = item.conversation_type,
