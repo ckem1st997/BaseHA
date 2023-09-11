@@ -31,7 +31,7 @@ namespace BaseHA.Application.Configuration
     {
         public static void AddCustomConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddCustomConfigurationCore<WareHouseContext>(configuration, "WarehouseManagementContext");
+            services.AddCustomConfigurationCore<CategoryTbContext>(configuration, "WarehouseManagementContext");
             services.AddMediatR(Assembly.GetExecutingAssembly());
             //services.Configure<ApiBehaviorOptions>(options =>
             //{
@@ -56,10 +56,7 @@ namespace BaseHA.Application.Configuration
 
         public static void AddCustomDI(this IServiceCollection services)
         {
-            services.AddScoped<IWareHouseService, WareHouseService>();
-            services.AddScoped<IUnitService, UnitService>();
-            services.AddScoped<IVendorService, VendorService>();
-            services.AddScoped<IBeginningWareHouseService, BeginningWareHouseService>();
+            services.AddScoped<ICategoryTbService, CategoryTbService>();
         }
     }
 }

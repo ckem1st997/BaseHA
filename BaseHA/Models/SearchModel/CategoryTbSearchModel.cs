@@ -1,12 +1,13 @@
 ﻿namespace BaseHA.Models.SearchModel
 {
-    public class VendorSearchModel : BaseSearchModel    
+    public class CategoryTbSearchModel : BaseSearchModel
     {
-        public VendorSearchModel()
+        public CategoryTbSearchModel()
         {
             Keywords = "";
         }
 
         public ActiveStatus ActiveStatus { get; set; }
+
     }
 }

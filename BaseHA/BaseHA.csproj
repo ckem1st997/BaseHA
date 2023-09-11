@@ -9,25 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="Views\Shared\EditorTemplates\AvatarUpload.cshtml" />
-    <None Include="Views\Shared\EditorTemplates\Boolean.cshtml" />
-    <None Include="Views\Shared\EditorTemplates\CkEditor.cshtml" />
-    <None Include="Views\Shared\EditorTemplates\Color.cshtml" />
-    <None Include="Views\Shared\EditorTemplates\DateTime.cshtml" />
-    <None Include="Views\Shared\EditorTemplates\Decimal.cshtml" />
-    <None Include="Views\Shared\EditorTemplates\Decimal4.cshtml" />
-    <None Include="Views\Shared\EditorTemplates\FileUpload.cshtml" />
-    <None Include="Views\Shared\EditorTemplates\IconPicker.cshtml" />
-    <None Include="Views\Shared\EditorTemplates\ImageUpload.cshtml" />
-    <None Include="Views\Shared\EditorTemplates\Int32.cshtml" />
-    <None Include="Views\Shared\EditorTemplates\KendoTextArea.cshtml" />
-    <None Include="Views\Shared\EditorTemplates\KendoTextBox.cshtml" />
-    <None Include="Views\Shared\EditorTemplates\TimeSpan.cshtml" />
-    <None Include="Views\Shared\EditorTemplates\Year.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="FluentValidation" Version="11.6.0" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.6.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.18" />
@@ -37,6 +18,8 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.18.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.14" />
+    <PackageReference Include="System.IO" Version="4.3.0" />
+    <PackageReference Include="YamlDotNet" Version="13.3.1" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,7 +1,6 @@
 ﻿
 using BaseHA.Application.ModelDto;
 using BaseHA.Application.Validations.BaseValidator;
-using BaseHA.Application.Validations.Unit;
 using BaseHA.Application.Validations.WareHouse;
 using BaseHA.Models.SearchModel;
 using FluentValidation;
@@ -22,11 +21,8 @@ namespace BaseHA.Application.Validations.ConfigureServices
         {
             services.AddFluentValidation();
 
-            services.AddTransient<IValidator<WareHouseCommands>, WareHouseCommandValidator>();
-            services.AddTransient<IValidator<UnitCommands>, UnitCommandValidator>();
-            services.AddTransient<IValidator<VendorCommands>, VendorCommandValidator>();
-            services.AddTransient<IValidator<BeginningCommands>, BeginningWareHouseValidator>();
-
+            services.AddTransient<IValidator<CategoryTbCommands>, CategoryTbCommandValidator>();
+            
             services.AddScoped<IValidator<BaseSearchModel>, BaseSearchModelValidator>();
 
         }

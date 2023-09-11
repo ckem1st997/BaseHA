@@ -18,9 +18,9 @@ namespace BaseHA.Application.ModuleAutoFac
     /// <summary>
     /// app.ConfigureRequestPipeline(); đăng ký
     /// </summary>
-    public class WareHouseModule : Module
+    public class CategoryTbModule : Module
     {
-        public WareHouseModule()
+        public CategoryTbModule()
         {
         }
         protected override void Load(ContainerBuilder builder)
@@ -29,10 +29,10 @@ namespace BaseHA.Application.ModuleAutoFac
             builder.RegisterType<HttpContextAccessor>().As<IHttpContextAccessor>().InstancePerLifetimeScope();
             builder.RegisterType<BaseEngine>().As<IEngine>().SingleInstance();
             //
-            builder.AddDbContext<WareHouseContext>(DataConnectionHelper.ConnectionStringNames.Warehouse);
+            builder.AddDbContext<CategoryTbContext>(DataConnectionHelper.ConnectionStringNames.CategoryTb);
             builder.AddRegisterDbContext(true);
             // ef core
-            builder.AddGeneric(DataConnectionHelper.ConnectionStringNames.Warehouse, DataConnectionHelper.ParameterName);
+            builder.AddGeneric(DataConnectionHelper.ConnectionStringNames.CategoryTb, DataConnectionHelper.ParameterName);
 
         }
     }

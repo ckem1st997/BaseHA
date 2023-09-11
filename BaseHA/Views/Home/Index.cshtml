@@ -1,6 +1,6 @@
 ﻿@using BaseHA.Domain.Entity;
 @using BaseHA.Models.SearchModel;
-@model WareHouseSearchModel
+@model CategoryTbSearchModel
 
 @{
     var setting = new AdminAreaSettings();
@@ -60,16 +60,17 @@
         </form>
     </div>
     <div class="row full-height">
-        @(Html.Kendo().Grid<WareHouse>()
+        @(Html.Kendo().Grid<CategoryTb>()
             .Name("grd")
             .HtmlAttributes(new { style = "height: 100%" })
             .Columns(columns =>
             {
                 columns.Select().Width(30);
                 columns.Bound(x => x.Id).Width(300).Hidden();
-                columns.Bound(x => x.Name).ClientTemplate("#=grd.tmp.name(Name)#").Width(100).Title("Tên");
-                columns.Bound(x => x.Code).Width(100).Title("Mã");
-                columns.Bound(x => x.Inactive).ClientTemplate("#=grd.tmp.activate(!Inactive)#").Width(100).Title("Kích hoạt");
+                columns.Bound(x => x.Category).ClientTemplate("#=grd.tmp.name(Category)#").Width(100).Title("Category");
+                columns.Bound(x => x.IntentCodeEn).Width(100).Title("Intent_Code_EN");
+                columns.Bound(x => x.IntentCodeVn).Width(100).Title("Intent_Code_VN");
+                columns.Bound(x => x.Description).Width(100).Title("Description");
             })
             .DataSource(dataSource => dataSource
             .Ajax()

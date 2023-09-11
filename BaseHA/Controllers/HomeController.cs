@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BaseHA.Application.AutoMapper.WareHouses;
+using BaseHA.Application.AutoMapper.CategoryTbs;
 using BaseHA.Application.ModelDto;
 using BaseHA.Application.Serivce;
 using BaseHA.Domain.Entity;
@@ -29,10 +29,12 @@ namespace BaseHA.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IWareHouseService _generic;
+        private readonly ICategoryTbService _generic;
+        private readonly ICategoryTbService _context;
+
         private readonly IMapper _mapper;
 
-        public HomeController(ILogger<HomeController> logger, IWareHouseService generic, IMapper mapper)
+        public HomeController(ILogger<HomeController> logger, ICategoryTbService generic, IMapper mapper)
         {
             _logger = logger;
             _generic = generic;
@@ -52,26 +54,34 @@ namespace BaseHA.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Edit(string id)
-        {
+        public async Task<IActionResult> Edit(string id){
             var res = await _generic.GetByIdAsync(id);
-            var entity = _mapper.Map<WareHouseCommands>(res);
-            entity.AvailableWareHouses = await _generic.GetSelectListItem();
+            var entity = _mapper.Map<CategoryTbCommands>(res);
+            //entity.AvailableCategoryTb = await _generic.GetSelectListItem();
             return View(entity);
         }
 
         public async Task<IActionResult> Details(string id)
         {
             var res = await _generic.GetByIdAsync($"{id}");
-            var entity = _mapper.Map<WareHouseCommands>(res);
+            var entity = _mapper.Map<CategoryTbCommands>(res);
             return View(entity);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Add(WareHouseCommands wareHouse)
+
+        public async Task<IActionResult> Add()
         {
-            var entity = _mapper.Map<WareHouse>(wareHouse);
+            var model = new CategoryTbCommands();
+            // model.AvailableCategoryTb = await _generic.GetSelectListItem();
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Add(CategoryTbCommands category){
+
+            var entity = _mapper.Map<CategoryTb>(category);
             var res = await _generic.InsertAsync(entity);
+
             return Ok(new ResultMessageResponse()
             {
                 message = res ? "Thành công !" : "Thất bại !",
@@ -116,18 +126,8 @@ namespace BaseHA.Controllers
             });
         }
 
-
-        public async Task<IActionResult> Add()
-        {
-            var model = new WareHouseCommands();
-            model.AvailableWareHouses = await _generic.GetSelectListItem();
-            return View(model);
-        }
-
-
-
         [HttpPost]
-        public async Task<IActionResult> Edit(WareHouseCommands unit)
+        public async Task<IActionResult> Edit(CategoryTbCommands unit)
         {
             var model = await _generic.GetByIdAsync(unit.Id, true);
             if (model == null)
@@ -151,18 +151,9 @@ namespace BaseHA.Controllers
             return View();
         }
 
-
-
-        #region List
-        /// <summary>
-        /// Lấy về danh sách dữ liệu phân trang
-        /// </summary>
-        /// <param name="request"></param>
-        /// <param name="searchModel"></param>
-        /// <returns></returns>
         [IgnoreAntiforgeryToken]
         [HttpPost]
-        public async Task<IActionResult> Get([DataSourceRequest] DataSourceRequest request, WareHouseSearchModel searchModel)
+        public async Task<IActionResult> Get([DataSourceRequest] DataSourceRequest request, CategoryTbSearchModel searchModel)
         {
 
             searchModel.BindRequest(request);
@@ -176,7 +167,6 @@ namespace BaseHA.Controllers
 
             return Ok(result);
         }
-        #endregion
 
 
 

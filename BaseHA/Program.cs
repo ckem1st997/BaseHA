@@ -38,10 +38,12 @@ using BaseHA.Application.Configuration;
 using BaseHA.Application.ModuleAutoFac;
 using BaseHA.Application.AutoMapper.ConfigureServices;
 using BaseHA.Application.Validations.ConfigureServices;
-using BaseHA.Application.AutoMapper.WareHouses;
+using BaseHA.Application.AutoMapper.CategoryTbs;
 using AutoMapper;
 
+
 var builder = WebApplication.CreateBuilder(args);
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -74,13 +76,13 @@ services.AddApiCors();
 //    options.AddFilter<CustomFilter>();
 //});
 AutoMapperConfiguration.Profiles.AddRange(new Profile[]
-  {                new WareHouseCommandProfile(),
+  {                new CategoryTbCommandProfile(),
   });
 
 //auto fac
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 builder.Host.ConfigureContainer<ContainerBuilder>(
-   builder => builder.RegisterModule(new WareHouseModule()));
+   builder => builder.RegisterModule(new CategoryTbModule()));
 
 
 var app = builder.Build();

@@ -1,4 +1,4 @@
-﻿using BaseHA.Application.AutoMapper.WareHouses;
+﻿using BaseHA.Application.AutoMapper.CategoryTbs;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -11,8 +11,7 @@ namespace BaseHA.Application.AutoMapper.ConfigureServices
     {
         public static void AddMapper(this IServiceCollection services)
         {
-            services.AddAutoMapper(typeof(WareHouseCommandProfile).Assembly);
-            services.AddAutoMapper(typeof(BeginningWareHouseProfile).Assembly);
+            services.AddAutoMapper(typeof(CategoryTbCommandProfile).Assembly);
         }
     }
 }

@@ -11,7 +11,7 @@ namespace Share.BaseCore.Extensions
         public static class ConnectionStringNames
         {
             public const string Master = "Master";
-            public const string Warehouse = "Warehouse";
+            public const string CategoryTb = "CategoryTb";
             public const string Asset = "Asset";
             public const string Ticket = "Ticket";
             public const string Dashboard = "Dashboard";
@@ -22,7 +22,7 @@ namespace Share.BaseCore.Extensions
         public static class ConnectionString
         {
             public const string Master = "MasterDataContext";
-            public const string Warehouse = "WarehouseManagementContext";
+            public const string CategoryTb = "WarehouseManagementContext";
             public const string Asset = "Asset";
             public const string Ticket = "Ticket";
             public const string Dashboard = "Dashboard";
