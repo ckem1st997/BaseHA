@@ -47,6 +47,7 @@ namespace BaseHA.Controllers
                 .Select(s => s[random.Next(s.Length)]).ToArray());
             return randomName;
         }
+
         public async Task<IActionResult> Index()
         {
             return View();

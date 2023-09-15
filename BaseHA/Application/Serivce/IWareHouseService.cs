@@ -78,6 +78,7 @@ namespace BaseHA.Application.Serivce
             var l = from i in _generic.Table select i;
             if (!string.IsNullOrEmpty(ctx.Keywords))
                 l = from aa in l where aa.Name.Contains(ctx.Keywords) || aa.Code.Contains(ctx.Keywords) select aa;
+
             PagedList<WareHouse> res = new PagedList<WareHouse>();
             await res.Result(ctx.PageSize, (ctx.PageIndex - 1) * ctx.PageSize, l);
             return res;

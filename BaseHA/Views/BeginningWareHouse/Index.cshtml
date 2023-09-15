@@ -73,7 +73,7 @@
                         columns.Bound(x => x.ItemId).Width(100).Title("Mã kho sản phẩm");
                         columns.Bound(x => x.UnitId).Width(100).Title("Mã đơn vị");
                         columns.Bound(x => x.UnitName).ClientTemplate("#=grd.tmp.name(UnitName)#").Width(100).Title("Tên đơn vị");
-                columns.Bound(x => x.Quantity).Width(100).Title("Số lượng").Editable("returnFalse");
+                        columns.Bound(x => x.Quantity).Width(100).Title("Số lượng").Editable("returnFalse");
                         columns.Bound(x => x.CreatedDate).Width(100).Title("Ngày tạo");
                         columns.Bound(x => x.CreatedBy).Width(100).Title("Người tạo");
                         columns.Bound(x => x.ModifiedDate).Width(100).Title("Ngày sửa đổi");

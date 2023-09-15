@@ -24,6 +24,10 @@ namespace BaseHA.Application.Validations.ConfigureServices
             services.AddTransient<IValidator<WareHouseCommands>, WareHouseCommandValidator>();
             services.AddTransient<IValidator<UnitCommands>, UnitCommandValidator>();
             services.AddTransient<IValidator<VendorCommands>, VendorCommandValidator>();
+            services.AddTransient<IValidator<BeginningCommands>, BeginningWareHouseValidator>();
+            services.AddTransient<IValidator<CategoryCommands>, CategoryCommandValidator>();
+            services.AddTransient<IValidator<IntentCommands>, IntentCommandValidator>();
+            services.AddTransient<IValidator<AnswerCommands>, AnswerCommandValidator>();
 
             services.AddScoped<IValidator<BaseSearchModel>, BaseSearchModelValidator>();
 

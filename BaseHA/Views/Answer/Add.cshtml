@@ -1,5 +1,5 @@
 ﻿@using BaseHA.Application.ModelDto;
-@model BeginningCommands
+@model CategoryCommands
 @{
     Layout = null;
 }
@@ -21,55 +21,38 @@
                 @Html.AntiForgeryToken()
                 @Html.HiddenFor(m => m.Id)
 
-                 <div class="form-group form-group-sm">
-                    @Html.LabelFor(m => m.WareHouseId, new { @class = "control-label col-md-4" })
+
+                <div class="form-group form-group-sm">
+                    <label class="control-label  col-md-4" for="UnitName">Tên danh mục</label>
                     <div class="col-md-8">
-                        @Html.DropDownListFor(m => m.WareHouseId, Model.AvailableWareHouses, "Chọn kho...", new { @class = "form-control", style = "width: 100%" })
+                        @Html.TextBoxFor(m => m.NameCategory, new { @class = "form-control" })
                     </div>
                 </div>
 
                 <div class="form-group form-group-sm">
-                    @Html.LabelFor(m => m.ItemId, new { @class = "control-label col-md-4" })
+                    <label class="control-label  col-md-4" for="UnitName">Mã English</label>
                     <div class="col-md-8">
-                        @Html.DropDownListFor(m => m.ItemId, Model.AvailableItem, "Chọn kho sản phẩm...", new { @class = "form-control", style = "width: 100%" })
+                        @Html.TextBoxFor(m => m.IntentCodeEn, new { @class = "form-control" })
                     </div>
                 </div>
-
                 <div class="form-group form-group-sm">
-                    @Html.LabelFor(m => m.UnitId, new { @class = "control-label col-md-4" })
+                    <label class="control-label  col-md-4" for="UnitName">Mã Việt Nam</label>
                     <div class="col-md-8">
-                        @Html.DropDownListFor(m => m.UnitId, Model.AvailableUnit, "Chọn đơn vị...", new { @class = "form-control", style = "width: 100%" })
+                        @Html.TextBoxFor(m => m.IntentCodeVn, new { @class = "form-control" })
                     </div>
                 </div>
-
                 <div class="form-group form-group-sm">
-                    <label class="control-label  col-md-4" for="UnitName">Tên đơn vị</label>
+                    <label class="control-label  col-md-4" for="UnitName">Mô tả</label>
                     <div class="col-md-8">
-                        @Html.TextBoxFor(m => m.UnitName, new { @class = "form-control" })
+                        @Html.TextBoxFor(m => m.Description, new { @class = "form-control" })
                     </div>
                 </div>
-
                 <div class="form-group form-group-sm">
-                    <label class="control-label  col-md-4" for="UnitName">Số lượng</label>
+                    <label class="control-label  col-md-4" for="UnitName">Trạng thái</label>
                     <div class="col-md-8">
-                        @Html.TextBoxFor(m => m.Quantity, new { @class = "form-control" })
+                        @Html.EditorFor(m => m.Inactive)
                     </div>
                 </div>
-
-                <div class="form-group form-group-sm">
-                    <label class="control-label  col-md-4" for="UnitName">Ngày tạo</label>
-                    <div class="col-md-8">
-                        @Html.TextBoxFor(m => m.CreatedDate, new { @class = "form-control" })
-                    </div>
-                </div>
-
-                <div class="form-group form-group-sm">
-                    <label class="control-label  col-md-4" for="UnitName">Ngày sửa đổi</label>
-                    <div class="col-md-8">
-                        @Html.TextBoxFor(m => m.ModifiedDate, new { @class = "form-control" })
-                    </div>
-                </div>
-
             </div>
             <div class="modal-footer form-actions">
                 <button type="submit" class="btn blue btn-sm">

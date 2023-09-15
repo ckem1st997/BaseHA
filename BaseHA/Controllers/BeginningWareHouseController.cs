@@ -8,6 +8,8 @@ using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Mvc;
 using Share.BaseCore.Extensions;
 using System.Diagnostics;
+using MediatR;
+using Nest;
 
 namespace BaseHA.Controllers
 {
@@ -47,6 +49,7 @@ namespace BaseHA.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(BeginningCommands wareHouse)
         {
+
             var entity = _mapper.Map<BeginningWareHouse>(wareHouse);
             var res = await _generic.InsertAsync(entity);
             return Ok(new ResultMessageResponse()
@@ -98,6 +101,8 @@ namespace BaseHA.Controllers
         {
             var model = new BeginningCommands();
             model.AvailableWareHouses = await _generic.GetSelectListWareHouse();
+            model.AvailableUnit = await _generic.GetSelectListUnit();
+            model.AvailableItem = await _generic.GetSelectListItem();
             return View(model);
         }
 
@@ -105,7 +110,7 @@ namespace BaseHA.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(BeginningWareHouse model)
         {
-           /* var model = await _generic.GetByIdAsync(unit.Id, true);
+            /*var model = await _generic.GetByIdAsync(unit.Id, true);
 
             if (model == null)
                 return Ok(new ResultMessageResponse()
@@ -122,6 +127,30 @@ namespace BaseHA.Controllers
                 success = res
             });
         }
+
+        /* [HttpPost]
+         public async Task<IActionResult> Edit(BeginningCommands unit)
+         {
+            var model = await _generic.GetByIdAsync(unit.Id, true);
+             *//*  if (model == null)
+                  return Ok(new ResultMessageResponse()
+                  {
+                      message = "Không tồn tại bản ghi !",
+                      success = false
+                  });*//*
+             //var resId = await _generic.GetByIdAsync(unit.Id);
+             var entity = _mapper.Map(unit, entity);
+
+             //var entity = _mapper.Map(unit, model);
+
+             var res = await _generic.UpdateAsync(entity);
+             return Ok(new ResultMessageResponse()
+             {
+                 message = res ? "Thành công !" : "Thất bại !",
+                 success = res
+             });
+         }*/
+
 
 
         public async Task<IActionResult> Privacy()

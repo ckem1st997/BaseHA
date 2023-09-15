@@ -1,5 +1,6 @@
 ﻿using BaseHA.Domain.Entity;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Share.BaseCore.IRepositories;
 
 namespace BaseHA.Application.ModelDto
 {
@@ -8,6 +9,8 @@ namespace BaseHA.Application.ModelDto
         public BeginningCommands() 
         {
             AvailableWareHouses = new List<SelectListItem>();
+            AvailableItem = new List<SelectListItem>();
+            AvailableUnit = new List<SelectListItem>();
         }
 
         public string WareHouseId { get; set; }
@@ -26,5 +29,8 @@ namespace BaseHA.Application.ModelDto
         public virtual WareHouse? WareHouse { get; set; } = null!;
 
         public virtual IList<SelectListItem> AvailableWareHouses { get; set; }
+        
+        public virtual IList<SelectListItem> AvailableItem { get; set; }
+        public virtual IList<SelectListItem> AvailableUnit { get; set; }
     }
 }

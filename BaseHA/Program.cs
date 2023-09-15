@@ -41,7 +41,9 @@ using BaseHA.Application.Validations.ConfigureServices;
 using BaseHA.Application.AutoMapper.WareHouses;
 using AutoMapper;
 
+
 var builder = WebApplication.CreateBuilder(args);
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

@@ -13,6 +13,9 @@ namespace BaseHA.Application.AutoMapper.ConfigureServices
         {
             services.AddAutoMapper(typeof(WareHouseCommandProfile).Assembly);
             services.AddAutoMapper(typeof(BeginningWareHouseProfile).Assembly);
+            services.AddAutoMapper(typeof(CategoryCommandProfile).Assembly);
+            services.AddAutoMapper(typeof(IntentCommandProfile).Assembly);
+            services.AddAutoMapper(typeof(AnswerCommandProfile).Assembly);
         }
     }
 }
