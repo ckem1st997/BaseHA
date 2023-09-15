@@ -15,7 +15,9 @@ namespace BaseHA.Application.AutoMapper.WareHouses
             CreateMap<BeginningCommands, BeginningWareHouse>();
 
             CreateMap<BeginningWareHouse, BeginningCommands>()
-                .ForMember(x => x.AvailableWareHouses, opt => opt.Ignore());
+                .ForMember(x => x.AvailableWareHouses, opt => opt.Ignore())
+                .ForMember(x => x.AvailableItem, opt => opt.Ignore())
+                .ForMember(x => x.AvailableUnit, opt => opt.Ignore());
 
             #endregion
 

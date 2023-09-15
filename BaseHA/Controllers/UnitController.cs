@@ -8,6 +8,10 @@ using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Mvc;
 using Share.BaseCore.Extensions;
 using System.Diagnostics;
+using Grpc.Core;
+using System.IdentityModel.Tokens.Jwt;
+using System.IO;
+using YamlDotNet.Serialization;
 
 namespace BaseHA.Controllers
 {
@@ -166,5 +170,24 @@ namespace BaseHA.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        /*public ActionResult ReadYaml()
+        {
+            string yamlFilePath = Server.MapPath("~/Application/ModelDto/UnitCommands.cs");
+
+            var deserializer = new Deserializer();
+            UnitCommands unit;
+
+            using (StreamReader reader = new StreamReader(yamlFilePath))
+            {
+                unit = deserializer.Deserialize<UnitCommands>(reader);
+            }
+
+            // Sử dụng dữ liệu
+            ViewBag.Name = unit.UnitName;
+            //ViewBag.Age = person.Age;
+
+            return View();
+        }*/
     }
 }

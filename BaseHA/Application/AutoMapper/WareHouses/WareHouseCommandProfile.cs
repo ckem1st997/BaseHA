@@ -56,10 +56,14 @@ namespace BaseHA.Application.AutoMapper.WareHouses
 
 
             CreateMap<Unit, UnitCommands>();
-                //.ForMember(x => x.AvailableWareHouses, opt => opt.Ignore());
+            //.ForMember(x => x.AvailableWareHouses, opt => opt.Ignore());
 
             #endregion
 
+            CreateMap<CategoryCommandProfile, Category>()
+               .ForMember(x => x.Intents, opt => opt.Ignore());
+
+            CreateMap<Category, CategoryCommands>();
 
 
         }

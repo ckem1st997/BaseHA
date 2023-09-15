@@ -31,7 +31,6 @@ namespace BaseHA.Application.Serivce
         Task<IList<SelectListItem>> GetSelectListItem();
         Task<IList<SelectListItem>> GetSelectListWareHouse();
         Task<IList<SelectListItem>> GetSelectListUnit();
-        Task<IList<SelectListItem>> GetSelectListBegin();
     }
 
 
@@ -109,10 +108,10 @@ namespace BaseHA.Application.Serivce
         public async Task<IList<SelectListItem>> GetSelectListWareHouse()
         {
             var q = from i in _tableWareHouse.Table
-                    where !i.OnDelete
+                    where i.OnDelete == false
                     select new SelectListItem
                     {
-                        Text = $"{i.Name}",
+                        Text = $"{i.Id} - {i.Name}",
                         Value = i.Id
                     };
             return await q.ToListAsync();
@@ -135,18 +134,6 @@ namespace BaseHA.Application.Serivce
                     select new SelectListItem
                     {
                         Text = $"{i.Id}-{i.Name}",
-                        Value = i.Id
-                    };
-            return await q.ToListAsync();
-        }
-
-        public async Task<IList<SelectListItem>> GetSelectListBegin()
-        {
-            var q = from i in _generic.Table
-                    where !i.OnDelete
-                    select new SelectListItem
-                    {
-                        Text = $"{i.Id}-{i.UnitName}",
                         Value = i.Id
                     };
             return await q.ToListAsync();
