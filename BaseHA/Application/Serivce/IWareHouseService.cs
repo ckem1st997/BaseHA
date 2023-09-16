@@ -1,13 +1,19 @@
-﻿using BaseHA.Domain.Entity;
+﻿using BaseHA.Application.ModelDto.DTO;
+using BaseHA.Domain.Entity;
 using BaseHA.Models.SearchModel;
+using Dapper;
+using GreenDonut;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Diagnostics.Tracing.Parsers.Kernel;
 using Microsoft.EntityFrameworkCore;
 using Nest;
 using NuGet.Packaging.Signing;
+using NuGet.Protocol.Core.Types;
 using Share.BaseCore.Base;
 using Share.BaseCore.Extensions;
 using Share.BaseCore.IRepositories;
+using System.Data;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace BaseHA.Application.Serivce
@@ -28,6 +34,7 @@ namespace BaseHA.Application.Serivce
 
         Task<bool> ActivatesAsync(IEnumerable<string> ids, bool active);
         Task<IList<SelectListItem>> GetSelectListItem();
+        Task<IList<WareHouseTreeModel>> GetTree(int? expandLevel);
     }
 
 
@@ -76,8 +83,47 @@ namespace BaseHA.Application.Serivce
         public async Task<PagedList<WareHouse>> GetAsync(WareHouseSearchModel ctx)
         {
             var l = from i in _generic.Table select i;
+
             if (!string.IsNullOrEmpty(ctx.Keywords))
                 l = from aa in l where aa.Name.Contains(ctx.Keywords) || aa.Code.Contains(ctx.Keywords) select aa;
+
+            if (!string.IsNullOrEmpty(ctx.WareHouseId))
+            {
+                // lấy các con của id và tìm kiếm
+
+                StringBuilder queryBuilder = new StringBuilder();
+                queryBuilder.Append("WITH cte (Id, Name, ParentId) AS (");
+                queryBuilder.Append("    SELECT");
+                queryBuilder.Append("        wh.Id,");
+                queryBuilder.Append("        wh.Name,");
+                queryBuilder.Append("        wh.ParentId");
+                queryBuilder.Append("    FROM");
+                queryBuilder.Append("        WareHouse wh");
+                queryBuilder.Append("    WHERE");
+                queryBuilder.Append("        wh.ParentId = '" + ctx.WareHouseId + "'");
+                queryBuilder.Append("    UNION ALL");
+                queryBuilder.Append("    SELECT");
+                queryBuilder.Append("        p.Id,");
+                queryBuilder.Append("        p.Name,");
+                queryBuilder.Append("        p.ParentId");
+                queryBuilder.Append("    FROM");
+                queryBuilder.Append("        WareHouse p");
+                queryBuilder.Append("    INNER JOIN");
+                queryBuilder.Append("        cte");
+                queryBuilder.Append("    ON");
+                queryBuilder.Append("        p.ParentId = cte.Id");
+                queryBuilder.Append(" ) ");
+                queryBuilder.Append(" SELECT ");
+                queryBuilder.Append("    Id");
+                queryBuilder.Append(" FROM ");
+                queryBuilder.Append("    cte");
+                queryBuilder.Append(" GROUP BY ");
+                queryBuilder.Append("    Id, Name, ParentId;");
+                var departmentIds = (await _generic.QueryAsync<string>(queryBuilder.ToString())).ToList();
+                departmentIds.Add(ctx.WareHouseId);
+                if (departmentIds != null && departmentIds.Any())
+                    l = from aa in l where departmentIds.Contains(aa.Id) select aa;
+            }
             PagedList<WareHouse> res = new PagedList<WareHouse>();
             await res.Result(ctx.PageSize, (ctx.PageIndex - 1) * ctx.PageSize, l);
             return res;
@@ -103,6 +149,74 @@ namespace BaseHA.Application.Serivce
             return await q.ToListAsync();
         }
 
+        public async Task<IList<WareHouseTreeModel>> GetTree(int? expandLevel)
+        {
+            expandLevel = expandLevel ?? 1;
+            var qq = new Queue<WareHouseTreeModel>();
+            var lstCheck = new List<WareHouseTreeModel>();
+            var result = new List<WareHouseTreeModel>();
+            string sql = "select Id,ParentId,Code,Name from WareHouse where Inactive =@active and OnDelete=0 ";
+            DynamicParameters parameter = new DynamicParameters();
+            parameter.Add("@active", 1);
+            var getAll = await _generic.QueryAsync<WareHouseDTO>(sql, parameter, CommandType.Text);
+            var organizationalUnitModels = getAll
+                .Select(s => new WareHouseTreeModel
+                {
+                    children = new List<WareHouseTreeModel>(),
+                    folder = false,
+                    key = s.Id,
+                    title = s.Name,
+                    tooltip = s.Name,
+                    Path = s.Path,
+                    ParentId = s.ParentId,
+                    Code = s.Code,
+                    Name = s.Name
+                });
+            var roots = organizationalUnitModels
+                .Where(w => !w.ParentId.HasValue())
+                .OrderBy(o => o.Name);
+
+            foreach (var root in roots)
+            {
+                root.level = 1;
+                root.expanded = !expandLevel.HasValue || root.level <= expandLevel.Value;
+                root.folder = true;
+                qq.Enqueue(root);
+                lstCheck.Add(root);
+                result.Add(root);
+            }
+
+            while (qq.Any())
+            {
+                var cur = qq.Dequeue();
+                if (lstCheck.All(a => a.key != cur.key))
+                    result.Add(cur);
+
+                var childs = organizationalUnitModels
+                    .Where(w => w.ParentId.HasValue() && w.ParentId.ToString() == cur.key)
+                    .OrderBy(o => o.Name);
+
+                if (!childs.Any())
+                    continue;
+
+                var childLevel = cur.level + 1;
+                foreach (var child in childs)
+                {
+                    if (lstCheck.Any(a => a.key == child.key))
+                        continue;
+
+                    child.level = childLevel;
+                    child.expanded = !expandLevel.HasValue || child.level <= expandLevel.Value;
+
+                    qq.Enqueue(child);
+                    lstCheck.Add(child);
+                    cur.children.Add(child);
+                }
+            }
+
+            return result;
+        }
+
         public async Task<bool> InsertAsync(WareHouse entity)
         {
             if (entity == null)
@@ -125,6 +239,67 @@ namespace BaseHA.Application.Serivce
                 throw new ArgumentNullException(nameof(entity));
             _generic.Update(entity);
             return await _generic.SaveChangesConfigureAwaitAsync() > 0;
+        }
+
+        private List<WareHouseDTO> GetWareHouseTreeModel(IEnumerable<WareHouseDTO> models)
+        {
+            var parents = models.Where(w => string.IsNullOrEmpty(w.ParentId))
+                .OrderBy(o => o.Name);
+
+            var result = new List<WareHouseDTO>();
+            var level = 0;
+            foreach (var parent in parents)
+            {
+                result.Add(new WareHouseDTO
+                {
+                    Id = parent.Id,
+                    ParentId = parent.ParentId,
+                    Name = "[" + parent.Code + "] " + parent.Name,
+                    Code = parent.Code
+                });
+                GetChildWareHouseTreeModel(ref models, parent.Id, ref result, level);
+            }
+
+            return result;
+        }
+
+        private void GetChildWareHouseTreeModel(ref IEnumerable<WareHouseDTO> models, string parentId,
+            ref List<WareHouseDTO> result, int level)
+        {
+            level++;
+            var childs = models
+                .Where(w => w.ParentId == parentId)
+                .OrderBy(o => o.Name);
+
+            if (childs.Any())
+            {
+                foreach (var child in childs)
+                {
+                    child.Name = "[" + child.Code + "] " + child.Name;
+                    result.Add(new WareHouseDTO()
+                    {
+                        Id = child.Id,
+                        ParentId = child.ParentId,
+                        Name = GetTreeLevelString(level) + child.Name,
+                        Code = child.Code
+                    });
+                    GetChildWareHouseTreeModel(ref models, child.Id, ref result, level);
+                }
+            }
+        }
+
+        public static string GetTreeLevelString(int level)
+        {
+            if (level <= 0)
+                return "";
+
+            var result = "";
+            for (var i = 1; i <= level; i++)
+            {
+                result += "–";
+            }
+
+            return result;
         }
     }
 }

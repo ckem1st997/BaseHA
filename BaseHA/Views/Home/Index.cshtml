@@ -33,58 +33,62 @@
         </div>
     </div>
 </div>
-<!-- #endregion -->
-<!-- #region Page Content -->
-<div class="page-data">
-    <div class="row search-form">
-        <form style="
+<div class="splitter fixed-layout-split" data-position="230px">
+    <div class="leftPane">
+        <div id="treeWareHouse" class="full-height"></div>
+    </div>
+    <div class="rightPane">
+        <div class="page-data">
+            <div class="row search-form">
+                <form style="
     display: flex;
     align-items: center;">
-            <div class="search-label">
-                Tìm kiếm:
-            </div>
-            <div class="col-md-4">
-                <div class="form-group form-group-sm">
-                    <div class="input-icon right">
-                        @Html.TextBoxFor(m => m.Keywords, new { @class = "form-control", placeholder = "" })
+                    <div class="search-label">
+                        Tìm kiếm:
                     </div>
-                </div>
+                    <div class="col-md-4">
+                        <div class="form-group form-group-sm">
+                            <div class="input-icon right">
+                                @Html.TextBoxFor(m => m.Keywords, new { @class = "form-control", placeholder = "" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="form-group form-group-sm">
+                            <button type="submit" id="btnSearch" class="btn btn-default btn-sm">
+                                <i class="fa fa-search"></i>GetData
+                            </button>
+                        </div>
+                    </div>
+                </form>
             </div>
-            <div class="col-md-1">
-                <div class="form-group form-group-sm">
-                    <button type="submit" id="btnSearch" class="btn btn-default btn-sm">
-                        <i class="fa fa-search"></i>GetData
-                    </button>
-                </div>
+            <div class="row full-height">
+                @(Html.Kendo().Grid<WareHouse>()
+                    .Name("grd")
+                    .HtmlAttributes(new { style = "height: 100%" })
+                    .Columns(columns =>
+                    {
+                        columns.Select().Width(30);
+                        columns.Bound(x => x.Id).Width(300).Hidden();
+                        columns.Bound(x => x.Name).ClientTemplate("#=grd.tmp.name(Name)#").Width(100).Title("Tên");
+                        columns.Bound(x => x.Code).Width(100).Title("Mã");
+                        columns.Bound(x => x.Inactive).ClientTemplate("#=grd.tmp.activate(!Inactive)#").Width(100).Title("Kích hoạt");
+                    })
+                    .DataSource(dataSource => dataSource
+                    .Ajax()
+                    .ServerOperation(true)
+                    .PageSize(setting.GridPageSize)
+                    .Read(read => read.Action("Get", "Home").Data("grd.data"))
+                    )
+                    .NoRecords()
+                    .Scrollable(scr => scr.Enabled(true))
+                    .Pageable(pageable => pageable.ButtonCount(setting.GridButtonCount).Info(true).Input(true).Numeric(true).PageSizes(setting.GridPageSizeOptions).PreviousNext(true).Refresh(true))
+                    .Selectable(selectable => selectable.Type(GridSelectionType.Row).Mode(GridSelectionMode.Multiple))
+                    .Navigatable())
             </div>
-        </form>
-    </div>
-    <div class="row full-height">
-        @(Html.Kendo().Grid<WareHouse>()
-            .Name("grd")
-            .HtmlAttributes(new { style = "height: 100%" })
-            .Columns(columns =>
-            {
-                columns.Select().Width(30);
-                columns.Bound(x => x.Id).Width(300).Hidden();
-                columns.Bound(x => x.Name).ClientTemplate("#=grd.tmp.name(Name)#").Width(100).Title("Tên");
-                columns.Bound(x => x.Code).Width(100).Title("Mã");
-                columns.Bound(x => x.Inactive).ClientTemplate("#=grd.tmp.activate(!Inactive)#").Width(100).Title("Kích hoạt");
-            })
-            .DataSource(dataSource => dataSource
-            .Ajax()
-            .ServerOperation(true)
-            .PageSize(setting.GridPageSize)
-            .Read(read => read.Action("Get", "Home").Data("grd.data"))
-            )
-            .NoRecords()
-            .Scrollable(scr => scr.Enabled(true))
-            .Pageable(pageable => pageable.ButtonCount(setting.GridButtonCount).Info(true).Input(true).Numeric(true).PageSizes(setting.GridPageSizeOptions).PreviousNext(true).Refresh(true))
-            .Selectable(selectable => selectable.Type(GridSelectionType.Row).Mode(GridSelectionMode.Multiple))
-            .Navigatable())
+        </div>
     </div>
 </div>
-
 <ul id="mnu" style="display: none">
     <li data-action="details">
         <i class="flaticon-eye font-blue-dark"></i> Details
@@ -115,6 +119,7 @@
     <script>
         // Fields
         var master = {
+            urlTree: '@Url.Action("GetTree")',
             urlDetails: '@Url.Action("Details")',
             urlCreate: '@Url.Action("Add")',
             urlEdit: '@Url.Action("Edit")',
@@ -144,6 +149,12 @@
                 data: function () { },
                 init: function () { }
             },
+            treeWareHouse: {
+                el: '#treeWareHouse',
+                $el: {},
+                api: {},
+                init: function () { },
+            },
             mnu: {
                 el: '#mnu',
                 $el: {},
@@ -170,14 +181,18 @@
         var grd = master.grd;
         var mnu = master.mnu;
         var btnSearch = master.btnSearch;
+        var treeWareHouse = master.treeWareHouse;
 
         grd.data = function () {
             var $keywords = $('#@Html.FieldIdFor(m => m.Keywords)');
             var $status = $('#@Html.FieldIdFor(m => m.ActiveStatus)');
-
+            var wareHouseId = null;
+            if (!_.isEmpty(treeWareHouse.api) && treeWareHouse.api.getActiveNode())
+                wareHouseId = treeWareHouse.api.activeNode.key;
             var searchModel = {
                 Keywords: $keywords.val(),
                 Status: $status.val(),
+                WareHouseId: wareHouseId
             };
             return searchModel;
         };
@@ -279,6 +294,7 @@
             grd.init();
             mnu.init();
             btnSearch.init();
+            treeWareHouse.init();
         };
 
         toolbar.init = function () {
@@ -313,6 +329,33 @@
             grd.api.initDblClick(master.details);
             grd.api.initEdit(master.edit);
             grd.api.initActivate(master.activates);
+        };
+
+        treeWareHouse.init = function () {
+            treeWareHouse.$el = $(treeWareHouse.el);
+            treeWareHouse.$el.fancytree({
+                source: {
+                    url: master.urlTree,
+                    beforeSend: function (jqXHR, settings) {
+                        grd.api.clear();
+                    },
+                    complete: function () {
+                        var lastKeySelected = '@Model.WareHouseId';
+                        $("#treeWareHouse").fancytree("getTree").getNodeByKey(lastKeySelected).setActive();
+                    }
+                },
+                postProcess: function (event, data) {
+                    data.result = data.response.data;
+                },
+                activate: function (event, data) {
+                    $('#@Html.FieldIdFor(m => m.Keywords)').val("")
+                    var node = data.node;
+                    if (node.statusNodeType !== 'loading') {
+                        grd.api.resetPage();
+                    }
+                }
+            });
+            treeWareHouse.api = treeWareHouse.$el.fancytree("getTree");
         };
         mnu.init = function () {
             mnu.$el = $(mnu.el);

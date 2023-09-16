@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BaseHA.Application.AutoMapper.WareHouses;
 using BaseHA.Application.ModelDto;
+using BaseHA.Application.ModelDto.DTO;
 using BaseHA.Application.Serivce;
 using BaseHA.Domain.Entity;
 using BaseHA.Models;
@@ -47,9 +48,10 @@ namespace BaseHA.Controllers
                 .Select(s => s[random.Next(s.Length)]).ToArray());
             return randomName;
         }
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View();
+            var model = new WareHouseSearchModel();
+            return View(model);
         }
 
         public async Task<IActionResult> Edit(string id)
@@ -146,9 +148,32 @@ namespace BaseHA.Controllers
         }
 
 
-        public async Task<IActionResult> Privacy()
+        /// <summary>
+        /// Gọi Api lấy cấu trúc cây kho
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ActionResult> GetTree()
         {
-            return View();
+            var res = await _generic.GetTree(2);
+            IList<WareHouseTreeModel> cg = new List<WareHouseTreeModel>();
+            foreach (var item in res)
+            {
+                cg.Add(item);
+            }
+            var all = new WareHouseTreeModel()
+            {
+                Name = "Tất cả",
+                key = "",
+                title = "Tất cả",
+                tooltip = "Tất cả",
+                children = cg,
+                level = 1,
+                expanded = true
+            };
+            res.Clear();
+            res.Add(all);
+
+            return Ok(res);
         }
 
 

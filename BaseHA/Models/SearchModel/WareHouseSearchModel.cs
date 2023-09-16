@@ -5,7 +5,9 @@
         public WareHouseSearchModel()
         {
             Keywords = "";
+            WareHouseId = "";
         }
+        public string WareHouseId { get; set; }
 
         public ActiveStatus ActiveStatus { get; set; }
 
