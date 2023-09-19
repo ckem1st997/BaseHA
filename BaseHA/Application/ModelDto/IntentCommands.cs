@@ -22,7 +22,7 @@ namespace BaseHA.Application.ModelDto
 
         public bool Inactive { get; set; }
 
-        public virtual Answer? Answer { get; set; }
+     
         public virtual Category? IntentCodeEnNavigation { get; set; }
 
         public virtual IList<SelectListItem> AvailableCategory { get; set; }

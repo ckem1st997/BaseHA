@@ -1,11 +1,10 @@
-﻿@using BaseHA.Application.ModelDto;
-@using BaseHA.Domain.Entity;
+﻿@using BaseHA.Domain.Entity;
 @using BaseHA.Models.SearchModel;
-@model IntentSearchModel
+@model CategorySearchModel
 
 @{
     var setting = new AdminAreaSettings();
- }
+}
 <!-- #region Page Header -->
 <div class="page-bar">
     <ul class="page-breadcrumb"></ul>
@@ -34,75 +33,180 @@
         </div>
     </div>
 </div>
-<!-- #endregion -->
-<!-- #region Page Content -->
-<div class="page-data">
-    <div class="row search-form">
-        <form style="
+<div class="splitter fixed-layout-split" data-position="230px">
+    <div class="leftPane">
+        <div id="treeWareHouse" class="full-height"></div>
+    </div>
+    <div class="rightPane">
+        <div class="page-data">
+            <div class="row search-form">
+                <form style="
     display: flex;
     align-items: center;">
-            <div class="search-label">
-                Tìm kiếm:
+                    <div class="search-label">
+                        Tìm kiếm:
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group form-group-sm">
+                            <div class="input-icon right">
+                                @Html.TextBoxFor(m => m.Keywords, new { @class = "form-control", placeholder = "" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="form-group form-group-sm">
+                            <button type="submit" id="btnSearch" class="btn btn-default btn-sm">
+                                <i class="fa fa-search"></i>GetData
+                            </button>
+                        </div>
+                    </div>
+                </form>
             </div>
-            <div class="col-md-4">
-                <div class="form-group form-group-sm">
-                    <div class="input-icon right">
-                        @Html.TextBoxFor(m => m.Keywords, new { @class = "form-control", placeholder = "" })
+            <div class="row full-height" style="display:none">
+                @(Html.Kendo().Grid<Category>()
+                    .Name("grd")
+                    .HtmlAttributes(new { style = "height: 100%" })
+                    .Columns(columns =>
+                    {
+                        columns.Select().Width(30);
+                        columns.Bound(x => x.Id).Width(300).Hidden();
+                        columns.Bound(x => x.NameCategory).ClientTemplate("#=grd.tmp.name(NameCategory)#").Width(100).Title("Tên danh mục");
+                        columns.Bound(x => x.IntentCodeEn).Width(100).Title("Intent Code English");
+                        columns.Bound(x => x.IntentCodeVn).Width(100).Title("Intent Code VietNam");
+                        columns.Bound(x => x.Description).Width(100).Title("Mô tả");
+                        columns.Bound(x => x.Inactive).ClientTemplate("#=grd.tmp.activate(!Inactive)#").Width(30).Title("Kích hoạt");
+                        columns.Command(command => command.Destroy()).Width(30);
+                    })
+                    .ToolBar(toolbar =>
+                    {
+                        toolbar.Create();
+                        toolbar.Save();
+                    })
+                    .Editable(editable => editable.Mode(GridEditMode.InCell))
+                    .DataSource(dataSource => dataSource
+                    .Ajax()
+                    .ServerOperation(true)
+                    .Model(model =>
+                    {
+                        model.Id(p => p.Id);
+                        model.Field(p => p.NameCategory);
+                        model.Field(p => p.IntentCodeEn);
+                        model.Field(p => p.IntentCodeVn);
+                        model.Field(p => p.Description);
+                        //model.Field(p => p.Quantity).Editable(false);
+                    })
+                    .PageSize(setting.GridPageSize)
+                    .Read(read => read.Action("GetCategory", "Category").Data("grd.data"))
+                    .Create(add => add.Action("Add", "Category"))
+                    .Update(update => update.Action("Edit", "Category"))
+                    .Destroy(destroy => destroy.Action("Delete", "Category"))
+                    )
+                    .NoRecords()
+                    .Scrollable(scr => scr.Enabled(true))
+                    .Pageable(pageable => pageable.ButtonCount(setting.GridButtonCount).Info(true).Input(true).Numeric(true).PageSizes(setting.GridPageSizeOptions).PreviousNext(true).Refresh(true))
+                    .Selectable(selectable => selectable.Type(GridSelectionType.Row).Mode(GridSelectionMode.Multiple))
+                    .Navigatable())
+            </div>
+
+            <div style="display:flex">
+                <div style="width:55%; border: 2px solid #3085C3; padding: 4px">
+                    <h4>Intent</h4>
+                    <div class="row full-height">
+                        @(Html.Kendo().Grid<Intent>()
+                            .Name("grdIntent")
+                            .HtmlAttributes(new { style = "height: 100%" })
+                            .Columns(columns =>
+                            {
+                                columns.Select().Width(30);
+                                columns.Bound(x => x.Id).Width(100).Hidden();
+                                columns.Bound(x => x.IntentCodeEn).ClientTemplate("#=grd.tmp.name(IntentCodeEn)#").Width(60).Title("Intent Code Engkish");
+                                columns.Bound(x => x.IntentEn).Width(60).Title("Intent English");
+                                columns.Bound(x => x.IntentVn).Width(60).Title("Intent VietNam");
+                                columns.Bound(x => x.Inactive).ClientTemplate("#=grd.tmp.activate(!Inactive)#").Width(30).Title("Kích hoạt");
+                                columns.Command(command => command.Destroy()).Width(30);
+                            })
+                            .ToolBar(toolbar =>
+                            {
+                                toolbar.Create();
+                                toolbar.Save();
+                            })
+                            .Editable(editable => editable.Mode(GridEditMode.InCell))
+                            .DataSource(dataSource => dataSource
+                            .Ajax()
+                            .ServerOperation(true)
+                            .Model(model =>
+                            {
+                                model.Id(p => p.Id);
+                                model.Field(p => p.IntentCodeEn);
+                                model.Field(p => p.IntentEn);
+                                model.Field(p => p.IntentVn);
+                                //model.Field(p => p.Quantity).Editable(false);
+                            })
+                            .PageSize(setting.GridPageSize)
+                            .Read(read => read.Action("GetIntent", "Intent").Data("grd.data"))
+                            .Create(add => add.Action("Add", "Intent"))
+                            .Update(update => update.Action("Edit", "Intent"))
+                            .Destroy(destroy => destroy.Action("Delete", "Intent"))
+                            )
+                            .NoRecords()
+                            .Scrollable(scr => scr.Enabled(true))
+                            .Pageable(pageable => pageable.ButtonCount(setting.GridButtonCount).Info(true).Input(true).Numeric(true).PageSizes(setting.GridPageSizeOptions).PreviousNext(true).Refresh(true))
+                            .Selectable(selectable => selectable.Type(GridSelectionType.Row).Mode(GridSelectionMode.Multiple))
+                            .Navigatable())
+                    </div>
+                </div>
+
+                <div style="width:43%; margin-left: 10px;  border: 2px solid #3085C3; padding: 4px">
+                    <h4>Answer</h4>
+                    <div class="row full-height">
+                        @(Html.Kendo().Grid<Answer>()
+                            .Name("grdAnswer")
+                            .HtmlAttributes(new { style = "height: 100%" })
+                            .Columns(columns =>
+                            {
+                                columns.Select().Width(30);
+                                columns.Bound(x => x.Id).Width(300).Hidden();
+                                columns.Bound(x => x.IntentCodeEn).ClientTemplate("#=grd.tmp.name(IntentCodeEn)#").Width(60).Title("Intent Code English");
+                                columns.Bound(x => x.AnswerVn).Width(60).Title("Answer");
+                                columns.Bound(x => x.Inactive).ClientTemplate("#=grd.tmp.activate(!Inactive)#").Width(30).Title("Kích hoạt");
+                                columns.Command(command => command.Destroy()).Width(30);
+                            })
+                            .ToolBar(toolbar =>
+                            {
+                                toolbar.Create();
+                                toolbar.Save();
+                            })
+                            .Editable(editable => editable.Mode(GridEditMode.InCell))
+                            .DataSource(dataSource => dataSource
+                            .Ajax()
+                            .ServerOperation(true)
+                            .Model(model =>
+                            {
+                                model.Id(p => p.Id);
+                                model.Field(p => p.IntentCodeEn);
+                                model.Field(p => p.AnswerVn);
+                                //model.Field(p => p.Quantity).Editable(false);
+                            })
+                            .PageSize(setting.GridPageSize)
+                            .Read(read => read.Action("GetAnswer", "Answer").Data("grd.data"))
+                            .Create(add => add.Action("Add", "Answer"))
+                            .Update(update => update.Action("Edit", "Answer"))
+                            .Destroy(destroy => destroy.Action("Delete", "Answer"))
+                            )
+                            .NoRecords()
+                            .Scrollable(scr => scr.Enabled(true))
+                            .Pageable(pageable => pageable.ButtonCount(setting.GridButtonCount).Info(true).Input(true).Numeric(true).PageSizes(setting.GridPageSizeOptions).PreviousNext(true).Refresh(true))
+                            .Selectable(selectable => selectable.Type(GridSelectionType.Row).Mode(GridSelectionMode.Multiple))
+                            .Navigatable())
                     </div>
                 </div>
             </div>
-            <div class="col-md-1">
-                <div class="form-group form-group-sm">
-                    <button type="submit" id="btnSearch" class="btn btn-default btn-sm">
-                        <i class="fa fa-search"></i>GetData
-                    </button>
-                </div>
-            </div>
-        </form>
-    </div>
-    <div class="row full-height">
-        @(Html.Kendo().Grid<IntentCommands>()
-            .Name("grd")
-            .HtmlAttributes(new { style = "height: 100%" })
-            .Columns(columns =>
-            {
-                columns.Select().Width(30);
-                columns.Bound(x => x.Id).Width(300).Hidden();
-                columns.Bound(x => x.IntentCodeEn).Width(100).Title("Mã Intnet English");
-                columns.Bound(x => x.IntentEn).Width(100).Title("Intent English");
-                columns.Bound(x => x.IntentVn).Width(100).Title("Intent VietNam");
-                columns.Bound(x => x.Inactive).ClientTemplate("#=grd.tmp.activate(!Inactive)#").Width(100).Title("Kích hoạt");
-            })
-            .ToolBar(toolbar =>
-            {
-                toolbar.Create();
-                toolbar.Save();
-            })
-             .Editable(editable => editable.Mode(GridEditMode.InCell))
-            .DataSource(dataSource => dataSource
-                    .Ajax()
-                    .ServerOperation(true)
-                        .Model(model =>
-                        {
-                            model.Id(p => p.Id);
-                            model.Field(p => p.IntentCodeEn);
-                            model.Field(p => p.IntentEn);
-                            model.Field(p => p.IntentVn);
-                            //model.Field(p => p.Quantity).Editable(false);
-                        })
-                    .PageSize(setting.GridPageSize)
-                    .Read(read => read.Action("Get", "Intent").Data("grd.data"))
-                    .Create(add => add.Action("Add", "Intent").Data("grd.data"))
-            .Update(update => update.Action("Edit", "Intent").Data("grd.data"))
-            )
-            .NoRecords()
-            .Scrollable(scr => scr.Enabled(true))
-            .Pageable(pageable => pageable.ButtonCount(setting.GridButtonCount).Info(true).Input(true).Numeric(true).PageSizes(setting.GridPageSizeOptions).PreviousNext(true).Refresh(true))
-            .Selectable(selectable => selectable.Type(GridSelectionType.Row).Mode(GridSelectionMode.Multiple))
-            .Navigatable())
+
+           
+           
+        </div>
     </div>
 </div>
-
 <ul id="mnu" style="display: none">
     <li data-action="details">
         <i class="flaticon-eye font-blue-dark"></i> Details
@@ -133,6 +237,7 @@
     <script>
         // Fields
         var master = {
+            urlTree: '@Url.Action("GetTree")',
             urlDetails: '@Url.Action("Details")',
             urlCreate: '@Url.Action("Add")',
             urlEdit: '@Url.Action("Edit")',
@@ -162,6 +267,12 @@
                 data: function () { },
                 init: function () { }
             },
+            treeWareHouse: {
+                el: '#treeWareHouse',
+                $el: {},
+                api: {},
+                init: function () { },
+            },
             mnu: {
                 el: '#mnu',
                 $el: {},
@@ -188,14 +299,18 @@
         var grd = master.grd;
         var mnu = master.mnu;
         var btnSearch = master.btnSearch;
+        var treeWareHouse = master.treeWareHouse;
 
         grd.data = function () {
             var $keywords = $('#@Html.FieldIdFor(m => m.Keywords)');
             var $status = $('#@Html.FieldIdFor(m => m.ActiveStatus)');
-
+            var wareHouseId = null;
+            if (!_.isEmpty(treeWareHouse.api) && treeWareHouse.api.getActiveNode())
+                wareHouseId = treeWareHouse.api.activeNode.key;
             var searchModel = {
                 Keywords: $keywords.val(),
                 Status: $status.val(),
+                WareHouseId: wareHouseId
             };
             return searchModel;
         };
@@ -297,6 +412,7 @@
             grd.init();
             mnu.init();
             btnSearch.init();
+            treeWareHouse.init();
         };
 
         toolbar.init = function () {
@@ -331,6 +447,33 @@
             grd.api.initDblClick(master.details);
             grd.api.initEdit(master.edit);
             grd.api.initActivate(master.activates);
+        };
+
+        treeWareHouse.init = function () {
+            treeWareHouse.$el = $(treeWareHouse.el);
+            treeWareHouse.$el.fancytree({
+                source: {
+                    url: master.urlTree,
+                    beforeSend: function (jqXHR, settings) {
+                        grd.api.clear();
+                    },
+                    complete: function () {
+                        var lastKeySelected = '@Model.CategoryId';
+                        $("#treeWareHouse").fancytree("getTree").getNodeByKey(lastKeySelected).setActive();
+                    }
+                },
+                postProcess: function (event, data) {
+                    data.result = data.response.data;
+                },
+                activate: function (event, data) {
+                    $('#@Html.FieldIdFor(m => m.Keywords)').val("")
+                    var node = data.node;
+                    if (node.statusNodeType !== 'loading') {
+                        grd.api.resetPage();
+                    }
+                }
+            });
+            treeWareHouse.api = treeWareHouse.$el.fancytree("getTree");
         };
         mnu.init = function () {
             mnu.$el = $(mnu.el);

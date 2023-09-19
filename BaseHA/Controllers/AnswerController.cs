@@ -88,7 +88,7 @@ namespace BaseHA.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Delete(IEnumerable<string> ids)
+        public async Task<IActionResult> Delete00(IEnumerable<string> ids)
         {
             if (ids == null)
                 return Ok(new ResultMessageResponse()
@@ -98,6 +98,24 @@ namespace BaseHA.Controllers
                 });
 
             var res = await _answer.DeletesAsync(ids);
+            return Ok(new ResultMessageResponse()
+            {
+                message = res ? "Thành công !" : "Thất bại !",
+                success = res
+            });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(Answer answer)
+        {
+            if (answer.Id == null)
+                return Ok(new ResultMessageResponse()
+                {
+                    message = "Thất bại !",
+                    success = false
+                });
+
+            var res = await _answer.DeleteAsyncID(answer.Id);
             return Ok(new ResultMessageResponse()
             {
                 message = res ? "Thành công !" : "Thất bại !",
@@ -140,7 +158,7 @@ namespace BaseHA.Controllers
         /// <returns></returns>
         [IgnoreAntiforgeryToken]
         [HttpPost]
-        public async Task<IActionResult> Get([DataSourceRequest] DataSourceRequest request, AnswerSearchModel searchModel)
+        public async Task<IActionResult> GetAnswer([DataSourceRequest] DataSourceRequest request, AnswerSearchModel searchModel)
         {
 
             searchModel.BindRequest(request);

@@ -68,8 +68,8 @@
             {
                 columns.Select().Width(30);
                 columns.Bound(x => x.Id).Width(300).Hidden();
-                columns.Bound(x => x.IntentId).ClientTemplate("#=grd.tmp.name(IntentId)#").Width(100).Title("IntentID");
-                //columns.Bound(x => x.IntentCodeEn).Width(100).Title("IntentCodeEn");
+                columns.Bound(x => x.IntentCodeEn).ClientTemplate("#=grd.tmp.name(IntentCodeEn)#").Width(100).Title("IntentID");
+                //columns.Bound(x => x.Intent.Id).Width(100).Title("NameID");
                 columns.Bound(x => x.AnswerVn).Width(100).Title("Answer");
                 columns.Bound(x => x.Inactive).ClientTemplate("#=grd.tmp.activate(!Inactive)#").Width(100).Title("Kích hoạt");
                
@@ -85,9 +85,8 @@
                         .Model(model =>
                         {
                             model.Id(p => p.Id);
-                            model.Field(p => p.IntentId);
+                            model.Field(p => p.IntentCodeEn);
                             model.Field(p => p.AnswerVn);
-                            //model.Field(p => p.Quantity).Editable(false);
                         })
                     .PageSize(setting.GridPageSize)
             .Read(read => read.Action("Get", "Answer").Data("grd.data"))

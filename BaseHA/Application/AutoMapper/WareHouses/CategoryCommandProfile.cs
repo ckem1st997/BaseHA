@@ -9,7 +9,8 @@ namespace BaseHA.Application.AutoMapper.WareHouses
         public CategoryCommandProfile() 
         {
             CreateMap<CategoryCommands, Category>()
-                .ForMember(x => x.Intents, opt => opt.Ignore());
+                .ForMember(x => x.Intents, opt => opt.Ignore())
+                .ForMember(x => x.Answers, opt => opt.Ignore());
 
             CreateMap<Category, CategoryCommands>();
                 //.ForMember(x => x.Intents, opt => opt.Ignore());

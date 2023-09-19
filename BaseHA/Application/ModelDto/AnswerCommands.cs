@@ -11,18 +11,12 @@ namespace BaseHA.Application.ModelDto
 
         }
 
-        public string IntentId { get; set; } = default!;
-
-
-        public string? IntentCodeEn { get; set; }
-
+        public string IntentCodeEn { get; set; } = default!;
 
         public string? AnswerVn { get; set; }
 
+        public bool Inactive { get; set; } = false;
 
-        public bool Inactive { get; set; }
-
-
-        public virtual Intent? Intent { get; set; }
+        public virtual Category IntentCodeEnNavigation { get; set; } 
     }
 }

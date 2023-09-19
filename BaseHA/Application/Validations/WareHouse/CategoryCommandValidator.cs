@@ -14,7 +14,6 @@ namespace BaseHA.Application.Validations.WareHouse
         {
             RuleFor(order => order.NameCategory).NotNull().WithMessage("Bạn chưa nhập Name Category");
             RuleFor(order => order.IntentCodeEn).NotNull().WithMessage("Bạn chưa nhập Code English");
-           // RuleFor(order => order.IntentCodeEn).NotNull().WithMessage("Bạn chưa nhập Code English");
             RuleFor(order => order.IntentCodeVn).NotNull().WithMessage("Bạn chưa nhập Code VietNam");
 
             

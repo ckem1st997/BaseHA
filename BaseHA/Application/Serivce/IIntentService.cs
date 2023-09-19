@@ -18,6 +18,8 @@ namespace BaseHA.Application.Serivce
 
         Task<bool> DeletesAsync(IEnumerable<string> ids);
 
+        Task<bool> DeleteAsyncID(string ids);
+
         Task<PagedList<Intent>> GetAsync(IntentSearchModel ctx);
 
         Task<Intent> GetByIdAsync(string id, bool tracking = false);
@@ -47,6 +49,15 @@ namespace BaseHA.Application.Serivce
                 return false;
             }
             list.ForEach(x => x.Inactive = active);
+            return await _intent.SaveChangesConfigureAwaitAsync() > 0;
+        }
+
+        public async Task<bool> DeleteAsyncID(string ids)
+        {
+            if (ids == null)
+                throw new NotImplementedException();
+
+            await _intent.DeteleSoftDelete(ids);
             return await _intent.SaveChangesConfigureAwaitAsync() > 0;
         }
 

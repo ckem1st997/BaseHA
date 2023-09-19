@@ -7,7 +7,7 @@ namespace BaseHA.Application.Validations.WareHouse
     {
         public AnswerCommandValidator()
         {
-            RuleFor(order => order.IntentId).NotNull().WithMessage("Bạn chưa nhập mã English");
+            RuleFor(order => order.IntentCodeEn).NotNull().WithMessage("Bạn chưa nhập mã English");
             RuleFor(order => order.AnswerVn).NotNull().WithMessage("Bạn chưa nhập câu trả lời");
         }
     }
