@@ -4,6 +4,7 @@ using BaseHA.Models.SearchModel;
 using Dapper;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Nest;
 using Share.BaseCore.Base;
 using Share.BaseCore.Extensions;
 using Share.BaseCore.IRepositories;
@@ -22,6 +23,7 @@ namespace BaseHA.Application.Serivce
             Task<bool> UpdateAsync(Answer entity);
 
             Task<bool> DeletesAsync(IEnumerable<string> ids);
+            Task<bool> DeleteAsyncID(string id);
 
             Task<PagedList<Answer>> GetAsync(AnswerSearchModel ctx);
 
@@ -56,7 +58,16 @@ namespace BaseHA.Application.Serivce
                 return await _answer.SaveChangesConfigureAwaitAsync() > 0;
             }
 
-            public async Task<bool> DeletesAsync(IEnumerable<string> ids)
+        public async Task<bool> DeleteAsyncID(string id)
+        {
+            if (id == null)
+                throw new NotImplementedException();
+
+            await _answer.DeteleSoftDelete(id);
+            return await _answer.SaveChangesConfigureAwaitAsync() > 0;
+        }
+
+        public async Task<bool> DeletesAsync(IEnumerable<string> ids)
             {
                 if (ids == null)
                     throw new NotImplementedException();
@@ -65,24 +76,36 @@ namespace BaseHA.Application.Serivce
                 return await _answer.SaveChangesConfigureAwaitAsync() > 0;
             }
 
-            public async Task<PagedList<Answer>> GetAsync(AnswerSearchModel ctx)
-            {
+        public async Task<PagedList<Answer>> GetAsync(AnswerSearchModel ctx)
+        {
             var list = from cate in _answer.Table where cate.OnDelete == false select cate; //.Include("Intent")
             if (!string.IsNullOrEmpty(ctx.Keywords))
             {
                 list = from c in list
-                       where c.IntentId.Contains(ctx.Keywords) || c.AnswerVn.Contains(ctx.Keywords)
+                       where c.IntentCodeEn.Contains(ctx.Keywords) || c.AnswerVn.Contains(ctx.Keywords)
                        select c;
             }
+
+
+           /* var query = from q in list
+                        join i in _answer.Table on q.IntentId equals i.Intent.Id
+                        select new Answer
+                        {
+                            Id = q.Id,
+                            IntentId = q.IntentId, // i.Intent.IntentCodeEn ,
+                            //IntentCodeEn = i.Intent.IntentCodeEn,
+                            AnswerVn = q.AnswerVn
+                        };*/
+
 
             PagedList<Answer> res = new PagedList<Answer>();
             await res.Result(ctx.PageSize, (ctx.PageIndex - 1) * ctx.PageSize, list);
 
             return res;
 
-            /*var query = from a in _answer.Table
-                            join i in _intent.Table
-                        on a.IntentId equals i.Id into intentjoin
+           /* var query = from a in _answer.Table
+                        join i in _intent.Table
+                    on a.IntentId equals i.Id into intentjoin
                         select new
                         {
                             id = a.Id,
@@ -95,7 +118,7 @@ namespace BaseHA.Application.Serivce
                 Id = e.id,
                 IntentId = e.intnentId,
                 AnswerVn = e.answerVn,
-                IntentCodeEn= e.intnetCodeEN
+                IntentCodeEn = e.intnetCodeEN
 
             });
             PagedList<Answer> res1 = new PagedList<Answer>();
@@ -104,18 +127,17 @@ namespace BaseHA.Application.Serivce
             return res1;*/
         }
 
+       /* public async Task<Category> GetByENcode(string codeEn)
+        {
+            if (codeEn == null)
+                throw new NotImplementedException();
 
-        /* public async Task<Category> GetByENcode(string codeEn)
-         {
-             if (codeEn == null)
-                 throw new NotImplementedException();
+            var record = from i in _category.Table
+                         where i.IntentCodeEn == codeEn && !i.OnDelete
+                         select i;
 
-             var record = from i in _category.Table
-                          where i.IntentCodeEn == codeEn && !i.OnDelete
-                          select i;
-
-             return await record.FirstAsync<Category>();
-         }*/
+            return await record.FirstAsync<Category>();
+        }*/
 
         public async Task<Answer> GetByIdAsync(string id, bool tracking = false)
             {
@@ -147,9 +169,20 @@ namespace BaseHA.Application.Serivce
 
             public async Task<bool> UpdateAsync(Answer entity)
             {
-                if (entity == null)
+            /*var list = from cate in _answer.Table select cate;
+            var query= from q in list where q.Id == entity.Id 
+                    
+                       select new Answer
+                       {
+                           Id = q.Id,
+                           IntentId = entity.IntentId,
+                           //IntentCodeEn = i.Intent.IntentCodeEn,
+                           AnswerVn = q.AnswerVn
+                       };*/
+            if (entity == null)
                     throw new ArgumentNullException(nameof(entity));
-                _answer.Update(entity);
+
+            _answer.Update(entity);
                 return await _answer.SaveChangesConfigureAwaitAsync() > 0;
             }
         }

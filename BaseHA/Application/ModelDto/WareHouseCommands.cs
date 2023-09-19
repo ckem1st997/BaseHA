@@ -29,6 +29,7 @@ namespace BaseHA.Application.ModelDto
         public virtual ICollection<Outward> OutwardToWareHouses { get; set; }
         public virtual ICollection<Outward> OutwardWareHouses { get; set; }
         public virtual ICollection<WareHouseLimit> WareHouseLimits { get; set; }
+
         public virtual IList<SelectListItem> AvailableWareHouses { get; set; }
     }
 

@@ -10,6 +10,7 @@ namespace BaseHA.Application.ModelDto
         public CategoryCommands()
         {
             Intents = new HashSet<Intent>();
+            Answers = new HashSet<Answer>();
         }
 
         public string NameCategory { get; set; } = default!;
@@ -31,5 +32,6 @@ namespace BaseHA.Application.ModelDto
 
 
         public virtual ICollection<Intent> Intents { get; set; }
+        public virtual ICollection<Answer> Answers { get; set; }
     }
 }

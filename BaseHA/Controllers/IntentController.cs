@@ -8,6 +8,7 @@ using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Mvc;
 using Share.BaseCore.Extensions;
 using System.Diagnostics;
+using BaseHA.Application.ModelDto.DTO;
 
 namespace BaseHA.Controllers
 {
@@ -15,20 +16,23 @@ namespace BaseHA.Controllers
     {
         private readonly ILogger<IntentController> _logger;
         private readonly IIntentService _intent;
-        private readonly ICategoryService _categoryService;
+        private readonly ICategoryService _category;
+        private readonly IAnswerService _answer;
         private readonly IMapper _mapper;
 
-        public IntentController(ILogger<IntentController> logger, IIntentService intent, ICategoryService category, IMapper mapper)
+        public IntentController(ILogger<IntentController> logger, IIntentService intent, ICategoryService category, IAnswerService answer, IMapper mapper)
         {
             _logger = logger;
             _intent = intent;
-            _categoryService = category;
+            _category = category;
+            _answer = answer;
             _mapper = mapper;
         }
 
         public async Task<IActionResult> Index()
         {
-            return View();
+            var model = new CategorySearchModel();
+            return View(model);
         }
 
         public async Task<IActionResult> Edit(string id)
@@ -90,16 +94,16 @@ namespace BaseHA.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Delete(IEnumerable<string> ids)
+        public async Task<IActionResult> Delete(IntentCommands intent)
         {
-            if (ids == null)
+            if (intent.Id == null)
                 return Ok(new ResultMessageResponse()
                 {
                     message = "Thất bại !",
                     success = false
                 });
 
-            var res = await _intent.DeletesAsync(ids);
+            var res = await _intent.DeleteAsyncID(intent.Id);
             return Ok(new ResultMessageResponse()
             {
                 message = res ? "Thành công !" : "Thất bại !",
@@ -126,14 +130,36 @@ namespace BaseHA.Controllers
         }
 
 
-        public async Task<IActionResult> Privacy()
+        /// <summary>
+        /// Gọi Api lấy cấu trúc cây kho
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ActionResult> GetTree()
         {
-            return View();
+            var res = await _category.GetTree(2);
+            IList<CategoryTreeModel> cg = new List<CategoryTreeModel>();
+            foreach (var item in res)
+            {
+                cg.Add(item);
+            }
+            var all = new CategoryTreeModel()
+            {
+                NameCategory = "Tất cả",
+                key = "",
+                title = "Tất cả",
+                tooltip = "Tất cả",
+                children = cg,
+                level = 1,
+                expanded = true
+            };
+            res.Clear();
+            res.Add(all);
+
+            return Ok(res);
         }
 
 
-
-        #region List
+        #region List Category
         /// <summary>
         /// Lấy về danh sách dữ liệu phân trang
         /// </summary>
@@ -142,7 +168,36 @@ namespace BaseHA.Controllers
         /// <returns></returns>
         [IgnoreAntiforgeryToken]
         [HttpPost]
-        public async Task<IActionResult> Get([DataSourceRequest] DataSourceRequest request, IntentSearchModel searchModel)
+        public async Task<IActionResult> GetCategory([DataSourceRequest] DataSourceRequest request, CategorySearchModel searchModel)
+        {
+
+            searchModel.BindRequest(request);
+            var data = await _category.GetAsync(searchModel);
+
+            var result = new DataSourceResult
+            {
+                Data = data.Lists,
+                Total = data.Count
+            };
+
+            return Ok(result);
+        }
+        #endregion
+
+
+
+
+
+        #region List Intent
+        /// <summary>
+        /// Lấy về danh sách dữ liệu phân trang
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="searchModel"></param>
+        /// <returns></returns>
+        [IgnoreAntiforgeryToken]
+        [HttpPost]
+        public async Task<IActionResult> GetIntent([DataSourceRequest] DataSourceRequest request, IntentSearchModel searchModel)
         {
 
             searchModel.BindRequest(request);
@@ -158,6 +213,31 @@ namespace BaseHA.Controllers
         }
         #endregion
 
+        #region List Answer
+        /// <summary>
+        /// Lấy về danh sách dữ liệu phân trang
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="searchModel"></param>
+        /// <returns></returns>
+        [IgnoreAntiforgeryToken]
+        [HttpPost]
+        public async Task<IActionResult> GetAnswer([DataSourceRequest] DataSourceRequest request, AnswerSearchModel searchModel)
+        {
+
+            searchModel.BindRequest(request);
+            var data = await _answer.GetAsync(searchModel);
+
+            var result = new DataSourceResult
+            {
+                Data = data.Lists,
+                Total = data.Count
+            };
+            //var entity = _mapper.Map<AnswerCommands>(result);
+
+            return Ok(result);
+        }
+        #endregion
 
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
