@@ -81,6 +81,7 @@
                 toolbar.Create();
                 toolbar.Save();
             })
+            .Events(e => e.SaveChanges("master.refresh"))
             .Editable(editable => editable.Mode(GridEditMode.InCell))
             .DataSource(dataSource => dataSource
                     .Ajax()
@@ -212,6 +213,11 @@
 @section Scripts {
     <script>
         // Methods
+
+        const refreshTable = () => {
+            grd.api.reload();
+        }
+
         master.details = function () {
             var id = grd.api.selectedIds()[0];
             if (id) {

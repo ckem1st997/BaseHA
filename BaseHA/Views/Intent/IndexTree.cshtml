@@ -62,51 +62,7 @@
                     </div>
                 </form>
             </div>
-            <div class="row full-height" style="display:none">
-                @(Html.Kendo().Grid<Category>()
-                    .Name("grd")
-                    .HtmlAttributes(new { style = "height: 100%" })
-                    .Columns(columns =>
-                    {
-                        columns.Select().Width(30);
-                        columns.Bound(x => x.Id).Width(300).Hidden();
-                        columns.Bound(x => x.NameCategory).ClientTemplate("#=grd.tmp.name(NameCategory)#").Width(100).Title("Tên danh mục");
-                        columns.Bound(x => x.IntentCodeEn).Width(100).Title("Intent Code English");
-                        columns.Bound(x => x.IntentCodeVn).Width(100).Title("Intent Code VietNam");
-                        columns.Bound(x => x.Description).Width(100).Title("Mô tả");
-                        columns.Bound(x => x.Inactive).ClientTemplate("#=grd.tmp.activate(!Inactive)#").Width(30).Title("Kích hoạt");
-                        columns.Command(command => command.Destroy()).Width(30);
-                    })
-                    .ToolBar(toolbar =>
-                    {
-                        toolbar.Create();
-                        toolbar.Save();
-                    })
-                    .Editable(editable => editable.Mode(GridEditMode.InCell))
-                    .DataSource(dataSource => dataSource
-                    .Ajax()
-                    .ServerOperation(true)
-                    .Model(model =>
-                    {
-                        model.Id(p => p.Id);
-                        model.Field(p => p.NameCategory);
-                        model.Field(p => p.IntentCodeEn);
-                        model.Field(p => p.IntentCodeVn);
-                        model.Field(p => p.Description);
-                        //model.Field(p => p.Quantity).Editable(false);
-                    })
-                    .PageSize(setting.GridPageSize)
-                    .Read(read => read.Action("GetCategory", "Category").Data("grd.data"))
-                    .Create(add => add.Action("Add", "Category"))
-                    .Update(update => update.Action("Edit", "Category"))
-                    .Destroy(destroy => destroy.Action("Delete", "Category"))
-                    )
-                    .NoRecords()
-                    .Scrollable(scr => scr.Enabled(true))
-                    .Pageable(pageable => pageable.ButtonCount(setting.GridButtonCount).Info(true).Input(true).Numeric(true).PageSizes(setting.GridPageSizeOptions).PreviousNext(true).Refresh(true))
-                    .Selectable(selectable => selectable.Type(GridSelectionType.Row).Mode(GridSelectionMode.Multiple))
-                    .Navigatable())
-            </div>
+        
 
             <div style="display:flex">
                 <div style="width:55%; border: 2px solid #3085C3; padding: 4px">
@@ -130,6 +86,7 @@
                                 toolbar.Create();
                                 toolbar.Save();
                             })
+                            .Events(e => e.SaveChanges("master.refresh"))
                             .Editable(editable => editable.Mode(GridEditMode.InCell))
                             .DataSource(dataSource => dataSource
                             .Ajax()
@@ -176,6 +133,7 @@
                                 toolbar.Create();
                                 toolbar.Save();
                             })
+                            .Events(e => e.SaveChanges("master.refresh"))
                             .Editable(editable => editable.Mode(GridEditMode.InCell))
                             .DataSource(dataSource => dataSource
                             .Ajax()
@@ -444,9 +402,9 @@
             grd.actions.init();
         };
         grd.actions.init = function () {
-            grd.api.initDblClick(master.details);
-            grd.api.initEdit(master.edit);
-            grd.api.initActivate(master.activates);
+         //   grd.api.initDblClick(master.details);
+           // grd.api.initEdit(master.edit);
+          //  grd.api.initActivate(master.activates);
         };
 
         treeWareHouse.init = function () {
@@ -455,7 +413,7 @@
                 source: {
                     url: master.urlTree,
                     beforeSend: function (jqXHR, settings) {
-                        grd.api.clear();
+                        //grd.api.clear();
                     },
                     complete: function () {
                         var lastKeySelected = '@Model.CategoryId';
