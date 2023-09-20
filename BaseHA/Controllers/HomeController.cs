@@ -48,8 +48,9 @@ namespace BaseHA.Controllers
             return randomName;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
+            ViewData["Title"] = "Quản lý danh mục";
             return View();
         }
 

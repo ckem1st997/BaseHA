@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Elasticsearch.Net;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
@@ -27,9 +29,13 @@ namespace Share.BaseCore.Filters
         public void OnException(ExceptionContext context)
         {
             string getEnv = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? Environments.Development;
-
-
             Log.Error(context.Exception + "|" + context.Exception.Message);
+            string error = "Có lỗi ngoài ý muốn xảy ra, xin vui lòng liên hệ bộ phận liên quan !";
+            if(context.Exception.Message.Contains("conflicted with the FOREIGN KEY constraint"))
+            {
+                error = "Có lỗi xảy ra, bạn chưa chọn dữ liệu có liên quan từ nguồn khác !";
+            }
+            
             if (context.Exception.GetType() == typeof(BaseException))
             {
                 var problemDetails = new ValidationProblemDetails()
@@ -43,13 +49,21 @@ namespace Share.BaseCore.Filters
 
                 context.Result = new BadRequestObjectResult(problemDetails);
                 context.HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            }
-
+            } 
+            else if(context.Exception.GetType() == typeof(DbUpdateException))
+            {
+                var jsonResult = new ResultMessageResponse
+                {
+                    message = context.Exception.Message,
+                    httpStatusCode = (int)HttpStatusCode.InternalServerError,
+                    success = false
+                };
+            }    
             else
             {
                 var jsonResult = new ResultMessageResponse
                 {
-                    message = "Có lỗi ngoài ý muốn xảy ra, xin vui lòng liên hệ bộ phận liên quan !",
+                    message = error,
                     httpStatusCode = (int)HttpStatusCode.InternalServerError,
                     success = false
                 };

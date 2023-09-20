@@ -1,10 +1,52 @@
-﻿@using BaseHA.Domain.Entity;
+﻿@using BaseHA.Application.ModelDto.DTO;
+@using BaseHA.Domain.Entity;
 @using BaseHA.Models.SearchModel;
 @model CategorySearchModel
 
 @{
     var setting = new AdminAreaSettings();
 }
+
+<script>
+    function onChange(e) {
+        var colIdx = e.container.index();
+        var dataItem = e.sender.dataItem($(e.container).parent());
+        var listunits = @Html.Raw(JsonConvert.SerializeObject(ViewData["category"]));
+        var unit = listunits.find(x => x.IntentCodeEn === dataItem.IntentCodeEn)
+        // if (colIdx == 1 && unit !== undefined) {
+        //     dataItem.set("CategorieModel", unit);
+        // }
+    }
+
+    function onAdd(e) {
+        if (e.model.isNew()) {
+            var dataItem = e.sender.dataItem($(e.container).parent());
+            var wareHouseId = null;
+            if (!_.isEmpty(treeWareHouse.api) && treeWareHouse.api.getActiveNode())
+                wareHouseId = treeWareHouse.api.activeNode.key;
+            if (wareHouseId === null || wareHouseId === undefined || wareHouseId.length < 5) {
+                notify({ text: 'Notifies.NotWareHouseSelect', type: 'info' });
+
+                grd.api.dataSource.cancelChanges(dataItem);
+                this.refresh()
+                return false;
+            }
+            var listcategory = @Html.Raw(JsonConvert.SerializeObject(ViewData["category"]));
+            // var item = listcategory.find(x => x.Id === wareHouseId)
+            var item = listcategory
+            // if (item != undefined)
+            //     dataItem.set("CategorieModel", item)
+            // var unit = listcategory.find(x => x.IntentCodeEn === dataItem.IntentCodeEn)
+            // if (unit !== undefined) {
+            //     dataItem.set("CategorieModel", unit);
+            // }
+        }
+
+    }
+</script>
+
+
+
 <!-- #region Page Header -->
 <div class="page-bar">
     <ul class="page-breadcrumb"></ul>
@@ -62,42 +104,44 @@
                     </div>
                 </form>
             </div>
-        
+
 
             <div style="display:flex">
                 <div style="width:55%; border: 2px solid #3085C3; padding: 4px">
                     <h4>Intent</h4>
                     <div class="row full-height">
-                        @(Html.Kendo().Grid<Intent>()
+                        @(Html.Kendo().Grid<IntentModel>
+                            ()
                             .Name("grdIntent")
                             .HtmlAttributes(new { style = "height: 100%" })
                             .Columns(columns =>
                             {
                                 columns.Select().Width(30);
                                 columns.Bound(x => x.Id).Width(100).Hidden();
-                                columns.Bound(x => x.IntentCodeEn).ClientTemplate("#=grd.tmp.name(IntentCodeEn)#").Width(60).Title("Intent Code Engkish");
+                                columns.Bound(x => x.IntentCodeEn).EditorTemplateName("Category").ClientTemplate("#=IntentCodeEn#").Width(200);
                                 columns.Bound(x => x.IntentEn).Width(60).Title("Intent English");
                                 columns.Bound(x => x.IntentVn).Width(60).Title("Intent VietNam");
                                 columns.Bound(x => x.Inactive).ClientTemplate("#=grd.tmp.activate(!Inactive)#").Width(30).Title("Kích hoạt");
-                                columns.Command(command => command.Destroy()).Width(30);
+                                columns.Command(command => command.Destroy()).Width(150).HtmlAttributes(new { style = "text-align: center" });
                             })
                             .ToolBar(toolbar =>
                             {
-                                toolbar.Create();
-                                toolbar.Save();
+                                toolbar.Create().Text("Thêm mới");
+                                toolbar.Save().Text("Lưu").CancelText("Huỷ bỏ");
                             })
-                            .Events(e => e.SaveChanges("master.refresh"))
+
                             .Editable(editable => editable.Mode(GridEditMode.InCell))
                             .DataSource(dataSource => dataSource
                             .Ajax()
+                            .Batch(true)
                             .ServerOperation(true)
                             .Model(model =>
                             {
                                 model.Id(p => p.Id);
-                                model.Field(p => p.IntentCodeEn);
-                                model.Field(p => p.IntentEn);
-                                model.Field(p => p.IntentVn);
-                                //model.Field(p => p.Quantity).Editable(false);
+                                model.Field(p => p.IntentCodeEn).DefaultValue((ViewData["defaultCategory"] as CategotyDTO)?.IntentCodeEn).Editable(true);
+                                model.Field(p => p.IntentEn).Editable(true);
+                                model.Field(p => p.IntentVn).Editable(true);
+                                model.Field(p => p.Inactive).Editable(true);
                             })
                             .PageSize(setting.GridPageSize)
                             .Read(read => read.Action("GetIntent", "Intent").Data("grd.data"))
@@ -106,10 +150,12 @@
                             .Destroy(destroy => destroy.Action("Delete", "Intent"))
                             )
                             .NoRecords()
+                            .AutoBind(false)
                             .Scrollable(scr => scr.Enabled(true))
                             .Pageable(pageable => pageable.ButtonCount(setting.GridButtonCount).Info(true).Input(true).Numeric(true).PageSizes(setting.GridPageSizeOptions).PreviousNext(true).Refresh(true))
                             .Selectable(selectable => selectable.Type(GridSelectionType.Row).Mode(GridSelectionMode.Multiple))
-                            .Navigatable())
+                            .Navigatable()
+                            .Events(e => e.Edit("onAdd").CellClose("onChange")))
                     </div>
                 </div>
 
@@ -160,8 +206,8 @@
                 </div>
             </div>
 
-           
-           
+
+
         </div>
     </div>
 </div>
@@ -212,7 +258,7 @@
                 init: function () { }
             },
             grd: {
-                el: '#grd',
+                el: '#grdIntent',
                 $el: {},
                 api: {},
                 actions: {
@@ -262,6 +308,88 @@
         grd.data = function () {
             var $keywords = $('#@Html.FieldIdFor(m => m.Keywords)');
             var $status = $('#@Html.FieldIdFor(m => m.ActiveStatus)');
+            var CategoryId = null;
+            if (!_.isEmpty(treeWareHouse.api) && treeWareHouse.api.getActiveNode())
+                CategoryId = treeWareHouse.api.activeNode.key;
+            var searchModel = {
+                Keywords: $keywords.val(),
+                Status: $status.val(),
+                CategoryId: CategoryId
+            };
+            return searchModel;
+        };
+
+
+        //grdAnswer
+
+        var masterAnswer = {
+            urlTree: '@Url.Action("GetTree")',
+            urlDetails: '@Url.Action("Details")',
+            urlCreate: '@Url.Action("Add")',
+            urlEdit: '@Url.Action("Edit")',
+            urlDeletes: '@Url.Action("Delete")',
+            urlActivates: '@Url.Action("Activates")',
+            urlExport: '@Url.Action("ExportOrder")',
+            urlImportExcel: '@Url.Action("ImportExcel")',
+            toolbar: {
+                el: '.page-toolbar',
+                $el: {},
+                actions: {
+                    init: function () { }
+                },
+                init: function () { }
+            },
+            grd: {
+                el: '#grdAnswer',
+                $el: {},
+                api: {},
+                actions: {
+                    init: function () { }
+                },
+                tmp: {
+                    name: function (id, name) { },
+                    activate: function (activate) { }
+                },
+                data: function () { },
+                init: function () { }
+            },
+            treeWareHouse: {
+                el: '#treeWareHouse',
+                $el: {},
+                api: {},
+                init: function () { },
+            },
+            mnu: {
+                el: '#mnu',
+                $el: {},
+                api: {},
+                init: function () { }
+            },
+            btnSearch: {
+                el: '#btnSearch',
+                $el: {},
+                init: function () { }
+            },
+            init: function () { },
+            details: function (id) { },
+            create: function () { },
+            edit: function (id) { },
+            deletes: function () { },
+            activates: function (activate, ids) { },
+            refresh: function () { },
+            actionCallback: function () { },
+            importExcel: function () { },
+            export: function () { }
+        };
+        var toolbarAnswer = masterAnswer.toolbar;
+        var grdAnswer = masterAnswer.grd;
+        var mnuAnswer = masterAnswer.mnu;
+        var btnSearchAnswer = masterAnswer.btnSearch;
+        var treeWareHouseAnswer = masterAnswer.treeWareHouse;
+
+        grdAnswer.data = function () {
+            var $keywords = $('#@Html.FieldIdFor(m => m.Keywords)');
+            var $status = $('#@Html.FieldIdFor(m => m.ActiveStatus)');
             var wareHouseId = null;
             if (!_.isEmpty(treeWareHouse.api) && treeWareHouse.api.getActiveNode())
                 wareHouseId = treeWareHouse.api.activeNode.key;
@@ -272,13 +400,16 @@
             };
             return searchModel;
         };
+
+
+
     </script>
 }
 
 
 @section Scripts {
     <script>
-        // Methods
+        // Methods grdAnswer
         master.details = function () {
             var id = grd.api.selectedIds()[0];
             if (id) {
@@ -402,9 +533,9 @@
             grd.actions.init();
         };
         grd.actions.init = function () {
-         //   grd.api.initDblClick(master.details);
-           // grd.api.initEdit(master.edit);
-          //  grd.api.initActivate(master.activates);
+            //   grd.api.initDblClick(master.details);
+            // grd.api.initEdit(master.edit);
+            //  grd.api.initActivate(master.activates);
         };
 
         treeWareHouse.init = function () {
@@ -508,9 +639,214 @@
             return !activate ? '<i data-action="deactivate" class="fa fa-check green pointer"></i>' : '<i data-action="activate" class="fa fa-lock yellow pointer"></i>';
         };
 
+
+        //
+
+        masterAnswer.details = function () {
+            var id = grdAnswer.api.selectedIds()[0];
+            if (id) {
+                app.window.form.open({ url: `${masterAnswer.urlDetails}/${id}`, options: { width: '450px' } });
+            } else {
+                notify({ text: 'Notifies.NoItemsSelected', type: 'info' });
+            }
+        };
+        masterAnswer.importExcel = function () {
+            app.window.form.open({ url: `${masterAnswer.urlImportExcel}`, options: { width: '620px' } });
+        };
+        masterAnswer.create = function () {
+            app.window.form.open({ url: masterAnswer.urlCreate, options: { width: '550px' }, callback: master.actionCallback });
+        };
+        masterAnswer.edit = function () {
+            var id = grdAnswer.api.selectedIds()[0];
+            console.log(id)
+            if (id) {
+                app.window.form.open({ url: `${masterAnswer.urlEdit}/${id}`, options: { width: '450px' }, callback: masterAnswer.actionCallback });
+            } else {
+                notify({ text: 'Notifies.NoItemsSelected', type: 'info' });
+            }
+        };
+        masterAnswer.deletes = function () {
+            var ids = grd.api.selectedIds();
+            if (ids.length > 0) {
+                app.window.deletes.open({ url: masterAnswer.urlDeletes, ids: ids, options: { width: '450px' }, callback: masterAnswer.actionCallback });
+            } else {
+                notify({ text: 'Notifies.NoItemsSelected', type: 'info' });
+            }
+        };
+        masterAnswer.activates = function (activate, ids) {
+            ids = ids || grdAnswer.api.selectedIds();
+            if (ids.length > 0) {
+                $.ajax({
+                    type: 'POST',
+                    data: { Ids: ids, Active: activate, __RequestVerificationToken: app.form.antiForgeryToken.value },
+                    dataType: 'json',
+                    url: masterAnswer.urlActivates,
+                    beforeSend: function (jqXhr, settings) {
+                        app.ui.loader(grdAnswer.api.element, true);
+                    },
+                    success: function (msg) {
+                        if (!msg)
+                            return;
+                        if (!msg.HasError) {
+                            masterAnswer.actionCallback();
+                        }
+                        if (msg && msg.message)
+                            notify({ text: msg.message, type: msg.success ? 'success' : 'info' });
+                        app.ui.loader(grdAnswer.api.element, false);
+                    },
+                    error: function (jqXhr, textStatus, errorThrown) {
+                        app.ui.loader(grdAnswer.api.element, false);
+                    }
+                });
+            } else {
+                notify({ text: 'Bạn chưa chọn bảng ghi nào !', type: 'info' });
+            }
+        };
+        masterAnswer.refresh = function () {
+            grdAnswer.api.reload();
+        };
+        masterAnswer.actionCallback = function () {
+            grdAnswer.api.reload();
+        };
+        masterAnswer.export = function () {
+            var $keywords = $('#@Html.FieldIdFor(m => m.Keywords)');
+            var $status = $('#@Html.FieldIdFor(m => m.ActiveStatus)');
+
+            var searchModel = {
+                Keywords: $keywords.val(),
+                Status: $status.val(),
+                PageIndex: grd.api.dataSource.page(),
+                PageSize: grd.api.dataSource.pageSize(),
+            };
+            $.ajax({
+                url: '@Url.Action("GetExcelReport")',
+                data: searchModel,
+                success: function (data) {
+                    window.location = '@Url.Action("DownloadExcel")' + '?fileGuid=' + data.FileGuid
+                        + '&fileName=' + data.FileName;
+                }
+            });
+        };
+        // Inits
+        masterAnswer.init = function () {
+            toolbarAnswer.init();
+            grdAnswer.init();
+            mnuAnswer.init();
+            btnSearchAnswer.init();
+            treeWareHouseAnswer.init();
+        };
+
+        toolbarAnswer.init = function () {
+            toolbarAnswer.$el = $(toolbarAnswer.el);
+
+            toolbarAnswer.actions.init();
+        };
+        toolbarAnswer.actions.init = function () {
+            var $toolbar = toolbarAnswer.$el;
+            $toolbar.find('a[data-action="edit"]').click(function (e) {
+                masterAnswer.edit();
+            });
+
+            $toolbar.find('a[data-action="export"]').click(function (e) {
+                masterAnswer.export();
+            });
+            $toolbar.find('a[data-action="importexcel"]').click(function (e) {
+                masterAnswer.importExcel();
+            });
+            admin.pageToolbar.actions.initCreate($toolbar, masterAnswer.create);
+            admin.pageToolbar.actions.initEdit($toolbar, masterAnswer.edit);
+            admin.pageToolbar.actions.initDeletes($toolbar, masterAnswer.deletes);
+            admin.pageToolbar.actions.initActivate($toolbar, masterAnswer.activates);
+        };
+        grdAnswer.init = function () {
+            grdAnswer.$el = $(grdAnswer.el);
+            grdAnswer.api = grdAnswer.$el.data('kendoGrid');
+
+            grdAnswer.actions.init();
+        };
+        grdAnswer.actions.init = function () {
+        };
+        mnuAnswer.init = function () {
+            mnuAnswer.$el = $(mnuAnswer.el);
+            mnuAnswer.$el.kendoContextMenu({
+                orientation: 'vertical',
+                target: masterAnswer.grd.el,
+                filter: 'tbody tr[role="row"]',
+                animation: {
+                    open: { effects: "fadeIn" },
+                    duration: 0
+                },
+                open: function (e) {
+                    var $row = $(e.target);
+                    var selected = masterAnswer.grdAnswer.api.select().length;
+                    if (selected === 0 || (!$row.hasClass('k-state-selected') && selected > 0)) {
+                        masterAnswer.grdAnswer.api.clearSelection();
+                        masterAnswer.grdAnswer.api.select($row);
+                    }
+                },
+                select: function (e) {
+                    var action = $(e.item).attr('data-action');
+                    switch (action) {
+                        case 'details':
+                            masterAnswer.details();
+                            break;
+                        case 'create':
+                            masterAnswer.create();
+                            break;
+                        case 'importExcel':
+                            masterAnswer.importExcel();
+                            break;
+                        case 'edit':
+                            masterAnswer.edit();
+                            break;
+                        case 'activate':
+                            masterAnswer.activates(true);
+                            break;
+                        case 'deactivate':
+                            masterAnswer.activates(false);
+                            break;
+                        case 'deletes':
+                            masterAnswer.deletes();
+                            break;
+                        case 'refresh':
+                            masterAnswer.refresh();
+                            break;
+                        case 'export':
+                            masterAnswer.export();
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            });
+            mnuAnswer.api = mnuAnswer.$el.data("kendoContextMenu");
+        };
+        btnSearchAnswer.init = function () {
+            btnSearchAnswer.$el = $(btnSearch.el);
+
+            const search = _.debounce(() => {
+                grdAnswer.api.resetPage();
+            }, app.ui.def.debounce.timeout);
+            btnSearchAnswer.$el.click(function (e) {
+                search();
+                return false;
+            });
+        };
+
+        // Templates
+        grdAnswer.tmp.name = function (name) {
+            return `<a data-action="edit" href="javascript:void(0)">${name}</a>`;
+        };
+        grdAnswer.tmp.activate = function (activate) {
+            return !activate ? '<i data-action="deactivate" class="fa fa-check green pointer"></i>' : '<i data-action="activate" class="fa fa-lock yellow pointer"></i>';
+        };
+
+
+
         // Startup
         $(function () {
             master.init();
+            masterAnswer.init();
         });
     </script>
 }

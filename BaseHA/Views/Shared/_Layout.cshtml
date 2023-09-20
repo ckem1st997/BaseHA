@@ -12,7 +12,7 @@
     </script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - BaseHA</title>
+    <title>@ViewData["Title"]</title>
 
     <link rel="apple-touch-icon" href="~/Content/global/img/apple-touch-icon.png">
     <link rel="shortcut icon" href="~/Content/global/img/favicon.ico" />
@@ -80,17 +80,18 @@
                     <li class="classic-menu-dropdown">
                         <a href="javascript:;" data-hover="megamenu-dropdown" data-close-others="true" class="hover-initialized" aria-expanded="false">
                             <i class="fa flaticon2-warning"></i>
-                            <span class="navbar-label">Ticket</span>
+                            <span class="navbar-label">Chatbot</span>
                         </a>
                         <ul class="dropdown-menu pull-left">
                             <li>
-                                <a href="/Admin/ProblemTicket">
-                                    <i class=""></i> Ticket sự cố
+                                <a asp-action="IndexTree" asp-controller="Intent">
+                                    <i class=""></i> Ý Định
                                 </a>
                             </li>
                             <li>
-                                <a href="/Admin/ProblemTicket/viewIndexHTE">
-                                    <i class=""></i> Ticket sự cố (HTE)
+                                
+                                <a asp-action="Index" asp-controller="Answer">
+                                    <i class=""></i> Trả lời
                                 </a>
                             </li>
                             <li>
