@@ -80,6 +80,7 @@
                 toolbar.Create();
                 toolbar.Save();
             })
+            .Events(e => e.SaveChanges("master.refresh"))
             .Editable(editable => editable.Mode(GridEditMode.InCell))
             .DataSource(dataSource => dataSource
                     .Ajax()
