@@ -72,6 +72,7 @@
                 //columns.Bound(x => x.Intent.Id).Width(100).Title("NameID");
                 columns.Bound(x => x.AnswerVn).Width(100).Title("Answer");
                 columns.Bound(x => x.Inactive).ClientTemplate("#=grd.tmp.activate(!Inactive)#").Width(100).Title("Kích hoạt");
+                columns.Command(command => command.Destroy()).Width(30);
                
             })
             .ToolBar(toolbar => {
@@ -89,9 +90,10 @@
                             model.Field(p => p.AnswerVn);
                         })
                     .PageSize(setting.GridPageSize)
-            .Read(read => read.Action("Get", "Answer").Data("grd.data"))
-            .Create(add => add.Action("Add", "Answer").Data("grd.data"))
+            .Read(read => read.Action("GetAnswer", "Answer").Data("grd.data"))
+            .Create(add => add.Action("Add", "Answer"))
             .Update(update => update.Action("Edit", "Answer"))
+            .Destroy(destroy => destroy.Action("Delete", "Answer"))
             )
             .NoRecords()
             .Scrollable(scr => scr.Enabled(true))

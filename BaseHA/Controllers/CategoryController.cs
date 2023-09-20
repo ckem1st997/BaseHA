@@ -28,7 +28,12 @@ namespace BaseHA.Controllers
             _intent = intent;
             _answer = answer;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
+        {
+            
+            return View();
+        }
+        public IActionResult Index_Tree()
         {
             var model = new CategorySearchModel();
             return View(model);

@@ -31,8 +31,15 @@ namespace BaseHA.Controllers
 
         public async Task<IActionResult> Index()
         {
+            // var model = new CategorySearchModel();
+            //return View(model);
+            return View();
+        }
+        public IActionResult IndexTree()
+        {
             var model = new CategorySearchModel();
             return View(model);
+            //return View();
         }
 
         public async Task<IActionResult> Edit(string id)
@@ -71,7 +78,6 @@ namespace BaseHA.Controllers
         public async Task<IActionResult> Add()
         {
             var model = new IntentCommands();
-            model.AvailableCategory = await _intent.GetSelectListItem();
             return View(model);
         }
 

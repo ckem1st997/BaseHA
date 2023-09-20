@@ -31,7 +31,7 @@ namespace BaseHA.Application.Serivce
         //Task<Category> GetByENcode(string codeEn);
 
         Task<bool> ActivatesAsync(IEnumerable<string> ids, bool active);
-        //Task<IList<SelectListItem>> GetSelectListItem();
+        
 
         Task<IList<CategoryTreeModel>> GetTree(int? expandLevel);
     }

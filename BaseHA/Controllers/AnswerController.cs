@@ -70,14 +70,14 @@ namespace BaseHA.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Add(AnswerCommands category)
+        public async Task<IActionResult> Add(AnswerCommands answer)
         {
-            if (category.Id == null)
+            if (answer.Id == null)
             {
-                category.Id = Guid.NewGuid().ToString();
+                answer.Id = Guid.NewGuid().ToString();
             }
 
-            var entity = _mapper.Map<Answer>(category);
+            var entity = _mapper.Map<Answer>(answer);
             var res = await _answer.InsertAsync(entity);
             return Ok(new ResultMessageResponse()
             {
@@ -88,7 +88,7 @@ namespace BaseHA.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Delete00(IEnumerable<string> ids)
+        public async Task<IActionResult> Delete000(IEnumerable<string> ids)
         {
             if (ids == null)
                 return Ok(new ResultMessageResponse()
@@ -149,7 +149,7 @@ namespace BaseHA.Controllers
 
 
 
-        #region List
+        #region List Answer
         /// <summary>
         /// Lấy về danh sách dữ liệu phân trang
         /// </summary>

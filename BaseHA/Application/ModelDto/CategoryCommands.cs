@@ -12,7 +12,8 @@ namespace BaseHA.Application.ModelDto
             Intents = new HashSet<Intent>();
             Answers = new HashSet<Answer>();
         }
-
+        public string Id { get; set; }
+       
         public string NameCategory { get; set; } = default!;
 
         
@@ -29,6 +30,7 @@ namespace BaseHA.Application.ModelDto
 
 
         public bool Inactive { get; set; }= false;
+        public bool Ondelete { get; set; }
 
 
         public virtual ICollection<Intent> Intents { get; set; }

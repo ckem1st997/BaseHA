@@ -3,14 +3,14 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BaseHA.Application.ModelDto
 {
-    public class IntentCommands : BaseCommands
+    public class IntentCommands
     {
 
         public IntentCommands()
         {
-            AvailableCategory = new List<SelectListItem>();
+    
         }
-
+        public string Id { get; set; } 
 
         public string? IntentCodeEn { get; set; }
 
@@ -18,13 +18,11 @@ namespace BaseHA.Application.ModelDto
 
         public string? IntentVn { get; set; }
 
-        public string? AnswerId { get; set; }
-
         public bool Inactive { get; set; }
+        public bool Ondelete { get; set; }
 
-     
+
         public virtual Category? IntentCodeEnNavigation { get; set; }
 
-        public virtual IList<SelectListItem> AvailableCategory { get; set; }
     }
 }

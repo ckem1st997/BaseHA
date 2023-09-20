@@ -23,6 +23,7 @@ namespace BaseHA.Application.Serivce
             Task<bool> UpdateAsync(Answer entity);
 
             Task<bool> DeletesAsync(IEnumerable<string> ids);
+           
             Task<bool> DeleteAsyncID(string id);
 
             Task<PagedList<Answer>> GetAsync(AnswerSearchModel ctx);
@@ -31,7 +32,6 @@ namespace BaseHA.Application.Serivce
 
             Task<bool> ActivatesAsync(IEnumerable<string> ids, bool active);
 
-            Task<IList<SelectListItem>> GetSelectListItem();
      }
 
     public class AnswerService : IAnswerService
@@ -42,7 +42,7 @@ namespace BaseHA.Application.Serivce
         public AnswerService()
             {
                 _answer = EngineContext.Current.Resolve<IRepositoryEF<Answer>>(DataConnectionHelper.ConnectionStringNames.Warehouse);
-            _intent = EngineContext.Current.Resolve<IRepositoryEF<Intent>>(DataConnectionHelper.ConnectionStringNames.Warehouse);
+                _intent = EngineContext.Current.Resolve<IRepositoryEF<Intent>>(DataConnectionHelper.ConnectionStringNames.Warehouse);
         }
 
             public async Task<bool> ActivatesAsync(IEnumerable<string> ids, bool active)
@@ -159,7 +159,7 @@ namespace BaseHA.Application.Serivce
                 return await _answer.SaveChangesConfigureAwaitAsync() > 0;
             }
 
-            public async Task<bool> InsertWHAsync(IEnumerable<Answer> entities)
+        public async Task<bool> InsertWHAsync(IEnumerable<Answer> entities)
             {
                 if (entities == null)
                     throw new ArgumentNullException(nameof(entities));
