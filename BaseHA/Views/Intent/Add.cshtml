@@ -22,10 +22,16 @@
                 @Html.HiddenFor(m => m.Id)
 
 
-                <div class="form-group form-group-sm">
+                @* <div class="form-group form-group-sm">
                     @Html.LabelFor(m => m.IntentCodeEn, new { @class = "control-label col-md-4" })
                     <div class="col-md-8">
                         @Html.DropDownListFor(m => m.IntentCodeEn, Model.AvailableCategory, "Chọn IntentCodeEn...", new { @class = "form-control", style = "width: 100%" })
+                    </div>
+                </div> *@
+                <div class="form-group form-group-sm">
+                    <label class="control-label  col-md-4" for="UnitName">Intent Code English</label>
+                    <div class="col-md-8">
+                        @Html.TextBoxFor(m => m.IntentCodeEn, new { @class = "form-control" })
                     </div>
                 </div>
 

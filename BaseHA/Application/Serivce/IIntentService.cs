@@ -25,8 +25,7 @@ namespace BaseHA.Application.Serivce
         Task<Intent> GetByIdAsync(string id, bool tracking = false);
 
         Task<bool> ActivatesAsync(IEnumerable<string> ids, bool active);
-        
-        Task<IList<SelectListItem>> GetSelectListItem();
+       
     }
 
     public class IntentService : IIntentService
@@ -94,7 +93,7 @@ namespace BaseHA.Application.Serivce
         }
 
 
-        public async Task<IList<SelectListItem>> GetSelectListItem()
+       /* public async Task<IList<SelectListItem>> GetSelectListItem()
         {
             var list = from i in _category.Table
                     where !i.OnDelete
@@ -104,7 +103,7 @@ namespace BaseHA.Application.Serivce
                         Value = i.IntentCodeEn
                     };
             return await list.ToListAsync();
-        }
+        }*/
 
         public async Task<bool> InsertAsync(Intent entities)
         {

@@ -9,11 +9,11 @@ namespace BaseHA.Application.AutoMapper.WareHouses
         public IntentCommandProfile()
         {
             CreateMap<IntentCommands, Intent>();
-                //.ForMember(x => x.Answers, opt => opt.Ignore());
+            //.ForMember(x => x.Answers, opt => opt.Ignore());
 
 
-            CreateMap<Intent, IntentCommands>()
-            .ForMember(x => x.AvailableCategory, opt => opt.Ignore());
+            CreateMap<Intent, IntentCommands>();
+            
         }
     }
     public static class MappingExtensionsIntent

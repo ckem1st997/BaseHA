@@ -4,12 +4,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BaseHA.Application.ModelDto
 {
-    public class AnswerCommands : BaseCommands
+    public class AnswerCommands 
     {
         public AnswerCommands()
         {
 
         }
+        public string Id { get; set; }
 
         public string IntentCodeEn { get; set; } = default!;
 
@@ -17,6 +18,8 @@ namespace BaseHA.Application.ModelDto
 
         public bool Inactive { get; set; } = false;
 
-        public virtual Category IntentCodeEnNavigation { get; set; } 
+        public bool Ondelete { get; set; }
+
+        public virtual Category? IntentCodeEnNavigation { get; set; } 
     }
 }
