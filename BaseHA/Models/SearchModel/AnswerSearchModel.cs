@@ -6,6 +6,7 @@
         {
             Keywords = "";
         }
+        public string CategoryId { get; set; }
         public ActiveStatus ActiveStatus { get; set; }
     }
 }

@@ -1,7 +1,7 @@
 ﻿@using BaseHA.Application.ModelDto;
 @using BaseHA.Domain.Entity;
 @using BaseHA.Models.SearchModel;
-@model CategorySearchModel
+@model AnswerSearchModel
 
 @{
     var setting = new AdminAreaSettings();
@@ -9,19 +9,26 @@
 <script>
 
     function onSave(e) {
+        console.log(e)
+        notify({ text: 'Bạn chưa chọn danh mục111 !', type: 'info' });
+
         if (e.action === "sync") {
             // Sự kiện sau khi gửi yêu cầu saveChanges thành công
             console.log("onSave");
         }
     }
     function onSave1(e) {
+        console.log(e)
+
         if (e.action === "sync") {
             // Sự kiện sau khi gửi yêu cầu saveChanges thành công
             console.log("onSave1");
         }
-    }   
-    
+    }
+
     function onNotication(e) {
+        console.log(e)
+
         if (e.action === "sync") {
             // Sự kiện sau khi gửi yêu cầu saveChanges thành công
             console.log("onNotication");
@@ -29,6 +36,8 @@
     }
 
     function onChange(e) {
+        console.log(e)
+
         //var colIdx = e.container.index();
         //var dataItem = e.sender.dataItem($(e.container).parent());
         //var listunits = @Html.Raw(JsonConvert.SerializeObject(ViewData["units"]));
@@ -52,6 +61,8 @@
     }
 
     function onAdd(e) {
+        console.log(e.action)
+
         if (e.model.isNew()) {
             var dataItem = e.sender.dataItem($(e.container).parent());
             var CategoryId = null;
@@ -184,48 +195,47 @@
 
                 <div style="width:43%; margin-left: 10px;  border: 2px solid #3085C3; padding: 4px">
                     <h4>Answer</h4>
-                    @* <div class="row full-height">
-                    @(Html.Kendo().Grid<Answer>()
-                    .Name("grdAnswer")
-                    .HtmlAttributes(new { style = "height: 100%" })
-                    .Columns(columns =>
-                    {
-                    columns.Select().Width(30);
-                    columns.Bound(x => x.Id).Width(300).Hidden();
-                    columns.Bound(x => x.Category).ClientTemplate("#=grd.tmp.name(CategoryId)#").Width(60).Title("Intent Code English");
-                    columns.Bound(x => x.AnswerVn).Width(60).Title("Answer");
-                    columns.Bound(x => x.Inactive).ClientTemplate("#=grd.tmp.activate(!Inactive)#").Width(30).Title("Kích hoạt");
-                    columns.Command(command => command.Destroy()).Width(30);
-                    })
-                    .ToolBar(toolbar =>
-                    {
-                    toolbar.Create();
-                    toolbar.Save();
-                    })
-                    .Events(e => e.SaveChanges("master.refresh"))
-                    .Editable(editable => editable.Mode(GridEditMode.InCell))
-                    .DataSource(dataSource => dataSource
-                    .Ajax()
-                    .ServerOperation(true)
-                    .Model(model =>
-                    {
-                    model.Id(p => p.Id);
-                    model.Field(p => p.CategoryId);
-                    model.Field(p => p.AnswerVn);
-                    //model.Field(p => p.Quantity).Editable(false);
-                    })
-                    .PageSize(setting.GridPageSize)
-                    .Read(read => read.Action("GetAnswer", "Answer").Data("grd.data"))
-                    .Create(add => add.Action("Add", "Answer"))
-                    .Update(update => update.Action("Edit", "Answer"))
-                    .Destroy(destroy => destroy.Action("Delete", "Answer"))
-                    )
-                    .NoRecords()
-                    .Scrollable(scr => scr.Enabled(true))
-                    .Pageable(pageable => pageable.ButtonCount(setting.GridButtonCount).Info(true).Input(true).Numeric(true).PageSizes(setting.GridPageSizeOptions).PreviousNext(true).Refresh(true))
-                    .Selectable(selectable => selectable.Type(GridSelectionType.Row).Mode(GridSelectionMode.Multiple))
-                    .Navigatable())
-                    </div>*@
+                    <div class="row full-height">
+                        @(Html.Kendo().Grid<Answer>()
+                            .Name("grdAnswer")
+                            .HtmlAttributes(new { style = "height: 100%" })
+                            .Columns(columns =>
+                            {
+                                columns.Select().Width(30);
+                                columns.Bound(x => x.Id).Width(300).Hidden();
+                                // columns.Bound(x => x.Category).ClientTemplate("#=grd.tmp.name(CategoryId)#").Width(60).Title("Intent Code English");
+                                columns.Bound(x => x.AnswerVn).Width(60).Title("Answer");
+                                columns.Bound(x => x.Inactive).ClientTemplate("#=grd.tmp.activate(!Inactive)#").Width(30).Title("Kích hoạt");
+                                columns.Command(command => command.Destroy()).Width(30);
+                            })
+                            .ToolBar(toolbar =>
+                            {
+                                toolbar.Create();
+                                toolbar.Save();
+                            })
+                            .Editable(editable => editable.Mode(GridEditMode.InCell))
+                            .DataSource(dataSource => dataSource
+                            .Ajax()
+                            .ServerOperation(true)
+                            .Model(model =>
+                            {
+                                model.Id(p => p.Id);
+                                model.Field(p => p.CategoryId);
+                                model.Field(p => p.AnswerVn);
+                                //model.Field(p => p.Quantity).Editable(false);
+                            })
+                            .PageSize(setting.GridPageSize)
+                            .Read(read => read.Action("GetAnswer", "Answer").Data("grdAnswer.data"))
+                            .Create(add => add.Action("Add", "Answer"))
+                            .Update(update => update.Action("Edit", "Answer"))
+                            .Destroy(destroy => destroy.Action("Delete", "Answer"))
+                            )
+                            .NoRecords()
+                            .Scrollable(scr => scr.Enabled(true))
+                            .Pageable(pageable => pageable.ButtonCount(setting.GridButtonCount).Info(true).Input(true).Numeric(true).PageSizes(setting.GridPageSizeOptions).PreviousNext(true).Refresh(true))
+                            .Selectable(selectable => selectable.Type(GridSelectionType.Row).Mode(GridSelectionMode.Multiple))
+                            .Navigatable())
+                    </div>
                 </div>
             </div>
 
@@ -339,12 +349,95 @@
                 CategoryId = treeIntent.api.activeNode.key;
             var searchModel = {
                 Keywords: $keywords.val(),
-                Status: $status.val(),
+                ActiveStatus: $status.val(),
                 CategoryId: CategoryId
             };
             return searchModel;
         };
 
+
+        //
+        var masterAnswer = {
+            urlTree: '@Url.Action("GetTree")',
+            urlDetails: '@Url.Action("Details")',
+            urlCreate: '@Url.Action("Add")',
+            urlEdit: '@Url.Action("Edit")',
+            urlDeletes: '@Url.Action("Delete")',
+            urlActivates: '@Url.Action("Activates")',
+            urlExport: '@Url.Action("ExportOrder")',
+            urlImportExcel: '@Url.Action("ImportExcel")',
+            toolbar: {
+                el: '.page-toolbar',
+                $el: {},
+                actions: {
+                    init: function () { }
+                },
+                init: function () { }
+            },
+            grd: {
+                el: '#grdAnswer',
+                $el: {},
+                api: {},
+                actions: {
+                    init: function () { }
+                },
+                tmp: {
+                    name: function (id, name) { },
+                    activate: function (activate) { }
+                },
+                data: function () { },
+                init: function () { }
+            },
+            treeIntent: {
+                el: '#treeIntent',
+                $el: {},
+                api: {},
+                init: function () { },
+            },
+            mnu: {
+                el: '#mnu',
+                $el: {},
+                api: {},
+                init: function () { }
+            },
+            btnSearch: {
+                el: '#btnSearch',
+                $el: {},
+                init: function () { }
+            },
+            init: function () { },
+            details: function (id) { },
+            create: function () { },
+            edit: function (id) { },
+            deletes: function () { },
+            activates: function (activate, ids) { },
+            refresh: function () { },
+            actionCallback: function () { },
+            importExcel: function () { },
+            export: function () { }
+        };
+
+
+
+        var toolbarAnswer = masterAnswer.toolbar;
+        var grdAnswer = masterAnswer.grd;
+        var mnuAnswer = masterAnswer.mnu;
+        var btnSearchAnswer = masterAnswer.btnSearch;
+        var treeIntent = master.treeIntent;
+
+        grdAnswer.data = function () {
+            var $keywords = $('#@Html.FieldIdFor(m => m.Keywords)');
+            var $status = $('#@Html.FieldIdFor(m => m.ActiveStatus)');
+            var CategoryId = null;
+            if (!_.isEmpty(treeIntent.api) && treeIntent.api.getActiveNode())
+                CategoryId = treeIntent.api.activeNode.key;
+            var searchModel = {
+                Keywords: $keywords.val(),
+                ActiveStatus: $status.val(),
+                CategoryId: CategoryId
+            };
+            return searchModel;
+        };
 
 
     </script>
@@ -784,8 +877,6 @@
         grdAnswer.tmp.activate = function (activate) {
             return !activate ? '<i data-action="deactivate" class="fa fa-check green pointer"></i>' : '<i data-action="activate" class="fa fa-lock yellow pointer"></i>';
         };
-
-
 
         // Startup
         $(function () {

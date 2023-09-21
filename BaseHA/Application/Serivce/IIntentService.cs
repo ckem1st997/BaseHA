@@ -129,7 +129,12 @@ namespace BaseHA.Application.Serivce
         {
             if (entities == null)
                 throw new ArgumentNullException(nameof(entities));
-            _intent.Update(entities);
+            foreach (var item in entities)
+            {
+                if (string.IsNullOrEmpty(item.Id))
+                    item.Id = Guid.NewGuid().ToString();
+                await _intent.AddAsync(item);
+            }
             return await _intent.SaveChangesConfigureAwaitAsync() > 0;
         }
 

@@ -13,6 +13,7 @@ using Share.BaseCore.Notifier;
 
 namespace BaseHA.Controllers
 {
+    [MvcNotify(Order = 1000)] // Run last (OnResultExecuting)
     public class IntentController : Controller
     {
         private readonly ILogger<IntentController> _logger;
@@ -40,7 +41,7 @@ namespace BaseHA.Controllers
         }
         public async Task<IActionResult> IndexTreeAsync()
         {
-            var model = new CategorySearchModel();
+            var model = new AnswerSearchModel();
             var resCategory = await _category.GetSelect();
             ViewData["category"] = resCategory.Select(x => new CategotyDTO()
             {
@@ -93,14 +94,23 @@ namespace BaseHA.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Add(IntentCommands intents)
+        public async Task<IActionResult> Add(IEnumerable<IntentCommands> intents)
         {
-            if (intents.Id == null)
+            if (intents is null)
             {
-                intents.Id = Guid.NewGuid().ToString();
+                return Ok(new ResultMessageResponse()
+                {
+                    message = "Chưa nhập dữ liệu !"
+                });
             }
-            var entity = _mapper.Map<Intent>(intents);
-            var res = await _intent.InsertAsync(entity);
+            var list = new List<Intent>();
+            foreach (var item in list)
+            {
+                var entity = _mapper.Map<Intent>(intents);
+                list.Add(entity);
+            }
+            Thread.Sleep(2000);
+            var res = await _intent.InsertWHAsync(list);
             _mvcNotifier.Add(MvcNotifyType.Success, res ? "Thành công !" : "Thất bại !");
             return Ok(new ResultMessageResponse()
             {
