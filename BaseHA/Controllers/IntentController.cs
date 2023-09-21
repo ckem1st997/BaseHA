@@ -31,6 +31,8 @@ namespace BaseHA.Controllers
 
         public async Task<IActionResult> Index()
         {
+            // var model = new CategorySearchModel();
+            //return View(model);
             return View();
         }
         public async Task<IActionResult> IndexTreeAsync()
@@ -44,6 +46,7 @@ namespace BaseHA.Controllers
             });
             ViewData["defaultCategory"] = resCategory.FirstOrDefault();
             return View(model);
+            //return View();
         }
 
         public async Task<IActionResult> Edit(string id)

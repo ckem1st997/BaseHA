@@ -60,18 +60,17 @@ namespace BaseHA.Domain.Contexts
                     .IsUnicode(false);
 
                 entity.Property(e => e.AnswerVn)
-                    .HasMaxLength(255)
+                    .HasMaxLength(1000)
                     .HasColumnName("AnswerVN");
 
-                entity.Property(e => e.IntentCodeEn)
-                    .HasMaxLength(255)
-                    .HasColumnName("IntentCodeEN");
+                entity.Property(e => e.CategoryId)
+                    .HasMaxLength(36)
+                    .IsUnicode(false)
+                    .HasColumnName("CategoryID");
 
-                entity.HasOne(d => d.IntentCodeEnNavigation)
+                entity.HasOne(d => d.Category)
                     .WithMany(p => p.Answers)
-                    .HasPrincipalKey(p => p.IntentCodeEn)
-                    .HasForeignKey(d => d.IntentCodeEn)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasForeignKey(d => d.CategoryId)
                     .HasConstraintName("fk_c");
             });
 
@@ -285,10 +284,10 @@ namespace BaseHA.Domain.Contexts
 
             modelBuilder.Entity<Category>(entity =>
             {
-                entity.HasIndex(e => e.IntentCodeEn, "UQ__Categori__4A7106403590F02C")
+                entity.HasIndex(e => e.IntentCodeEn, "UQ__Categori__4A7106400642077A")
                     .IsUnique();
 
-                entity.HasIndex(e => e.IntentCodeVn, "UQ__Categori__4A769C352A75658A")
+                entity.HasIndex(e => e.IntentCodeVn, "UQ__Categori__4A769C3515B6B10C")
                     .IsUnique();
 
                 entity.Property(e => e.Id)
@@ -318,9 +317,10 @@ namespace BaseHA.Domain.Contexts
                     .HasMaxLength(36)
                     .IsUnicode(false);
 
-                entity.Property(e => e.IntentCodeEn)
-                    .HasMaxLength(255)
-                    .HasColumnName("IntentCodeEN");
+                entity.Property(e => e.CategoryId)
+                    .HasMaxLength(36)
+                    .IsUnicode(false)
+                    .HasColumnName("CategoryID");
 
                 entity.Property(e => e.IntentEn)
                     .HasMaxLength(255)
@@ -330,10 +330,9 @@ namespace BaseHA.Domain.Contexts
                     .HasMaxLength(255)
                     .HasColumnName("IntentVN");
 
-                entity.HasOne(d => d.IntentCodeEnNavigation)
+                entity.HasOne(d => d.Category)
                     .WithMany(p => p.Intents)
-                    .HasPrincipalKey(p => p.IntentCodeEn)
-                    .HasForeignKey(d => d.IntentCodeEn)
+                    .HasForeignKey(d => d.CategoryId)
                     .HasConstraintName("fk_cate");
             });
 
