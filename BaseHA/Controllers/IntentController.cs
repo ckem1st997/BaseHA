@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Share.BaseCore.Extensions;
 using System.Diagnostics;
 using BaseHA.Application.ModelDto.DTO;
+using Share.BaseCore.Notifier;
 
 namespace BaseHA.Controllers
 {
@@ -19,14 +20,16 @@ namespace BaseHA.Controllers
         private readonly ICategoryService _category;
         private readonly IAnswerService _answer;
         private readonly IMapper _mapper;
+        private readonly IMvcNotifier _mvcNotifier;
 
-        public IntentController(ILogger<IntentController> logger, IIntentService intent, ICategoryService category, IAnswerService answer, IMapper mapper)
+        public IntentController(ILogger<IntentController> logger, IIntentService intent, ICategoryService category, IAnswerService answer, IMapper mapper, IMvcNotifier mvcNotifier)
         {
             _logger = logger;
             _intent = intent;
             _category = category;
             _answer = answer;
             _mapper = mapper;
+            _mvcNotifier = mvcNotifier;
         }
 
         public async Task<IActionResult> Index()
@@ -87,10 +90,11 @@ namespace BaseHA.Controllers
         {
             if (intents.Id == null)
             {
-                intents.Id= Guid.NewGuid().ToString();
+                intents.Id = Guid.NewGuid().ToString();
             }
             var entity = _mapper.Map<Intent>(intents);
             var res = await _intent.InsertAsync(entity);
+            _mvcNotifier.Add(MvcNotifyType.Success, res ? "Thành công !" : "Thất bại !");
             return Ok(new ResultMessageResponse()
             {
                 message = res ? "Thành công !" : "Thất bại !",

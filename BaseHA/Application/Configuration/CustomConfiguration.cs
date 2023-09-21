@@ -24,6 +24,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using BaseHA.Application.Serivce;
 using BaseHA.Domain.Contexts;
 using Autofac.Core;
+using Share.BaseCore.Notifier;
 
 namespace BaseHA.Application.Configuration
 {
@@ -63,6 +64,10 @@ namespace BaseHA.Application.Configuration
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IIntentService, IntentService>();
             services.AddScoped<IAnswerService, AnswerService>();
+
+            services.AddScoped<IMvcNotifier, MvcNotifier>();
+
+
         }
     }
 }

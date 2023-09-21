@@ -2,6 +2,7 @@
 using BaseHA.Domain.Entity;
 using BaseHA.Models.SearchModel;
 using Dapper;
+using Kendo.Mvc.Extensions;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Share.BaseCore.Base;

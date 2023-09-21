@@ -25,7 +25,7 @@ namespace BaseHA.Application.Serivce
         Task<Intent> GetByIdAsync(string id, bool tracking = false);
 
         Task<bool> ActivatesAsync(IEnumerable<string> ids, bool active);
-       
+
     }
 
     public class IntentService : IIntentService
@@ -35,7 +35,7 @@ namespace BaseHA.Application.Serivce
         public IntentService()
         {
             _intent = EngineContext.Current.Resolve<IRepositoryEF<Intent>>(DataConnectionHelper.ConnectionStringNames.Warehouse);
-            _category= EngineContext.Current.Resolve<IRepositoryEF<Category>>(DataConnectionHelper.ConnectionStringNames.Warehouse);
+            _category = EngineContext.Current.Resolve<IRepositoryEF<Category>>(DataConnectionHelper.ConnectionStringNames.Warehouse);
         }
 
         public async Task<bool> ActivatesAsync(IEnumerable<string> ids, bool active)
@@ -79,6 +79,13 @@ namespace BaseHA.Application.Serivce
                                             || c.IntentVn.Contains(ctx.Keywords)
                        select c;
             }
+
+            if (!string.IsNullOrEmpty(ctx.CategoryId))
+            {
+                list = from c in list
+                       where c.CategoryId.Equals(ctx.CategoryId)
+                       select c;
+            }
             PagedList<Intent> res = new PagedList<Intent>();
             await res.Result(ctx.PageSize, (ctx.PageIndex - 1) * ctx.PageSize, list);
 
@@ -93,17 +100,17 @@ namespace BaseHA.Application.Serivce
         }
 
 
-       /* public async Task<IList<SelectListItem>> GetSelectListItem()
-        {
-            var list = from i in _category.Table
-                    where !i.OnDelete
-                    select new SelectListItem
-                    {
-                        Text = $"{i.IntentCodeEn}",
-                        Value = i.IntentCodeEn
-                    };
-            return await list.ToListAsync();
-        }*/
+        /* public async Task<IList<SelectListItem>> GetSelectListItem()
+         {
+             var list = from i in _category.Table
+                     where !i.OnDelete
+                     select new SelectListItem
+                     {
+                         Text = $"{i.IntentCodeEn}",
+                         Value = i.IntentCodeEn
+                     };
+             return await list.ToListAsync();
+         }*/
 
         public async Task<bool> InsertAsync(Intent entities)
         {

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Kendo.Mvc.Extensions;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Localization;
 using NetTopologySuite.Utilities;
 using System;
@@ -444,11 +445,11 @@ namespace Share.BaseCore.Extensions
             return true;
         }
 
-        [DebuggerStepThrough]
-        public static bool HasValue(this string value)
-        {
-            return !string.IsNullOrWhiteSpace(value);
-        }
+        //[DebuggerStepThrough]
+        //public static bool HasValue(this string value)
+        //{
+        //    return !string.IsNullOrWhiteSpace(value);
+        //}
 
        
 

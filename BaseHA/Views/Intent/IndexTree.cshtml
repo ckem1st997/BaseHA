@@ -1,10 +1,75 @@
-﻿@using BaseHA.Domain.Entity;
+﻿@using BaseHA.Application.ModelDto;
+@using BaseHA.Domain.Entity;
 @using BaseHA.Models.SearchModel;
 @model CategorySearchModel
 
 @{
     var setting = new AdminAreaSettings();
 }
+<script>
+
+    function onSave(e) {
+        if (e.action === "sync") {
+            // Sự kiện sau khi gửi yêu cầu saveChanges thành công
+            console.log("onSave");
+        }
+    }
+    function onSave1(e) {
+        if (e.action === "sync") {
+            // Sự kiện sau khi gửi yêu cầu saveChanges thành công
+            console.log("onSave1");
+        }
+    }   
+    
+    function onNotication(e) {
+        if (e.action === "sync") {
+            // Sự kiện sau khi gửi yêu cầu saveChanges thành công
+            console.log("onNotication");
+        }
+    }
+
+    function onChange(e) {
+        //var colIdx = e.container.index();
+        //var dataItem = e.sender.dataItem($(e.container).parent());
+        //var listunits = @Html.Raw(JsonConvert.SerializeObject(ViewData["units"]));
+        //var unit = listunits.find(x => x.Id === dataItem.WareHouseItemModel.UnitId)
+        //if (colIdx == 1 && unit !== undefined) {
+        //    dataItem.set("UnitModel", unit);
+        //}
+
+        var dataItem = e.sender.dataItem($(e.container).parent());
+        var CategoryId = null;
+        if (!_.isEmpty(treeIntent.api) && treeIntent.api.getActiveNode())
+            CategoryId = treeIntent.api.activeNode.key;
+        if (CategoryId === null || CategoryId === undefined || CategoryId.length < 5) {
+            notify({ text: 'Bạn chưa chọn danh mục !', type: 'info' });
+            grd.api.dataSource.cancelChanges(dataItem);
+            this.refresh()
+            return false;
+        }
+        if (CategoryId != undefined && CategoryId != null)
+            dataItem.set("CategoryID", CategoryId)
+    }
+
+    function onAdd(e) {
+        if (e.model.isNew()) {
+            var dataItem = e.sender.dataItem($(e.container).parent());
+            var CategoryId = null;
+            if (!_.isEmpty(treeIntent.api) && treeIntent.api.getActiveNode())
+                CategoryId = treeIntent.api.activeNode.key;
+            if (CategoryId === null || CategoryId === undefined || CategoryId.length < 5) {
+                notify({ text: 'Bạn chưa chọn danh mục !', type: 'info' });
+                grd.api.dataSource.cancelChanges(dataItem);
+                this.refresh()
+                return false;
+            }
+            if (CategoryId != undefined && CategoryId != null)
+                dataItem.set("CategoryID", CategoryId)
+        }
+    }
+
+
+</script>
 <!-- #region Page Header -->
 <div class="page-bar">
     <ul class="page-breadcrumb"></ul>
@@ -35,7 +100,7 @@
 </div>
 <div class="splitter fixed-layout-split" data-position="230px">
     <div class="leftPane">
-        <div id="treeWareHouse" class="full-height"></div>
+        <div id="treeIntent" class="full-height"></div>
     </div>
     <div class="rightPane">
         <div class="page-data">
@@ -62,20 +127,20 @@
                     </div>
                 </form>
             </div>
-        
+
 
             <div style="display:flex">
                 <div style="width:55%; border: 2px solid #3085C3; padding: 4px">
                     <h4>Intent</h4>
                     <div class="row full-height">
-                        @(Html.Kendo().Grid<Intent>()
+                        @(Html.Kendo().Grid<IntentCommands>()
                             .Name("grdIntent")
                             .HtmlAttributes(new { style = "height: 100%" })
                             .Columns(columns =>
                             {
                                 columns.Select().Width(30);
                                 columns.Bound(x => x.Id).Width(100).Hidden();
-                                columns.Bound(x => x.CategoryId).ClientTemplate("#=grd.tmp.name(CategoryId)#").Width(60).Title("Intent Code English");
+                                columns.Bound(x => x.CategoryID).Hidden();
                                 columns.Bound(x => x.IntentEn).Width(60).Title("Intent English");
                                 columns.Bound(x => x.IntentVn).Width(60).Title("Intent VietNam");
                                 columns.Bound(x => x.Inactive).ClientTemplate("#=grd.tmp.activate(!Inactive)#").Width(30).Title("Kích hoạt");
@@ -83,10 +148,10 @@
                             })
                             .ToolBar(toolbar =>
                             {
-                                toolbar.Create();
-                                toolbar.Save();
+                                toolbar.Create().Text("Thêm mới");
+                                toolbar.Save().Text("Lưu").CancelText("Hủy bỏ");
                             })
-                            .Events(e => e.SaveChanges("master.refresh"))
+                            //.Events(e => e.SaveChanges("master.refresh"))
                             .Editable(editable => editable.Mode(GridEditMode.InCell))
                             .DataSource(dataSource => dataSource
                             .Ajax()
@@ -94,7 +159,7 @@
                             .Model(model =>
                             {
                                 model.Id(p => p.Id);
-                                model.Field(p => p.CategoryId);
+                                model.Field(p => p.CategoryID);
                                 model.Field(p => p.IntentEn);
                                 model.Field(p => p.IntentVn);
                                 //model.Field(p => p.Quantity).Editable(false);
@@ -109,59 +174,61 @@
                             .Scrollable(scr => scr.Enabled(true))
                             .Pageable(pageable => pageable.ButtonCount(setting.GridButtonCount).Info(true).Input(true).Numeric(true).PageSizes(setting.GridPageSizeOptions).PreviousNext(true).Refresh(true))
                             .Selectable(selectable => selectable.Type(GridSelectionType.Row).Mode(GridSelectionMode.Multiple))
-                            .Navigatable())
+                            .Navigatable()
+                            .Events(e => e.Edit("onAdd").CellClose("onChange").Save("onSave1").SaveChanges("onSave").Change("onNotication")))
+
                     </div>
                 </div>
 
                 <div style="width:43%; margin-left: 10px;  border: 2px solid #3085C3; padding: 4px">
                     <h4>Answer</h4>
-                    <div class="row full-height">
-                        @(Html.Kendo().Grid<Answer>()
-                            .Name("grdAnswer")
-                            .HtmlAttributes(new { style = "height: 100%" })
-                            .Columns(columns =>
-                            {
-                                columns.Select().Width(30);
-                                columns.Bound(x => x.Id).Width(300).Hidden();
-                                columns.Bound(x => x.CategoryId).ClientTemplate("#=grd.tmp.name(CategoryId)#").Width(60).Title("Intent Code English");
-                                columns.Bound(x => x.AnswerVn).Width(60).Title("Answer");
-                                columns.Bound(x => x.Inactive).ClientTemplate("#=grd.tmp.activate(!Inactive)#").Width(30).Title("Kích hoạt");
-                                columns.Command(command => command.Destroy()).Width(30);
-                            })
-                            .ToolBar(toolbar =>
-                            {
-                                toolbar.Create();
-                                toolbar.Save();
-                            })
-                            .Events(e => e.SaveChanges("master.refresh"))
-                            .Editable(editable => editable.Mode(GridEditMode.InCell))
-                            .DataSource(dataSource => dataSource
-                            .Ajax()
-                            .ServerOperation(true)
-                            .Model(model =>
-                            {
-                                model.Id(p => p.Id);
-                                model.Field(p => p.CategoryId);
-                                model.Field(p => p.AnswerVn);
-                                //model.Field(p => p.Quantity).Editable(false);
-                            })
-                            .PageSize(setting.GridPageSize)
-                            .Read(read => read.Action("GetAnswer", "Answer").Data("grd.data"))
-                            .Create(add => add.Action("Add", "Answer"))
-                            .Update(update => update.Action("Edit", "Answer"))
-                            .Destroy(destroy => destroy.Action("Delete", "Answer"))
-                            )
-                            .NoRecords()
-                            .Scrollable(scr => scr.Enabled(true))
-                            .Pageable(pageable => pageable.ButtonCount(setting.GridButtonCount).Info(true).Input(true).Numeric(true).PageSizes(setting.GridPageSizeOptions).PreviousNext(true).Refresh(true))
-                            .Selectable(selectable => selectable.Type(GridSelectionType.Row).Mode(GridSelectionMode.Multiple))
-                            .Navigatable())
-                    </div>
+                    @* <div class="row full-height">
+                    @(Html.Kendo().Grid<Answer>()
+                    .Name("grdAnswer")
+                    .HtmlAttributes(new { style = "height: 100%" })
+                    .Columns(columns =>
+                    {
+                    columns.Select().Width(30);
+                    columns.Bound(x => x.Id).Width(300).Hidden();
+                    columns.Bound(x => x.Category).ClientTemplate("#=grd.tmp.name(CategoryId)#").Width(60).Title("Intent Code English");
+                    columns.Bound(x => x.AnswerVn).Width(60).Title("Answer");
+                    columns.Bound(x => x.Inactive).ClientTemplate("#=grd.tmp.activate(!Inactive)#").Width(30).Title("Kích hoạt");
+                    columns.Command(command => command.Destroy()).Width(30);
+                    })
+                    .ToolBar(toolbar =>
+                    {
+                    toolbar.Create();
+                    toolbar.Save();
+                    })
+                    .Events(e => e.SaveChanges("master.refresh"))
+                    .Editable(editable => editable.Mode(GridEditMode.InCell))
+                    .DataSource(dataSource => dataSource
+                    .Ajax()
+                    .ServerOperation(true)
+                    .Model(model =>
+                    {
+                    model.Id(p => p.Id);
+                    model.Field(p => p.CategoryId);
+                    model.Field(p => p.AnswerVn);
+                    //model.Field(p => p.Quantity).Editable(false);
+                    })
+                    .PageSize(setting.GridPageSize)
+                    .Read(read => read.Action("GetAnswer", "Answer").Data("grd.data"))
+                    .Create(add => add.Action("Add", "Answer"))
+                    .Update(update => update.Action("Edit", "Answer"))
+                    .Destroy(destroy => destroy.Action("Delete", "Answer"))
+                    )
+                    .NoRecords()
+                    .Scrollable(scr => scr.Enabled(true))
+                    .Pageable(pageable => pageable.ButtonCount(setting.GridButtonCount).Info(true).Input(true).Numeric(true).PageSizes(setting.GridPageSizeOptions).PreviousNext(true).Refresh(true))
+                    .Selectable(selectable => selectable.Type(GridSelectionType.Row).Mode(GridSelectionMode.Multiple))
+                    .Navigatable())
+                    </div>*@
                 </div>
             </div>
 
-           
-           
+
+
         </div>
     </div>
 </div>
@@ -212,7 +279,7 @@
                 init: function () { }
             },
             grd: {
-                el: '#grd',
+                el: '#grdIntent',
                 $el: {},
                 api: {},
                 actions: {
@@ -225,8 +292,8 @@
                 data: function () { },
                 init: function () { }
             },
-            treeWareHouse: {
-                el: '#treeWareHouse',
+            treeIntent: {
+                el: '#treeIntent',
                 $el: {},
                 api: {},
                 init: function () { },
@@ -254,24 +321,24 @@
             export: function () { }
         };
 
-        
+
 
         var toolbar = master.toolbar;
         var grd = master.grd;
         var mnu = master.mnu;
         var btnSearch = master.btnSearch;
-        var treeWareHouse = master.treeWareHouse;
+        var treeIntent = master.treeIntent;
 
         grd.data = function () {
             var $keywords = $('#@Html.FieldIdFor(m => m.Keywords)');
             var $status = $('#@Html.FieldIdFor(m => m.ActiveStatus)');
-            var wareHouseId = null;
-            if (!_.isEmpty(treeWareHouse.api) && treeWareHouse.api.getActiveNode())
-                wareHouseId = treeWareHouse.api.activeNode.key;
+            var CategoryId = null;
+            if (!_.isEmpty(treeIntent.api) && treeIntent.api.getActiveNode())
+                CategoryId = treeIntent.api.activeNode.key;
             var searchModel = {
                 Keywords: $keywords.val(),
                 Status: $status.val(),
-                WareHouseId: wareHouseId
+                CategoryId: CategoryId
             };
             return searchModel;
         };
@@ -373,7 +440,7 @@
             grd.init();
             mnu.init();
             btnSearch.init();
-            treeWareHouse.init();
+            treeIntent.init();
         };
 
         toolbar.init = function () {
@@ -405,14 +472,14 @@
             grd.actions.init();
         };
         grd.actions.init = function () {
-         //   grd.api.initDblClick(master.details);
-           // grd.api.initEdit(master.edit);
-          //  grd.api.initActivate(master.activates);
+            //   grd.api.initDblClick(master.details);
+            // grd.api.initEdit(master.edit);
+            //  grd.api.initActivate(master.activates);
         };
 
-        treeWareHouse.init = function () {
-            treeWareHouse.$el = $(treeWareHouse.el);
-            treeWareHouse.$el.fancytree({
+        treeIntent.init = function () {
+            treeIntent.$el = $(treeIntent.el);
+            treeIntent.$el.fancytree({
                 source: {
                     url: master.urlTree,
                     beforeSend: function (jqXHR, settings) {
@@ -420,7 +487,7 @@
                     },
                     complete: function () {
                         var lastKeySelected = '@Model.CategoryId';
-                        $("#treeWareHouse").fancytree("getTree").getNodeByKey(lastKeySelected).setActive();
+                        $("#treeIntent").fancytree("getTree").getNodeByKey(lastKeySelected).setActive();
                     }
                 },
                 postProcess: function (event, data) {
@@ -434,7 +501,7 @@
                     }
                 }
             });
-            treeWareHouse.api = treeWareHouse.$el.fancytree("getTree");
+            treeIntent.api = treeIntent.$el.fancytree("getTree");
         };
         mnu.init = function () {
             mnu.$el = $(mnu.el);
