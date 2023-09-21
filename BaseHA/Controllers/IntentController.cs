@@ -38,9 +38,16 @@ namespace BaseHA.Controllers
             //return View(model);
             return View();
         }
-        public IActionResult IndexTree()
+        public async Task<IActionResult> IndexTreeAsync()
         {
             var model = new CategorySearchModel();
+            var resCategory = await _category.GetSelect();
+            ViewData["category"] = resCategory.Select(x => new CategotyDTO()
+            {
+                Id = x.Id,
+                IntentCodeEn = x.IntentCodeEn
+            });
+            ViewData["defaultCategory"] = resCategory.FirstOrDefault();
             return View(model);
             //return View();
         }

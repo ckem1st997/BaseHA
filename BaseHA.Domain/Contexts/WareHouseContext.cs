@@ -391,8 +391,6 @@ namespace BaseHA.Domain.Contexts
                     .HasMaxLength(36)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Viewer).HasDefaultValueSql("((0))");
-
                 entity.Property(e => e.Voucher)
                     .HasMaxLength(50)
                     .IsUnicode(false);
@@ -578,8 +576,6 @@ namespace BaseHA.Domain.Contexts
                 entity.Property(e => e.ToWareHouseId)
                     .HasMaxLength(36)
                     .IsUnicode(false);
-
-                entity.Property(e => e.Viewer).HasDefaultValueSql("((0))");
 
                 entity.Property(e => e.Voucher)
                     .HasMaxLength(50)

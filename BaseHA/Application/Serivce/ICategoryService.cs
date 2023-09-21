@@ -35,6 +35,7 @@ namespace BaseHA.Application.Serivce
         
 
         Task<IList<CategoryTreeModel>> GetTree(int? expandLevel);
+        Task<IList<Category>> GetSelect();
     }
     public class CategoryService : ICategoryService
     {
@@ -46,7 +47,7 @@ namespace BaseHA.Application.Serivce
 
         public async Task<bool> ActivatesAsync(IEnumerable<string> ids, bool active)
         {
-            if(ids == null)
+            if (ids == null)
                 throw new ArgumentNullException(nameof(ids));
              var list= await _category.WhereTracking(x => ids.Contains(x.Id) && !x.OnDelete).ToListAsync();
             if(list == null)
@@ -76,11 +77,13 @@ namespace BaseHA.Application.Serivce
 
         public async Task<PagedList<Category>> GetAsync(CategorySearchModel ctx)
         {
-            var list = from cate in _category.Table where cate.OnDelete==false select cate;
+            var list = from cate in _category.Table where cate.OnDelete == false select cate;
             if (!string.IsNullOrEmpty(ctx.Keywords))
             {
-                list = from c in list where c.NameCategory.Contains(ctx.Keywords) || c.IntentCodeEn.Contains(ctx.Keywords)
-                                            || c.IntentCodeVn.Contains(ctx.Keywords) select c;
+                list = from c in list
+                       where c.NameCategory.Contains(ctx.Keywords) || c.IntentCodeEn.Contains(ctx.Keywords)
+                                            || c.IntentCodeVn.Contains(ctx.Keywords)
+                       select c;
             }
 
             if (!string.IsNullOrEmpty(ctx.CategoryId))
@@ -142,14 +145,14 @@ namespace BaseHA.Application.Serivce
 
         public async Task<Category> GetByIdAsync(string id, bool tracking = false)
         {
-            if(id == null)
+            if (id == null)
                 throw new NotImplementedException();
             return await _category.GetByIdsync(id, Tracking: tracking);
         }
 
         public async Task<bool> InsertAsync(Category entities)
         {
-            if(entities == null)
+            if (entities == null)
                 throw new ArgumentNullException(nameof(entities));
             await _category.AddAsync(entities);
             return await _category.SaveChangesConfigureAwaitAsync() > 0;
@@ -157,7 +160,7 @@ namespace BaseHA.Application.Serivce
 
         public async Task<bool> InsertWHAsync(IEnumerable<Category> entities)
         {
-            if(entities == null)
+            if (entities == null)
                 throw new ArgumentNullException(nameof(entities));
             _category.Update(entities);
             return await _category.SaveChangesConfigureAwaitAsync() > 0;
@@ -165,7 +168,7 @@ namespace BaseHA.Application.Serivce
 
         public async Task<bool> UpdateAsync(Category entity)
         {
-            if(entity == null)
+            if (entity == null)
                 throw new ArgumentNullException(nameof(entity));
             _category.Update(entity);
             return await _category.SaveChangesConfigureAwaitAsync() > 0;
@@ -193,7 +196,7 @@ namespace BaseHA.Application.Serivce
                     NameCategory = s.NameCategory,
                     IntentCodeEn = s.IntentCodeEn,
                     IntentCodeVn = s.IntentCodeVn,
-                    Description= s.Description
+                    Description = s.Description
                    
                 });
             var roots = organizationalUnitModels
@@ -251,13 +254,13 @@ namespace BaseHA.Application.Serivce
             var level = 0;
             foreach (var parent in parents)
             {
-                result.Add(new  CategotyDTO
+                result.Add(new CategotyDTO
                 {
                     Id = parent.Id,
                     ParentId = parent.ParentId,
                     NameCategory = "[" + parent.IntentCodeEn + "] " + parent.NameCategory,
                     IntentCodeEn = parent.IntentCodeEn,
-                    IntentCodeVn= parent.IntentCodeVn,
+                    IntentCodeVn = parent.IntentCodeVn,
                     Description = parent.Description
                 });
                 GetChildWareHouseTreeModel(ref models, parent.Id, ref result, level);
@@ -287,7 +290,7 @@ namespace BaseHA.Application.Serivce
                         IntentCodeEn = GetTreeLevelString(level) + child.IntentCodeEn,
                         /*NameCategory = GetTreeLevelString(level) + child.NameCategory,*/
                         IntentCodeVn = child.IntentCodeVn,
-                        Description= child.Description
+                        Description = child.Description
                     });
                     GetChildWareHouseTreeModel(ref models, child.Id, ref result, level);
                 }
@@ -308,5 +311,14 @@ namespace BaseHA.Application.Serivce
             return result;
         }
 
+        public async Task<IList<Category>> GetSelect()
+        {
+            var res = await _category.WhereAsync(x => x.OnDelete == false && x.Inactive == true);
+            return await res.Select(x => new Category()
+            {
+                Id = x.Id,
+                IntentCodeEn = x.IntentCodeEn
+            }).ToListAsync();
+        }
     }
 }

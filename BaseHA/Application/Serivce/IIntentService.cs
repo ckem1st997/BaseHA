@@ -69,9 +69,14 @@ namespace BaseHA.Application.Serivce
             return await _intent.SaveChangesConfigureAwaitAsync() > 0;
         }
 
+        /// <summary>
+        /// phải tracking các thực thể thì khi thực hiện trên gird mới được
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <returns></returns>
         public async Task<PagedList<Intent>> GetAsync(IntentSearchModel ctx)
         {
-            var list = from cate in _intent.Table where !cate.OnDelete select cate;
+            var list = from cate in _intent.GetQueryable() where !cate.OnDelete select cate;
             if (!string.IsNullOrEmpty(ctx.Keywords))
             {
                 list = from c in list
