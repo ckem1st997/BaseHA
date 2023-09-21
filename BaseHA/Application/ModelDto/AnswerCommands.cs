@@ -6,7 +6,7 @@ namespace BaseHA.Application.ModelDto
     public class AnswerCommands : BaseCommands
     {
 
-        public string IntentCodeEn { get; set; } = default!;
+        public string? CategoryId { get; set; }
 
 
         public string? AnswerVn { get; set; }
@@ -14,6 +14,6 @@ namespace BaseHA.Application.ModelDto
 
         public bool Inactive { get; set; }
 
-        public virtual Category IntentCodeEnNavigation { get; set; } = null!;
+        public virtual CategoryCommands? CategoryCommands { get; set; }
     }
 }

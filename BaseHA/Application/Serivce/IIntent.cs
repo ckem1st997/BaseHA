@@ -27,6 +27,7 @@ namespace BaseHA.Application.Serivce
         Task<Intent> GetByIdAsync(string id, bool tracking = false);
 
         Task<bool> ActivatesAsync(IEnumerable<string> ids, bool active);
+       
         Task<IList<SelectListItem>> GetSelectListItem();
     }
 
@@ -63,7 +64,7 @@ namespace BaseHA.Application.Serivce
 
         public async Task<PagedList<Intent>> GetAsync(IntentSearchModel ctx)
         {
-            var l = from i in _generic.Table select i;
+            var l = from i in _generic.Table where i.OnDelete==false select i;
 
             if (!string.IsNullOrEmpty(ctx.Keywords))
                 l = from aa in l
@@ -104,7 +105,9 @@ namespace BaseHA.Application.Serivce
                 queryBuilder.Append("    cte");
                 queryBuilder.Append(" GROUP BY ");
                 queryBuilder.Append("    Id, Name, ParentId;");
+
                 var departmentIds = (await _generic.QueryAsync<string>(queryBuilder.ToString())).ToList();
+
                 departmentIds.Add(ctx.CategoryId);
                 if (departmentIds != null && departmentIds.Any())
                     l = from aa in l where departmentIds.Contains(aa.CategoryId) select aa;

@@ -27,6 +27,7 @@ namespace BaseHA.Application.Serivce
         Task<Answer> GetByIdAsync(string id, bool tracking = false);
 
         Task<bool> ActivatesAsync(IEnumerable<string> ids, bool active);
+        
         Task<IList<SelectListItem>> GetSelectListItem();
     }
 
@@ -63,14 +64,14 @@ namespace BaseHA.Application.Serivce
 
         public async Task<PagedList<Answer>> GetAsync(AnswerSearchModel ctx)
         {
-            var l = from i in _generic.Table select i;
+            var l = from i in _generic.Table where i.OnDelete == false select i;
 
             if (!string.IsNullOrEmpty(ctx.Keywords))
                 l = from aa in l
-                    where aa.CategoryId.Contains(ctx.Keywords)
-                    || aa.AnswerVn.Contains(ctx.Keywords)
+                    where aa.AnswerVn.Contains(ctx.Keywords)
+
                     select aa;
-            // if(ctx.ActiveStatus)
+
             if (!string.IsNullOrEmpty(ctx.CategoryId))
             {
                 // lấy các con của id và tìm kiếm
@@ -79,19 +80,19 @@ namespace BaseHA.Application.Serivce
                 queryBuilder.Append("WITH cte (Id, Name, ParentId) AS (");
                 queryBuilder.Append("    SELECT");
                 queryBuilder.Append("        wh.Id,");
-                queryBuilder.Append("        wh.NameCategory,");
+                queryBuilder.Append("        wh.NameCategory as Name,");
                 queryBuilder.Append("        wh.ParentId");
                 queryBuilder.Append("    FROM");
-                queryBuilder.Append("        Category wh");
+                queryBuilder.Append("        Categories wh");
                 queryBuilder.Append("    WHERE");
                 queryBuilder.Append("        wh.ParentId = '" + ctx.CategoryId + "'");
                 queryBuilder.Append("    UNION ALL");
                 queryBuilder.Append("    SELECT");
                 queryBuilder.Append("        p.Id,");
-                queryBuilder.Append("        p.NameCategory,");
+                queryBuilder.Append("        p.NameCategory as Name,");
                 queryBuilder.Append("        p.ParentId");
                 queryBuilder.Append("    FROM");
-                queryBuilder.Append("        Category p");
+                queryBuilder.Append("        Categories p");
                 queryBuilder.Append("    INNER JOIN");
                 queryBuilder.Append("        cte");
                 queryBuilder.Append("    ON");
@@ -103,10 +104,12 @@ namespace BaseHA.Application.Serivce
                 queryBuilder.Append("    cte");
                 queryBuilder.Append(" GROUP BY ");
                 queryBuilder.Append("    Id, Name, ParentId;");
+
                 var departmentIds = (await _generic.QueryAsync<string>(queryBuilder.ToString())).ToList();
+
                 departmentIds.Add(ctx.CategoryId);
                 if (departmentIds != null && departmentIds.Any())
-                    l = from aa in l where departmentIds.Contains(aa.Id) select aa;
+                    l = from aa in l where departmentIds.Contains(aa.CategoryId) select aa;
             }
             PagedList<Answer> res = new PagedList<Answer>();
             await res.Result(ctx.PageSize, (ctx.PageIndex - 1) * ctx.PageSize, l);

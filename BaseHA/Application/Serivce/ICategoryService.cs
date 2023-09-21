@@ -146,17 +146,19 @@ namespace BaseHA.Application.Serivce
             DynamicParameters parameter = new DynamicParameters();
             parameter.Add("@active", 1);
             var getAll = await _generic.QueryAsync<Category>(sql, parameter, CommandType.Text);
+           
             var organizationalUnitModels = getAll
                 .Select(s => new CategoryTreeModel
                 {
                     children = new List<CategoryTreeModel>(),
                     folder = false,
                     key = s.Id,
-                    title = s.NameCategory,
+                    title = s.IntentCodeVn,
                     tooltip = s.NameCategory,
                     ParentId = s.ParentId,
                     Name = "[" + s.NameCategory + "]-" + s.IntentCodeVn
                 });
+
             var roots = organizationalUnitModels.Where(w => !w.ParentId.HasValue()).OrderBy(o => o.Name);
 
             foreach (var root in roots)
