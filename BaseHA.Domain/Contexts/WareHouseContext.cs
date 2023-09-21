@@ -47,7 +47,7 @@ namespace BaseHA.Domain.Contexts
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
 
-                optionsBuilder.UseSqlServer("Data Source=ADMIN;Initial Catalog=WarehouseManagement;Integrated Security=True");
+                optionsBuilder.UseSqlServer("Data Source=it\\mssqlserver01;Initial Catalog=WarehouseManagement;Integrated Security=True");
             }
         }
 
@@ -71,7 +71,7 @@ namespace BaseHA.Domain.Contexts
                 entity.HasOne(d => d.Category)
                     .WithMany(p => p.Answers)
                     .HasForeignKey(d => d.CategoryId)
-                    .HasConstraintName("fk_c");
+                    .HasConstraintName("fk_c1111");
             });
 
             modelBuilder.Entity<Audit>(entity =>
@@ -284,10 +284,10 @@ namespace BaseHA.Domain.Contexts
 
             modelBuilder.Entity<Category>(entity =>
             {
-                entity.HasIndex(e => e.IntentCodeEn, "UQ__Categori__4A7106400642077A")
+                entity.HasIndex(e => e.IntentCodeEn, "UQ__Categori__4A7106404D1067AE")
                     .IsUnique();
 
-                entity.HasIndex(e => e.IntentCodeVn, "UQ__Categori__4A769C3515B6B10C")
+                entity.HasIndex(e => e.IntentCodeVn, "UQ__Categori__4A769C3548585105")
                     .IsUnique();
 
                 entity.Property(e => e.Id)
@@ -333,7 +333,7 @@ namespace BaseHA.Domain.Contexts
                 entity.HasOne(d => d.Category)
                     .WithMany(p => p.Intents)
                     .HasForeignKey(d => d.CategoryId)
-                    .HasConstraintName("fk_cate");
+                    .HasConstraintName("fk_cate111");
             });
 
             modelBuilder.Entity<Inward>(entity =>
