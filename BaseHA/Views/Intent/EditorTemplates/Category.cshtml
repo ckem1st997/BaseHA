@@ -1,0 +1,9 @@
+﻿@model string
+@(Html.Kendo().DropDownListFor(x => x)
+    .DataTextField("IntentCodeEn")
+    .DataValueField("IntentCodeEn")
+    .AutoBind(false)
+    .Filter("contains")
+    .BindTo((System.Collections.IEnumerable)ViewData["category"])
+    .HtmlAttributes(new { style = "width: 100%" })
+    )

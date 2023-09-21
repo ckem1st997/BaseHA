@@ -21,6 +21,7 @@ namespace BaseHA.Application.Validations.ConfigureServices
         public static void AddValidator(this IServiceCollection services)
         {
             services.AddFluentValidation();
+
             services.AddTransient<IValidator<WareHouseCommands>, WareHouseCommandValidator>();
             services.AddTransient<IValidator<UnitCommands>, UnitCommandValidator>();
             services.AddTransient<IValidator<VendorCommands>, VendorCommandValidator>();

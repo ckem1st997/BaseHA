@@ -35,9 +35,16 @@ namespace BaseHA.Controllers
             //return View(model);
             return View();
         }
-        public IActionResult IndexTree()
+        public async Task<IActionResult> IndexTreeAsync()
         {
             var model = new CategorySearchModel();
+            var resCategory = await _category.GetSelect();
+            ViewData["category"] = resCategory.Select(x => new CategotyDTO()
+            {
+                Id = x.Id,
+                IntentCodeEn = x.IntentCodeEn
+            });
+            ViewData["defaultCategory"] = resCategory.FirstOrDefault();
             return View(model);
             //return View();
         }
@@ -87,7 +94,7 @@ namespace BaseHA.Controllers
         {
             if (intents.Id == null)
             {
-                intents.Id= Guid.NewGuid().ToString();
+                intents.Id = Guid.NewGuid().ToString();
             }
             var entity = _mapper.Map<Intent>(intents);
             var res = await _intent.InsertAsync(entity);
