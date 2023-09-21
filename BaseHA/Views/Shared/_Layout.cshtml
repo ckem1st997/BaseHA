@@ -58,7 +58,7 @@
         <div class="page-header-inner">
             <div class="page-logo">
                 <a href="/Admin">
-                    <img src="https://cdn.htc-itc.vn/Content/global/img/logo_new.png" alt="logo" class="logo-default">
+                    <img src="https://hanoicomputercdn.com/media/lib/09-08-2023/logo-hacom-since-2001.png" alt="logo" class="logo-default">
                 </a>
             </div>
             <div id="admin_hMenu" class="hor-menu hor-menu-light hidden-sm hidden-xs">
@@ -80,17 +80,17 @@
                     <li class="classic-menu-dropdown">
                         <a href="javascript:;" data-hover="megamenu-dropdown" data-close-others="true" class="hover-initialized" aria-expanded="false">
                             <i class="fa flaticon2-warning"></i>
-                            <span class="navbar-label">Ticket</span>
+                            <span class="navbar-label">Chatbot</span>
                         </a>
                         <ul class="dropdown-menu pull-left">
                             <li>
-                                <a href="/Admin/ProblemTicket">
-                                    <i class=""></i> Ticket sự cố
+                                <a asp-action="Index" asp-controller="Category">
+                                    <i class=""></i> Phân loại kịch bản
                                 </a>
                             </li>
                             <li>
-                                <a href="/Admin/ProblemTicket/viewIndexHTE">
-                                    <i class=""></i> Ticket sự cố (HTE)
+                                <a asp-action="Index" asp-controller="Intent">
+                                    <i class=""></i> Phân loại ý định
                                 </a>
                             </li>
                             <li>
@@ -111,6 +111,25 @@
                         </ul>
                     </li>
                     <li class="classic-menu-dropdown">
+                        <a href="javascript:;">
+                            <i class="fa flaticon2-send-1"></i>
+                            <span class="navbar-label">Quản lý</span>
+                        </a>
+                        <ul class="dropdown-menu pull-left">
+                            <li>
+                                <a asp-action="Index" asp-controller="Home">
+                                    <i class=""></i> Quản lý kho
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-action="Index" asp-controller="Unit">
+                                    <i class=""></i> Quản lý đơn vị tính
+                                </a>
+                            </li>
+                           
+                        </ul>
+                    </li>
+@*                     <li class="classic-menu-dropdown">
                         <a href="javascript:;">
                             <i class="fa flaticon2-send-1"></i>
                             <span class="navbar-label">FTTH</span>
@@ -225,7 +244,7 @@
                             <i class="fa flaticon2-chart"></i>
                             <span class="navbar-label">Báo cáo</span>
                         </a>
-                    </li>
+                    </li> *@
                 </ul>
             </div>
             <a href="javascript:;" class="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse" style="display: none">

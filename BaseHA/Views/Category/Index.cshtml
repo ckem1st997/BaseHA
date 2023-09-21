@@ -1,7 +1,6 @@
 ﻿@using BaseHA.Application.ModelDto;
-@using BaseHA.Domain.Entity;
 @using BaseHA.Models.SearchModel;
-@model WareHouseSearchModel
+@model CategorySearchModel
 
 @{
     var setting = new AdminAreaSettings();
@@ -11,29 +10,25 @@
     <ul class="page-breadcrumb"></ul>
     <div class="page-toolbar">
         <div class="pull-right">
-            <a data-action="create" href="javascript:void(0)" class="btn blue btn-sm"><i class="flaticon2-plus"></i> Add</a>
-            <a data-action="edit" href="javascript:void(0)" class="btn yellow btn-sm"><i class="flaticon2-pen"></i> Edit</a>
-            <a data-action="deletes" href="javascript:void(0)" class="btn red btn-sm"><i class="flaticon-delete"></i> Deletes</a>
+            <a data-action="create" href="javascript:void(0)" class="btn blue btn-sm"><i class="flaticon2-plus"></i> Thêm mới</a>
+            <a data-action="edit" href="javascript:void(0)" class="btn yellow btn-sm"><i class="flaticon2-pen"></i> Chỉnh sửa</a>
+            <a data-action="deletes" href="javascript:void(0)" class="btn red btn-sm"><i class="flaticon-delete"></i> Xoá</a>
             <button type="button" class="btn purple btn-sm dropdown-toggle" data-toggle="dropdown">
-                <i class="flaticon-more"></i> T("Common.OtherActions") <i class="fa fa-angle-down"></i>
+                <i class="flaticon-more"></i> Chức năng khác <i class="fa fa-angle-down"></i>
             </button>
             <ul class="dropdown-menu pull-right" role="menu">
                 <li>
-                    <a data-action="activate" href="javascript: void(0);"><i class="fa fa-check font-blue"></i> ("Common.Activate")</a>
+                    <a data-action="activate" href="javascript: void(0);"><i class="fa fa-check font-blue"></i> Kích hoạt</a>
                 </li>
                 <li>
-                    <a data-action="deactivate" href="javascript: void(0);"><i class="fa fa-lock font-yellow"></i> ("Common.Deactivate")</a>
-                </li>
-                <li>
-                    <a data-action="export" href="javascript:void(0)"><i class="fa fa-print"></i> T("Common.ExportData")</a>
-                </li>
-                <li>
-                    <a data-action="importexcel" href="javascript:void(0)"><i class="fa fa-file-excel-o"></i> T("Common.ImportExcel")</a>
-                </li>
+                    <a data-action="deactivate" href="javascript: void(0);"><i class="fa fa-lock font-yellow"></i> Huỷ kích hoạt</a>
+                </li>          
             </ul>
         </div>
     </div>
 </div>
+<!-- #endregion -->
+<!-- #region Page Content -->
 <div class="page-data">
     <div class="row search-form">
         <form style="
@@ -52,30 +47,31 @@
             <div class="col-md-1">
                 <div class="form-group form-group-sm">
                     <button type="submit" id="btnSearch" class="btn btn-default btn-sm">
-                        <i class="fa fa-search"></i>GetData
+                        <i class="fa fa-search"></i>Tìm...
                     </button>
                 </div>
             </div>
         </form>
     </div>
     <div class="row full-height">
-        @(Html.Kendo().Grid<WareHouseCommands>()
+        @(Html.Kendo().Grid<CategoryCommands>()
             .Name("grd")
             .HtmlAttributes(new { style = "height: 100%" })
             .Columns(columns =>
             {
                 columns.Select().Width(30);
-                columns.Bound(x => x.Id).Width(300).Hidden();
-                columns.Bound(x => x.Name).ClientTemplate("#=grd.tmp.name(Name)#").Title("Tên");
-                columns.Bound(x => x.Code).Title("Mã");
-                columns.Bound(x => x.Description).Title("Mã");
+                columns.Bound(x => x.Id).Width(10).Hidden();
+                columns.Bound(x => x.NameCategory).ClientTemplate("#=grd.tmp.name(NameCategory)#").Title("Tên danh mục");
+                columns.Bound(x => x.IntentCodeVn).Title("Mã tiếng Việt");
+                columns.Bound(x => x.IntentCodeEn).Title("Mã tiếng Anh");
+                columns.Bound(x => x.Description).Title("Mô tả");
                 columns.Bound(x => x.Inactive).ClientTemplate("#=grd.tmp.activate(!Inactive)#").Width(100).Title("Trạng thái");
             })
             .DataSource(dataSource => dataSource
             .Ajax()
             .ServerOperation(true)
             .PageSize(setting.GridPageSize)
-            .Read(read => read.Action("Get", "Home").Data("grd.data"))
+            .Read(read => read.Action("Get", "Category").Data("grd.data"))
             )
             .NoRecords()
             .Scrollable(scr => scr.Enabled(true))
@@ -87,26 +83,26 @@
 
 <ul id="mnu" style="display: none">
     <li data-action="details">
-        <i class="flaticon-eye font-blue-dark"></i> Details
+        <i class="flaticon-eye font-blue-dark"></i> Chi tiết
     </li>
     <li data-action="create">
-        <i class="flaticon2-plus font-blue"></i> AddNew
+        <i class="flaticon2-plus font-blue"></i> Thêm mới
     </li>
     <li data-action="edit">
-        <i class="flaticon2-pen font-yellow"></i> Edit
+        <i class="flaticon2-pen font-yellow"></i> Chỉnh sửa
     </li>
     <li data-action="activate">
-        <i class="flaticon2-check-mark font-blue"></i> Activate
+        <i class="flaticon2-check-mark font-blue"></i> Kích hoạt
     </li>
     <li data-action="deactivate">
-        <i class="flaticon-lock font-yellow"></i> Deactivate
+        <i class="flaticon-lock font-yellow"></i> Huỷ kích hoạt
     </li>
     <li class="k-separator"></li>
     <li data-action="refresh">
-        <i class="flaticon-refresh font-green"></i>Refresh
+        <i class="flaticon-refresh font-green"></i>Tải lại trang
     </li>
     <li data-action="deletes">
-        <i class="flaticon-delete font-red"></i> Delete
+        <i class="flaticon-delete font-red"></i> Xoá
     </li>
 </ul>
 <!-- #endregion -->
@@ -115,7 +111,6 @@
     <script>
         // Fields
         var master = {
-            urlTree: '@Url.Action("GetTree","Category")',
             urlDetails: '@Url.Action("Details")',
             urlCreate: '@Url.Action("Add")',
             urlEdit: '@Url.Action("Edit")',
@@ -145,12 +140,6 @@
                 data: function () { },
                 init: function () { }
             },
-            treeWareHouse: {
-                el: '#treeWareHouse',
-                $el: {},
-                api: {},
-                init: function () { },
-            },
             mnu: {
                 el: '#mnu',
                 $el: {},
@@ -177,18 +166,13 @@
         var grd = master.grd;
         var mnu = master.mnu;
         var btnSearch = master.btnSearch;
-        var treeWareHouse = master.treeWareHouse;
 
         grd.data = function () {
             var $keywords = $('#@Html.FieldIdFor(m => m.Keywords)');
             var $status = $('#@Html.FieldIdFor(m => m.ActiveStatus)');
-            var CategoryId = null;
-            if (!_.isEmpty(treeWareHouse.api) && treeWareHouse.api.getActiveNode())
-                CategoryId = treeWareHouse.api.activeNode.key;
             var searchModel = {
                 Keywords: $keywords.val(),
                 Status: $status.val(),
-                CategoryId: CategoryId
             };
             return searchModel;
         };
@@ -204,7 +188,7 @@
             if (id) {
                 app.window.form.open({ url: `${master.urlDetails}/${id}`, options: { width: '450px' } });
             } else {
-                notify({ text: 'Notifies.NoItemsSelected', type: 'info' });
+                notify({ text: 'Bạn chưa chọn dữ liệu !', type: 'info' });
             }
         };
         master.importExcel = function () {
@@ -219,7 +203,7 @@
             if (id) {
                 app.window.form.open({ url: `${master.urlEdit}/${id}`, options: { width: '450px' }, callback: master.actionCallback });
             } else {
-                notify({ text: 'Notifies.NoItemsSelected', type: 'info' });
+                notify({ text: 'Bạn chưa chọn dữ liệu !', type: 'info' });
             }
         };
         master.deletes = function () {
@@ -227,7 +211,7 @@
             if (ids.length > 0) {
                 app.window.deletes.open({ url: master.urlDeletes, ids: ids, options: { width: '450px' }, callback: master.actionCallback });
             } else {
-                notify({ text: 'Notifies.NoItemsSelected', type: 'info' });
+                notify({ text: 'Bạn chưa chọn dữ liệu !', type: 'info' });
             }
         };
         master.activates = function (activate, ids) {
@@ -290,7 +274,6 @@
             grd.init();
             mnu.init();
             btnSearch.init();
-            treeWareHouse.init();
         };
 
         toolbar.init = function () {
@@ -325,33 +308,6 @@
             grd.api.initDblClick(master.details);
             grd.api.initEdit(master.edit);
             grd.api.initActivate(master.activates);
-        };
-
-        treeWareHouse.init = function () {
-            treeWareHouse.$el = $(treeWareHouse.el);
-            treeWareHouse.$el.fancytree({
-                source: {
-                    url: master.urlTree,
-                    beforeSend: function (jqXHR, settings) {
-                        grd.api.clear();
-                    },
-                    complete: function () {
-                        var lastKeySelected = '@Model.WareHouseId';
-                        $("#treeWareHouse").fancytree("getTree").getNodeByKey(lastKeySelected).setActive();
-                    }
-                },
-                postProcess: function (event, data) {
-                    data.result = data.response.data;
-                },
-                activate: function (event, data) {
-                    $('#@Html.FieldIdFor(m => m.Keywords)').val("")
-                    var node = data.node;
-                    if (node.statusNodeType !== 'loading') {
-                        grd.api.resetPage();
-                    }
-                }
-            });
-            treeWareHouse.api = treeWareHouse.$el.fancytree("getTree");
         };
         mnu.init = function () {
             mnu.$el = $(mnu.el);

@@ -9,5 +9,7 @@
         public int PageSize { get; set; }
 
         public string? LanguageId { get; set; }
+        public ActiveStatus ActiveStatus { get; set; }
+
     }
 }

@@ -56,76 +56,30 @@ namespace BaseHA.Application.AutoMapper.WareHouses
 
 
             CreateMap<Unit, UnitCommands>();
-                //.ForMember(x => x.AvailableWareHouses, opt => opt.Ignore());
+            //.ForMember(x => x.AvailableWareHouses, opt => opt.Ignore());
 
             #endregion
 
 
+            CreateMap<Category, CategoryCommands>();
 
-        }
-    }
+            CreateMap<CategoryCommands, Category>()
+                 .ForMember(x => x.Answers, opt => opt.Ignore())
+                 .ForMember(x => x.Intents, opt => opt.Ignore());
 
-    public static class MappingExtensions
-    {
 
-        public static WareHouseCommands ToModel(this WareHouse entity)
-        {
-            return AutoMapperConfiguration.Mapper.Map<WareHouse, WareHouseCommands>(entity);
-        }
+            CreateMap<Answer, AnswerCommands>();
 
-        public static WareHouse ToEntity(this WareHouseCommands model)
-        {
-            return AutoMapperConfiguration.Mapper.Map<WareHouseCommands, WareHouse>(model);
-        }
+            CreateMap<AnswerCommands, Answer>()
+                 .ForMember(x => x.IntentCodeEnNavigation, opt => opt.Ignore());
 
-        public static WareHouse ToEntity(this WareHouseCommands model, WareHouse destination)
-        {
-            return AutoMapperConfiguration.Mapper.Map(model, destination);
-        }
 
-        //
-        public static VendorCommands ToModel(this Vendor entity)
-        {
-            return AutoMapperConfiguration.Mapper.Map<Vendor, VendorCommands>(entity);
-        }
 
-        public static Vendor ToEntity(this VendorCommands model)
-        {
-            return AutoMapperConfiguration.Mapper.Map< VendorCommands, Vendor>(model);
-        }
+            CreateMap<Intent, IntentCommands>();
 
-        public static Vendor ToEntity(this VendorCommands model, Vendor destination)
-        {
-            return AutoMapperConfiguration.Mapper.Map(model, destination);
-        }
+            CreateMap<IntentCommands, Intent>()
+                 .ForMember(x => x.IntentCodeEnNavigation, opt => opt.Ignore());
 
-    }
-    /// <summary>
-    /// AutoMapper configuration
-    /// </summary>
-    public static class AutoMapperConfiguration
-    {
-        /// <summary>
-        /// Mapper
-        /// </summary>
-        public static IMapper Mapper { get; private set; }
-
-        /// <summary>
-        /// Mapper configuration
-        /// </summary>
-        public static MapperConfiguration MapperConfiguration { get; private set; }
-
-        // Custom-AutoMapper: AddProfile theo từng Project, cần Profile nào thì add Profile đó
-        public static IList<Profile> Profiles = new List<Profile>();
-
-        /// <summary>
-        /// Initialize mapper
-        /// </summary>
-        /// <param name="config">Mapper configuration</param>
-        public static void Init(MapperConfiguration config)
-        {
-            MapperConfiguration = config;
-            Mapper = config.CreateMapper();
         }
     }
 }

@@ -68,15 +68,6 @@ services.Configure<PasswordHasherOptions>(option =>
 });
 services.AddApiAuthentication();
 services.AddApiCors();
-//services.AddSignalR(options =>
-//{
-//    // Global filters will run first
-//    options.AddFilter<CustomFilter>();
-//});
-AutoMapperConfiguration.Profiles.AddRange(new Profile[]
-  {                new WareHouseCommandProfile(),
-  });
-
 //auto fac
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 builder.Host.ConfigureContainer<ContainerBuilder>(
@@ -87,8 +78,6 @@ var app = builder.Build();
 
 //auto fac
 ILifetimeScope AutofacContainer = app.Services.GetAutofacRoot();
-
-
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

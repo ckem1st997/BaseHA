@@ -25,4 +25,21 @@ namespace BaseHA.Application.ModelDto.DTO
             children = new List<WareHouseTreeModel>();
         }
     }
+
+     
+    public class CategoryTreeModel : FancytreeItem
+    {
+        public string Name { get; set; }
+
+        public string ParentId { get; set; }
+
+        public bool Inactive { get; set; }
+
+        public new IList<CategoryTreeModel> children { get; set; }
+
+        public CategoryTreeModel()
+        {
+            children = new List<CategoryTreeModel>();
+        }
+    }
 }

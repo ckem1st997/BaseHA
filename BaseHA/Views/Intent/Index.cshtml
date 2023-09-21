@@ -1,90 +1,89 @@
 ﻿@using BaseHA.Application.ModelDto;
 @using BaseHA.Domain.Entity;
 @using BaseHA.Models.SearchModel;
-@model WareHouseSearchModel
+@model IntentSearchModel
 
 @{
     var setting = new AdminAreaSettings();
 }
-<!-- #region Page Header -->
 <div class="page-bar">
     <ul class="page-breadcrumb"></ul>
     <div class="page-toolbar">
         <div class="pull-right">
-            <a data-action="create" href="javascript:void(0)" class="btn blue btn-sm"><i class="flaticon2-plus"></i> Add</a>
-            <a data-action="edit" href="javascript:void(0)" class="btn yellow btn-sm"><i class="flaticon2-pen"></i> Edit</a>
-            <a data-action="deletes" href="javascript:void(0)" class="btn red btn-sm"><i class="flaticon-delete"></i> Deletes</a>
+            <a data-action="create" href="javascript:void(0)" class="btn blue btn-sm"><i class="flaticon2-plus"></i> Thêm mới</a>
+            <a data-action="edit" href="javascript:void(0)" class="btn yellow btn-sm"><i class="flaticon2-pen"></i> Chỉnh sửa</a>
+            <a data-action="deletes" href="javascript:void(0)" class="btn red btn-sm"><i class="flaticon-delete"></i> Xoá</a>
             <button type="button" class="btn purple btn-sm dropdown-toggle" data-toggle="dropdown">
-                <i class="flaticon-more"></i> T("Common.OtherActions") <i class="fa fa-angle-down"></i>
+                <i class="flaticon-more"></i> Chức năng khác <i class="fa fa-angle-down"></i>
             </button>
             <ul class="dropdown-menu pull-right" role="menu">
                 <li>
-                    <a data-action="activate" href="javascript: void(0);"><i class="fa fa-check font-blue"></i> ("Common.Activate")</a>
+                    <a data-action="activate" href="javascript: void(0);"><i class="fa fa-check font-blue"></i> Kích hoạt</a>
                 </li>
                 <li>
-                    <a data-action="deactivate" href="javascript: void(0);"><i class="fa fa-lock font-yellow"></i> ("Common.Deactivate")</a>
-                </li>
-                <li>
-                    <a data-action="export" href="javascript:void(0)"><i class="fa fa-print"></i> T("Common.ExportData")</a>
-                </li>
-                <li>
-                    <a data-action="importexcel" href="javascript:void(0)"><i class="fa fa-file-excel-o"></i> T("Common.ImportExcel")</a>
+                    <a data-action="deactivate" href="javascript: void(0);"><i class="fa fa-lock font-yellow"></i> Huỷ kích hoạt</a>
                 </li>
             </ul>
         </div>
     </div>
 </div>
-<div class="page-data">
-    <div class="row search-form">
-        <form style="
+<div class="splitter fixed-layout-split" data-position="230px">
+    <div class="leftPane">
+        <div id="treeWareHouse" class="full-height"></div>
+    </div>
+    <div class="rightPane">
+        <div class="page-data">
+            <div class="row search-form">
+                <form style="
     display: flex;
     align-items: center;">
-            <div class="search-label">
-                Tìm kiếm:
-            </div>
-            <div class="col-md-4">
-                <div class="form-group form-group-sm">
-                    <div class="input-icon right">
-                        @Html.TextBoxFor(m => m.Keywords, new { @class = "form-control", placeholder = "" })
+                    <div class="search-label">
+                        Tìm kiếm:
                     </div>
-                </div>
+                    <div class="col-md-4">
+                        <div class="form-group form-group-sm">
+                            <div class="input-icon right">
+                                @Html.TextBoxFor(m => m.Keywords, new { @class = "form-control", placeholder = "" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="form-group form-group-sm">
+                            <button type="submit" id="btnSearch" class="btn btn-default btn-sm">
+                                <i class="fa fa-search"></i>GetData
+                            </button>
+                        </div>
+                    </div>
+                </form>
             </div>
-            <div class="col-md-1">
-                <div class="form-group form-group-sm">
-                    <button type="submit" id="btnSearch" class="btn btn-default btn-sm">
-                        <i class="fa fa-search"></i>GetData
-                    </button>
-                </div>
+            <div class="row full-height">
+                @(Html.Kendo().Grid<IntentCommands>()
+                    .Name("grd")
+                    .HtmlAttributes(new { style = "height: 100%" })
+                    .Columns(columns =>
+                    {
+                        columns.Select().Width(30);
+                        columns.Bound(x => x.Id).Width(300).Hidden();
+                        columns.Bound(x => x.IntentCodeEn).ClientTemplate("#=grd.tmp.name(IntentCodeEn)#").Title("Tên");
+                        columns.Bound(x => x.IntentVn).Title("Mã");
+                        columns.Bound(x => x.IntentEn).Title("Mã");
+                        columns.Bound(x => x.Inactive).ClientTemplate("#=grd.tmp.activate(!Inactive)#").Title("Trạng thái");
+                    })
+                    .DataSource(dataSource => dataSource
+                    .Ajax()
+                    .ServerOperation(true)
+                    .PageSize(setting.GridPageSize)
+                    .Read(read => read.Action("Get", "Intent").Data("grd.data"))
+                    )
+                    .NoRecords()
+                    .Scrollable(scr => scr.Enabled(true))
+                    .Pageable(pageable => pageable.ButtonCount(setting.GridButtonCount).Info(true).Input(true).Numeric(true).PageSizes(setting.GridPageSizeOptions).PreviousNext(true).Refresh(true))
+                    .Selectable(selectable => selectable.Type(GridSelectionType.Row).Mode(GridSelectionMode.Multiple))
+                    .Navigatable())
             </div>
-        </form>
-    </div>
-    <div class="row full-height">
-        @(Html.Kendo().Grid<WareHouseCommands>()
-            .Name("grd")
-            .HtmlAttributes(new { style = "height: 100%" })
-            .Columns(columns =>
-            {
-                columns.Select().Width(30);
-                columns.Bound(x => x.Id).Width(300).Hidden();
-                columns.Bound(x => x.Name).ClientTemplate("#=grd.tmp.name(Name)#").Title("Tên");
-                columns.Bound(x => x.Code).Title("Mã");
-                columns.Bound(x => x.Description).Title("Mã");
-                columns.Bound(x => x.Inactive).ClientTemplate("#=grd.tmp.activate(!Inactive)#").Width(100).Title("Trạng thái");
-            })
-            .DataSource(dataSource => dataSource
-            .Ajax()
-            .ServerOperation(true)
-            .PageSize(setting.GridPageSize)
-            .Read(read => read.Action("Get", "Home").Data("grd.data"))
-            )
-            .NoRecords()
-            .Scrollable(scr => scr.Enabled(true))
-            .Pageable(pageable => pageable.ButtonCount(setting.GridButtonCount).Info(true).Input(true).Numeric(true).PageSizes(setting.GridPageSizeOptions).PreviousNext(true).Refresh(true))
-            .Selectable(selectable => selectable.Type(GridSelectionType.Row).Mode(GridSelectionMode.Multiple))
-            .Navigatable())
+        </div>
     </div>
 </div>
-
 <ul id="mnu" style="display: none">
     <li data-action="details">
         <i class="flaticon-eye font-blue-dark"></i> Details
@@ -336,7 +335,7 @@
                         grd.api.clear();
                     },
                     complete: function () {
-                        var lastKeySelected = '@Model.WareHouseId';
+                        var lastKeySelected = '@Model.CategoryId';
                         $("#treeWareHouse").fancytree("getTree").getNodeByKey(lastKeySelected).setActive();
                     }
                 },

@@ -8,9 +8,6 @@
             WareHouseId = "";
         }
         public string WareHouseId { get; set; }
-
-        public ActiveStatus ActiveStatus { get; set; }
-
     }
 
     public class UnitSearchModel : BaseSearchModel
@@ -19,9 +16,34 @@
         {
             Keywords = "";
         }
+    }
 
-        public ActiveStatus ActiveStatus { get; set; }
+    public class CategorySearchModel : BaseSearchModel
+    {
+        public CategorySearchModel()
+        {
+            Keywords = "";
+        }
+        public string CategoryId { get; set; }
+    }  
+    
+    public class IntentSearchModel : BaseSearchModel
+    {
+        public IntentSearchModel()
+        {
+            Keywords = "";
+        }
+        public string CategoryId { get; set; }
+    }
 
+   
+    public class AnswerSearchModel : BaseSearchModel
+    {
+        public AnswerSearchModel()
+        {
+            Keywords = "";
+        }
+        public string CategoryId { get; set; }
     }
 
 

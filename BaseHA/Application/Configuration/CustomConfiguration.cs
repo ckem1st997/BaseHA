@@ -58,6 +58,9 @@ namespace BaseHA.Application.Configuration
             services.AddScoped<IWareHouseService, WareHouseService>();
             services.AddScoped<IUnitService, UnitService>();
             services.AddScoped<IVendorService, VendorService>();
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IAnswerSerive, AnswerService>();
+            services.AddScoped<IIntentService, IntentService>();
         }
     }
 }
