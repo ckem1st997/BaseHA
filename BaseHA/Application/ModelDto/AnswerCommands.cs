@@ -12,7 +12,7 @@ namespace BaseHA.Application.ModelDto
         }
         public string Id { get; set; }
 
-        public string IntentCodeEn { get; set; } = default!;
+        public string CategoryID { get; set; } 
 
         public string? AnswerVn { get; set; }
 
@@ -20,6 +20,6 @@ namespace BaseHA.Application.ModelDto
 
         public bool Ondelete { get; set; }
 
-        public virtual Category? IntentCodeEnNavigation { get; set; } 
+        public virtual Category? categories { get; set; } 
     }
 }

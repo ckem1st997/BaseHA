@@ -41,8 +41,8 @@
         <div class="page-data">
             <div class="row search-form">
                 <form style="
-    display: flex;
-    align-items: center;">
+                                display: flex;
+                                align-items: center;">
                     <div class="search-label">
                         Tìm kiếm:
                     </div>
@@ -75,7 +75,7 @@
                             {
                                 columns.Select().Width(30);
                                 columns.Bound(x => x.Id).Width(100).Hidden();
-                                columns.Bound(x => x.IntentCodeEn).ClientTemplate("#=grd.tmp.name(IntentCodeEn)#").Width(60).Title("Intent Code Engkish");
+                                columns.Bound(x => x.CategoryId).ClientTemplate("#=grd.tmp.name(CategoryId)#").Width(60).Title("Intent Code English");
                                 columns.Bound(x => x.IntentEn).Width(60).Title("Intent English");
                                 columns.Bound(x => x.IntentVn).Width(60).Title("Intent VietNam");
                                 columns.Bound(x => x.Inactive).ClientTemplate("#=grd.tmp.activate(!Inactive)#").Width(30).Title("Kích hoạt");
@@ -94,7 +94,7 @@
                             .Model(model =>
                             {
                                 model.Id(p => p.Id);
-                                model.Field(p => p.IntentCodeEn);
+                                model.Field(p => p.CategoryId);
                                 model.Field(p => p.IntentEn);
                                 model.Field(p => p.IntentVn);
                                 //model.Field(p => p.Quantity).Editable(false);
@@ -123,7 +123,7 @@
                             {
                                 columns.Select().Width(30);
                                 columns.Bound(x => x.Id).Width(300).Hidden();
-                                columns.Bound(x => x.IntentCodeEn).ClientTemplate("#=grd.tmp.name(IntentCodeEn)#").Width(60).Title("Intent Code English");
+                                columns.Bound(x => x.CategoryId).ClientTemplate("#=grd.tmp.name(CategoryId)#").Width(60).Title("Intent Code English");
                                 columns.Bound(x => x.AnswerVn).Width(60).Title("Answer");
                                 columns.Bound(x => x.Inactive).ClientTemplate("#=grd.tmp.activate(!Inactive)#").Width(30).Title("Kích hoạt");
                                 columns.Command(command => command.Destroy()).Width(30);
@@ -141,7 +141,7 @@
                             .Model(model =>
                             {
                                 model.Id(p => p.Id);
-                                model.Field(p => p.IntentCodeEn);
+                                model.Field(p => p.CategoryId);
                                 model.Field(p => p.AnswerVn);
                                 //model.Field(p => p.Quantity).Editable(false);
                             })
@@ -253,6 +253,9 @@
             importExcel: function () { },
             export: function () { }
         };
+
+        
+
         var toolbar = master.toolbar;
         var grd = master.grd;
         var mnu = master.mnu;

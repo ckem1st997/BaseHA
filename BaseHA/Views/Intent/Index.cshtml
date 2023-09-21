@@ -69,7 +69,7 @@
                 {
                     columns.Select().Width(30);
                     columns.Bound(x => x.Id).Width(300).Hidden();
-                    columns.Bound(x => x.IntentCodeEn).Width(100).Title("Mã Intnet English");
+                    columns.Bound(x => x.CategoryID).Width(100).Title("Mã Intnet English");
                     columns.Bound(x => x.IntentEn).Width(100).Title("Intent English");
                     columns.Bound(x => x.IntentVn).Width(100).Title("Intent VietNam");
                     columns.Bound(x => x.Inactive).ClientTemplate("#=grd.tmp.activate(!Inactive)#").Width(100).Title("Kích hoạt");
@@ -88,7 +88,7 @@
                         .Model(model =>
                         {
                             model.Id(p => p.Id);
-                            model.Field(p => p.IntentCodeEn);
+                            model.Field(p => p.CategoryID);
                             model.Field(p => p.IntentEn);
                             model.Field(p => p.IntentVn);
                             //model.Field(p => p.Quantity).Editable(false);

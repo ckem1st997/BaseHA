@@ -75,7 +75,7 @@ namespace BaseHA.Application.Serivce
             if (!string.IsNullOrEmpty(ctx.Keywords))
             {
                 list = from c in list
-                       where c.IntentCodeEn.Contains(ctx.Keywords) || c.IntentEn.Contains(ctx.Keywords)
+                       where c.CategoryId.Contains(ctx.Keywords) || c.IntentEn.Contains(ctx.Keywords)
                                             || c.IntentVn.Contains(ctx.Keywords)
                        select c;
             }

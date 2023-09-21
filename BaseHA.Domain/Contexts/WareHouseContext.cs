@@ -11,11 +11,14 @@ namespace BaseHA.Domain.Contexts
 {
     public partial class WareHouseContext : DbContext
     {
+        public virtual DbSet<Answer> Answers { get; set; } = null!;
         public virtual DbSet<Audit> Audits { get; set; } = null!;
         public virtual DbSet<AuditCouncil> AuditCouncils { get; set; } = null!;
         public virtual DbSet<AuditDetail> AuditDetails { get; set; } = null!;
         public virtual DbSet<AuditDetailSerial> AuditDetailSerials { get; set; } = null!;
         public virtual DbSet<BeginningWareHouse> BeginningWareHouses { get; set; } = null!;
+        public virtual DbSet<Category> Categories { get; set; } = null!;
+        public virtual DbSet<Intent> Intents { get; set; } = null!;
         public virtual DbSet<Inward> Inwards { get; set; } = null!;
         public virtual DbSet<InwardDetail> InwardDetails { get; set; } = null!;
         public virtual DbSet<Outward> Outwards { get; set; } = null!;
@@ -50,6 +53,27 @@ namespace BaseHA.Domain.Contexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Answer>(entity =>
+            {
+                entity.Property(e => e.Id)
+                    .HasMaxLength(36)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.AnswerVn)
+                    .HasMaxLength(1000)
+                    .HasColumnName("AnswerVN");
+
+                entity.Property(e => e.CategoryId)
+                    .HasMaxLength(36)
+                    .IsUnicode(false)
+                    .HasColumnName("CategoryID");
+
+                entity.HasOne(d => d.Category)
+                    .WithMany(p => p.Answers)
+                    .HasForeignKey(d => d.CategoryId)
+                    .HasConstraintName("fk_c");
+            });
+
             modelBuilder.Entity<Audit>(entity =>
             {
                 entity.ToTable("Audit");
@@ -256,6 +280,60 @@ namespace BaseHA.Domain.Contexts
                     .HasForeignKey(d => d.WareHouseId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_BeginningWareHouses_PK_WareHouse");
+            });
+
+            modelBuilder.Entity<Category>(entity =>
+            {
+                entity.HasIndex(e => e.IntentCodeEn, "UQ__Categori__4A7106400642077A")
+                    .IsUnique();
+
+                entity.HasIndex(e => e.IntentCodeVn, "UQ__Categori__4A769C3515B6B10C")
+                    .IsUnique();
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(36)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Description).HasMaxLength(1000);
+
+                entity.Property(e => e.IntentCodeEn)
+                    .HasMaxLength(255)
+                    .HasColumnName("IntentCodeEN");
+
+                entity.Property(e => e.IntentCodeVn)
+                    .HasMaxLength(255)
+                    .HasColumnName("IntentCodeVN");
+
+                entity.Property(e => e.NameCategory).HasMaxLength(100);
+
+                entity.Property(e => e.ParentId)
+                    .HasMaxLength(36)
+                    .HasColumnName("ParentID");
+            });
+
+            modelBuilder.Entity<Intent>(entity =>
+            {
+                entity.Property(e => e.Id)
+                    .HasMaxLength(36)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CategoryId)
+                    .HasMaxLength(36)
+                    .IsUnicode(false)
+                    .HasColumnName("CategoryID");
+
+                entity.Property(e => e.IntentEn)
+                    .HasMaxLength(255)
+                    .HasColumnName("IntentEN");
+
+                entity.Property(e => e.IntentVn)
+                    .HasMaxLength(255)
+                    .HasColumnName("IntentVN");
+
+                entity.HasOne(d => d.Category)
+                    .WithMany(p => p.Intents)
+                    .HasForeignKey(d => d.CategoryId)
+                    .HasConstraintName("fk_cate");
             });
 
             modelBuilder.Entity<Inward>(entity =>
