@@ -107,7 +107,7 @@ namespace BaseHA.Application.Serivce
                 var departmentIds = (await _generic.QueryAsync<string>(queryBuilder.ToString())).ToList();
                 departmentIds.Add(ctx.CategoryId);
                 if (departmentIds != null && departmentIds.Any())
-                    l = from aa in l where departmentIds.Contains(aa.Id) select aa;
+                    l = from aa in l where departmentIds.Contains(aa.CategoryId) select aa;
             }
             PagedList<Intent> res = new PagedList<Intent>();
             await res.Result(ctx.PageSize, (ctx.PageIndex - 1) * ctx.PageSize, l);

@@ -92,9 +92,10 @@ namespace BaseHA.Controllers
         }
 
 
-        public async Task<IActionResult> Add()
+        public async Task<IActionResult> Add(string CategoryId)
         {
             var model = new IntentCommands();
+            model.CategoryId = CategoryId;
             return View(model);
         }
 

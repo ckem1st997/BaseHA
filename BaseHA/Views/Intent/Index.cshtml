@@ -202,22 +202,30 @@
             if (id) {
                 app.window.form.open({ url: `${master.urlDetails}/${id}`, options: { width: '450px' } });
             } else {
-                notify({ text: 'Notifies.NoItemsSelected', type: 'info' });
+                notify({ text: 'Bạn chưa chọn bảng ghi nào !', type: 'info' });
             }
         };
         master.importExcel = function () {
             app.window.form.open({ url: `${master.urlImportExcel}`, options: { width: '620px' } });
         };
         master.create = function () {
-            app.window.form.open({ url: master.urlCreate, options: { width: '550px' }, callback: master.actionCallback });
+            var CategoryId = null;
+            if (!_.isEmpty(treeWareHouse.api) && treeWareHouse.api.getActiveNode())
+                CategoryId = treeWareHouse.api.activeNode.key;
+            if (CategoryId === null || CategoryId.length < 1) {
+                notify({ text: 'Bạn chưa chọn bảng ghi nào !', type: 'info' });
+                return;
+            }
+            else
+                app.window.form.open({ url: master.urlCreate + "?CategoryId=" + CategoryId, options: { width: '550px' }, callback: master.actionCallback });
         };
         master.edit = function () {
             var id = grd.api.selectedIds()[0];
             console.log(id)
             if (id) {
-                app.window.form.open({ url: `${master.urlEdit}/${id}`, options: { width: '450px' }, callback: master.actionCallback });
+                app.window.form.open({ url: `${master.urlEdit}/${id}`, options: { width: '550px' }, callback: master.actionCallback });
             } else {
-                notify({ text: 'Notifies.NoItemsSelected', type: 'info' });
+                notify({ text: 'Bạn chưa chọn bảng ghi nào !', type: 'info' });
             }
         };
         master.deletes = function () {
@@ -225,7 +233,7 @@
             if (ids.length > 0) {
                 app.window.deletes.open({ url: master.urlDeletes, ids: ids, options: { width: '450px' }, callback: master.actionCallback });
             } else {
-                notify({ text: 'Notifies.NoItemsSelected', type: 'info' });
+                notify({ text: 'Bạn chưa chọn bảng ghi nào !', type: 'info' });
             }
         };
         master.activates = function (activate, ids) {
