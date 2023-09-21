@@ -71,14 +71,14 @@ namespace BaseHA.Application.AutoMapper.WareHouses
             CreateMap<Answer, AnswerCommands>();
 
             CreateMap<AnswerCommands, Answer>()
-                 .ForMember(x => x.IntentCodeEnNavigation, opt => opt.Ignore());
+                 .ForMember(x => x.Category, opt => opt.Ignore());
 
 
 
             CreateMap<Intent, IntentCommands>();
 
             CreateMap<IntentCommands, Intent>()
-                 .ForMember(x => x.IntentCodeEnNavigation, opt => opt.Ignore());
+                 .ForMember(x => x.Category, opt => opt.Ignore());
 
         }
     }

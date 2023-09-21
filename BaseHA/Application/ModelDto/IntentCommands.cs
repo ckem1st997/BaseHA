@@ -6,7 +6,7 @@ namespace BaseHA.Application.ModelDto
     public class IntentCommands : BaseCommands
     {
 
-        public string? IntentCodeEn { get; set; }
+        public string? CategoryId { get; set; }
 
 
         public string? IntentEn { get; set; }

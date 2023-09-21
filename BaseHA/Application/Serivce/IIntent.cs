@@ -67,7 +67,7 @@ namespace BaseHA.Application.Serivce
 
             if (!string.IsNullOrEmpty(ctx.Keywords))
                 l = from aa in l
-                    where aa.IntentCodeEn.Contains(ctx.Keywords)
+                    where aa.IntentEn.Contains(ctx.Keywords)
                     || aa.IntentEn.Contains(ctx.Keywords)
                     || aa.IntentVn.Contains(ctx.Keywords)
                     select aa;
@@ -128,7 +128,7 @@ namespace BaseHA.Application.Serivce
                     where !i.OnDelete
                     select new SelectListItem
                     {
-                        Text = $"{i.IntentCodeEn}",
+                        Text = $"{i.IntentVn}",
                         Value = i.Id
                     };
             return await q.ToListAsync();

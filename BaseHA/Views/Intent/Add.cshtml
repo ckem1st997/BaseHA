@@ -20,7 +20,7 @@
             <div class="modal-body">
                 @Html.AntiForgeryToken()
                 @Html.HiddenFor(m => m.Id)
-                @Html.HiddenFor(m => m.IntentCodeEnNavigation)
+                @Html.HiddenFor(m => m.CategoryId)
 
 
                 <div class="form-group form-group-sm">
@@ -39,7 +39,7 @@
                 <div class="form-group form-group-sm">
                     <label class="control-label  col-md-4" for="UnitName">Mã kho</label>
                     <div class="col-md-8">
-                        @Html.TextBoxFor(m => m.IntentCodeEn, new { @class = "form-control" })
+                        @Html.TextBoxFor(m => m.IntentEn, new { @class = "form-control" })
                     </div>
                 </div>             
                 <div class="form-group form-group-sm">

@@ -67,7 +67,7 @@ namespace BaseHA.Application.Serivce
 
             if (!string.IsNullOrEmpty(ctx.Keywords))
                 l = from aa in l
-                    where aa.IntentCodeEn.Contains(ctx.Keywords)
+                    where aa.CategoryId.Contains(ctx.Keywords)
                     || aa.AnswerVn.Contains(ctx.Keywords)
                     select aa;
             // if(ctx.ActiveStatus)

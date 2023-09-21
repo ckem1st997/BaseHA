@@ -10,7 +10,7 @@ namespace BaseHA.Domain.Entity
         public override string Id { get; set; } = default!;
 
 
-        public string IntentCodeEn { get; set; } = default!;
+        public string? CategoryId { get; set; }
 
 
         public string? AnswerVn { get; set; }
@@ -22,6 +22,6 @@ namespace BaseHA.Domain.Entity
         public override bool OnDelete { get; set; } = default!;
 
 
-        public virtual Category IntentCodeEnNavigation { get; set; } = null!;
+        public virtual Category? Category { get; set; }
     }
 }

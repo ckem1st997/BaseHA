@@ -64,8 +64,7 @@
                     {
                         columns.Select().Width(30);
                         columns.Bound(x => x.Id).Width(300).Hidden();
-                        columns.Bound(x => x.IntentCodeEn).ClientTemplate("#=grd.tmp.name(IntentCodeEn)#").Title("Tên");
-                        columns.Bound(x => x.IntentVn).Title("Mã");
+                        columns.Bound(x => x.IntentVn).ClientTemplate("#=grd.tmp.name(IntentVn)#").Title("Tên");
                         columns.Bound(x => x.IntentEn).Title("Mã");
                         columns.Bound(x => x.Inactive).ClientTemplate("#=grd.tmp.activate(!Inactive)#").Title("Trạng thái");
                     })
