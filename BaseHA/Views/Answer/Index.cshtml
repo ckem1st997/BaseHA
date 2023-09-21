@@ -68,8 +68,7 @@
             {
                 columns.Select().Width(30);
                 columns.Bound(x => x.Id).Width(300).Hidden();
-                columns.Bound(x => x.IntentCodeEn).ClientTemplate("#=grd.tmp.name(IntentCodeEn)#").Width(100).Title("IntentID");
-                //columns.Bound(x => x.Intent.Id).Width(100).Title("NameID");
+                columns.Bound(x => x.CategoryID).ClientTemplate("#=grd.tmp.name(CategoryID)#").Width(100).Title("Category");
                 columns.Bound(x => x.AnswerVn).Width(100).Title("Answer");
                 columns.Bound(x => x.Inactive).ClientTemplate("#=grd.tmp.activate(!Inactive)#").Width(100).Title("Kích hoạt");
                 columns.Command(command => command.Destroy()).Width(30);
@@ -79,7 +78,7 @@
                 toolbar.Create();
                 toolbar.Save();
             })
-            .Events(e => e.SaveChanges("master.refresh"))
+            //.Events(e => e.SaveChanges("master.refresh"))
              .Editable(editable => editable.Mode(GridEditMode.InCell))
             .DataSource(dataSource => dataSource
                     .Ajax()
@@ -87,7 +86,7 @@
                         .Model(model =>
                         {
                             model.Id(p => p.Id);
-                            model.Field(p => p.IntentCodeEn);
+                            model.Field(p => p.CategoryID);
                             model.Field(p => p.AnswerVn);
                         })
                     .PageSize(setting.GridPageSize)

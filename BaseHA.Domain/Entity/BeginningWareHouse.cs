@@ -39,10 +39,9 @@ namespace BaseHA.Domain.Entity
 
         public override bool OnDelete { get; set; } = default!;
 
-        
-        public virtual WareHouseItem? Item { get; set; } = null!;
-        public virtual Unit? Unit { get; set; } = null!;
-        public virtual WareHouse? WareHouse { get; set; } = null!;
-        
+
+        public virtual WareHouseItem Item { get; set; } = null!;
+        public virtual Unit Unit { get; set; } = null!;
+        public virtual WareHouse WareHouse { get; set; } = null!;
     }
 }
