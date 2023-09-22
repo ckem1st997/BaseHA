@@ -247,6 +247,14 @@
             grd.api.reload();
         };
         master.actionCallback = function () {
+             app.window.confirm.open({
+                title: 'Gợi ý',
+                text: 'Chuyển qua phần nhập ý định !',
+                callback: function () {
+                    location = '@Url.Action("Index","Intent")';
+                    window.frmAddItem.winForm.close();
+                }
+            });
             grd.api.reload();
         };
         master.export = function () {
