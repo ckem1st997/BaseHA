@@ -23,16 +23,16 @@
 
 
                 <div class="form-group form-group-sm">
-                    <label class="control-label  col-md-4" for="UnitName">Tên kho</label>
+                    <label class="control-label  col-md-4" for="UnitName">Ý định bằng tiếng Việt</label>
                     <div class="col-md-8">
                         @Html.DisplayFor(m => m.IntentVn, new { @class = "form-control" })
                     </div>
                 </div>
 
                 <div class="form-group form-group-sm">
-                    <label class="control-label  col-md-4" for="UnitName">Mã kho</label>
+                    <label class="control-label  col-md-4" for="UnitName">Ý định bằng tiếng Anh</label>
                     <div class="col-md-8">
-                        @Html.TextBoxFor(m => m.IntentEn, new { @class = "form-control" })
+                        @Html.DisplayFor(m => m.IntentEn, new { @class = "form-control" })
                     </div>
                 </div>
                

@@ -64,7 +64,7 @@
                     {
                         columns.Select().Width(30);
                         columns.Bound(x => x.Id).Width(300).Hidden();
-                        columns.Bound(x => x.AnswerVn).ClientTemplate("#=grd.tmp.name(AnswerVn)#").Title("Tên");
+                        columns.Bound(x => x.AnswerVn).ClientTemplate("#=grd.tmp.name(AnswerVn)#").Title("Câu trả lời");
                         columns.Bound(x => x.Inactive).ClientTemplate("#=grd.tmp.activate(!Inactive)#").Title("Trạng thái");
                     })
                     .DataSource(dataSource => dataSource
