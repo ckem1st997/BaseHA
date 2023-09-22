@@ -213,7 +213,7 @@
             if (!_.isEmpty(treeWareHouse.api) && treeWareHouse.api.getActiveNode())
                 CategoryId = treeWareHouse.api.activeNode.key;
             if (CategoryId === null || CategoryId.length < 1) {
-                notify({ text: 'Bạn chưa chọn bảng ghi nào !', type: 'info' });
+                notify({ text: 'Bạn chưa chọn loại kịch bản!', type: 'info' });
                 return;
             }
             else
