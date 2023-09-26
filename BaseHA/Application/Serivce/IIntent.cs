@@ -29,6 +29,8 @@ namespace BaseHA.Application.Serivce
         Task<bool> ActivatesAsync(IEnumerable<string> ids, bool active);
        
         Task<IList<SelectListItem>> GetSelectListItem();
+
+        
     }
 
 
@@ -53,6 +55,8 @@ namespace BaseHA.Application.Serivce
             list.ForEach(x => x.Inactive = active);
             return await _generic.SaveChangesConfigureAwaitAsync() > 0;
         }
+
+       
 
         public async Task<bool> DeletesAsync(IEnumerable<string> ids)
         {

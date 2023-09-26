@@ -64,9 +64,9 @@
             {
                 columns.Select().Width(30);
                 columns.Bound(x => x.Id).Width(10).Hidden();
-                columns.Bound(x => x.NameCategory).ClientTemplate("#=grd.tmp.name(NameCategory)#").Title("Tên danh mục");
-                columns.Bound(x => x.IntentCodeVn).Title("Mã tiếng Việt");
-                columns.Bound(x => x.IntentCodeEn).Title("Mã tiếng Anh");
+                //columns.Bound(x => x.NameCategory).ClientTemplate("#=grd.tmp.name(NameCategory)#").Title("Tên danh mục");
+                columns.Bound(x => x.IntentCodeVn).Title("Mã kịch bản");
+                //columns.Bound(x => x.IntentCodeEn).Title("Mã tiếng Anh");
                 columns.Bound(x => x.Description).Title("Mô tả");
                 columns.Bound(x => x.Inactive).ClientTemplate("#=grd.tmp.activate(!Inactive)#").Width(100).Title("Trạng thái");
             })
@@ -198,7 +198,7 @@
             app.window.form.open({ url: `${master.urlImportExcel}`, options: { width: '620px' } });
         };
         master.create = function () {
-            app.window.form.open({ url: master.urlCreate, options: { width: '550px' }, callback: master.actionCallback });
+           app.window.form.open({ url: master.urlCreate, options: { width: '550px' }, callback: master.actionCallback });
         };
         master.edit = function () {
             var id = grd.api.selectedIds()[0];

@@ -5,11 +5,6 @@
 }
 
 
-@* @if (ViewBag.result != null)
-{
-    <p>@ViewBag.result</p>
-} *@
-
 <div class="form fixed-layout-form">
     <form data-form-type="ajax" id="editForm1" class="form-horizontal">
         <div class="form-body">
@@ -59,5 +54,38 @@
         </div>
     </form>
 </div>
+@section Script{
+    @* <script>
+        $(document).ready(function () {
+            $('editForm1').submit(function (event) {
+                event.preventDefault();
+
+                var intentEn = $('#IntentEn').val().trim();
+                var intentVn = $('#IntentVn').val().trim();
+
+                if (intentEn === '' && intentVn === '') {
+                    $('#errorContainer').text('Vui lòng nhập Ý định tiếng Anh hoặc tiếng Việt');
+                } else {
+                    checkIntenEn(intentEn);
+                }
+            });
+        });
+
+        function checkIntentEn(intentEn) {
+            $.ajax({
+                ulr: '/checkIntent',
+                type: 'POST',
+                data: { intentEn: intentEn },
+                success: function (response) {
+                    if (response.isDuplicate) {
+                        $('#errorContainer').text('Ý định tiếng Anh đã tồn tại');
+                    } else {
+                        $('#editForm1')[0].submit();
+                    }
+                }
+            });
+        }
+    </script> *@
+}
 
 

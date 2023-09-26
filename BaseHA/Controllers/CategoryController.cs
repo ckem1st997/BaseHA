@@ -9,6 +9,8 @@ using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Mvc;
 using Share.BaseCore.Extensions;
 using System.Diagnostics;
+using Share.BaseCore.IRepositories;
+using Share.BaseCore.Base;
 
 namespace BaseHA.Controllers
 {
@@ -17,12 +19,14 @@ namespace BaseHA.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly ICategoryService _generic;
         private readonly IMapper _mapper;
+        
 
         public CategoryController(ILogger<HomeController> logger, ICategoryService generic, IMapper mapper)
         {
             _logger = logger;
             _generic = generic;
             _mapper = mapper;
+          
         }
 
         public IActionResult Index()
@@ -49,14 +53,61 @@ namespace BaseHA.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(CategoryCommands wareHouse)
         {
-            var entity = _mapper.Map<Category>(wareHouse);
-            var res = await _generic.InsertAsync(entity);
+            if(wareHouse.IntentCodeEn==null)
+            {
+                wareHouse.IntentCodeEn = wareHouse.IntentCodeVn;
+            }
+
+            if (ModelState.IsValid)
+            {
+                if (_generic.IsIntentVnDuplicate( wareHouse.IntentCodeVn))
+                {
+                    
+                    ModelState.AddModelError("IntentCodeVn", "Mã bằng tiếng Việt đã tồn tại");
+                    //return View(wareHouse);
+                    return Ok(new ResultMessageResponse()
+                    {
+                        message = $"Mã {wareHouse.IntentCodeVn} bằng tiếng Việt đã tồn tại !",
+                        success = false
+                    });
+                }
+                else
+                {
+                    if (_generic.IsIntentEnDuplicate(wareHouse.IntentCodeEn))
+                    {
+                        ModelState.AddModelError("IntentCodeEn", "Mã bằng tiếng Anh đã tồn tại");
+                        //return View(wareHouse);
+                        return Ok(new ResultMessageResponse()
+                        {
+                            message = "Mã bằng tiếng Anh đã tồn tại !",
+                            success = false
+                        });
+                    }
+                }
+
+                var entity = _mapper.Map<Category>(wareHouse);
+                var res = await _generic.InsertAsync(entity);
+                return Ok(new ResultMessageResponse()
+                {
+                    message = res ? "Thành công !" : "Thất bại !",
+                    success = res
+                });
+            }
+            /* ViewBag.ErrorMessage = "Dữ liệu không hợp lệ";
+             return View(wareHouse);*/
             return Ok(new ResultMessageResponse()
             {
-                message = res ? "Thành công !" : "Thất bại !",
-                success = res
+                message = "Thất bại !",
+                success = false
             });
         }
+
+       /* public  bool IsIntentEnDuplicate(string intent)
+        {
+            bool isDuplicate = _category.Table.Any(e => e.IntentCodeEn == intent);
+            return isDuplicate;
+        }*/
+
 
 
         [HttpPost]
@@ -123,6 +174,8 @@ namespace BaseHA.Controllers
                 success = res
             });
         }
+
+        
 
 
         /// <summary>

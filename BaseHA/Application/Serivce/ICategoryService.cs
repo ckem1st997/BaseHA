@@ -30,6 +30,9 @@ namespace BaseHA.Application.Serivce
         Task<bool> ActivatesAsync(IEnumerable<string> ids, bool active);
         Task<IList<SelectListItem>> GetSelectListItem();
         Task<IList<CategoryTreeModel>> GetTree(int? expandLevel);
+
+        public bool IsIntentEnDuplicate(string intentCodeEn);
+        public bool IsIntentVnDuplicate(string intentCodeVn);
     }
 
 
@@ -61,6 +64,17 @@ namespace BaseHA.Application.Serivce
                 throw new ArgumentNullException(nameof(ids));
             await _generic.DeteleSoftDelete(ids);
             return await _generic.SaveChangesConfigureAwaitAsync() > 0;
+        }
+
+        public  bool IsIntentEnDuplicate(string intentCodeEn)
+        {
+            bool isDuplicate = _generic.Table.Any(e => e.IntentCodeEn == intentCodeEn );
+            return isDuplicate;
+        }
+        public bool IsIntentVnDuplicate(string intentCodeVn)
+        {
+            bool isDuplicate = _generic.Table.Any(e => e.IntentCodeEn == intentCodeVn);
+            return isDuplicate;
         }
 
         public async Task<PagedList<Category>> GetAsync(CategorySearchModel ctx)
@@ -153,7 +167,8 @@ namespace BaseHA.Application.Serivce
                     children = new List<CategoryTreeModel>(),
                     folder = false,
                     key = s.Id,
-                    title = s.IntentCodeVn,
+                    //title = s.IntentCodeVn,
+                    title= s.Description,
                     tooltip = s.NameCategory,
                     ParentId = s.ParentId,
                     Name = "[" + s.NameCategory + "]-" + s.IntentCodeVn
@@ -280,6 +295,8 @@ namespace BaseHA.Application.Serivce
 
             return result;
         }
+
+        
     }
 
 }
