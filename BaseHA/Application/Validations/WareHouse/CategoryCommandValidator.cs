@@ -12,7 +12,7 @@ namespace BaseHA.Application.Validations.WareHouse
 
            // RuleFor(order => order.IntentCodeEn).NotNull().WithMessage("Bạn chưa nhập mã tiếng Anh");
 
-            RuleFor(order => order.IntentCodeVn).NotEmpty().WithMessage("Bạn chưa nhập mã tiếng Việt");
+            RuleFor(order => order.IntentCodeVn).NotEmpty().WithMessage("Bạn chưa nhập mã kịch bản");
                 
 
         }
