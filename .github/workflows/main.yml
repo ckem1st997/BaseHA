@@ -19,6 +19,10 @@ jobs:
       - name: Build Docker image
         run: |
           ls
+          cd Share.BaseCore
+          ls
+          cd ..
+          cd ..
           docker build -t meoh0ang97/base_ha:latest ./BaseHA
 
       - name: Push Docker image to Docker Hub
