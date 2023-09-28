@@ -9,7 +9,7 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["BaseHA/BaseHA.csproj", "BaseHA/"]
 COPY ["BaseHA.Domain/BaseHA.Domain.csproj", "BaseHA.Domain/"]
-COPY ["Share.BaseCore/Share.BaseCore.csproj", "Share.BaseCore/"]
+COPY ["BaseHA/Share.BaseCore/Share.BaseCore.csproj", "Share.BaseCore/"]
 RUN dotnet restore "BaseHA/BaseHA.csproj"
 COPY . .
 WORKDIR "/src/BaseHA"
