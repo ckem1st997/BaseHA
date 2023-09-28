@@ -6,7 +6,10 @@ using BaseHA.Models;
 using BaseHA.Models.SearchModel;
 using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Share.BaseCore.Base;
 using Share.BaseCore.Extensions;
+using Share.BaseCore.IRepositories;
 
 namespace BaseHA.Controllers
 {
@@ -15,19 +18,23 @@ namespace BaseHA.Controllers
         private readonly ILogger<IntentController> _logger;
         private readonly IIntentService _generic;
         private readonly IMapper _mapper;
+        
 
         public IntentController(ILogger<IntentController> logger, IIntentService generic, IMapper mapper)
         {
             _logger = logger;
             _generic = generic;
             _mapper = mapper;
+            
         }
 
         public IActionResult Index()
         {
             var model = new IntentSearchModel();
             return View(model);
-        }
+        }      
+
+
         public async Task<IActionResult> Edit(string id)
         {
             var res = await _generic.GetByIdAsync(id);
@@ -90,6 +97,7 @@ namespace BaseHA.Controllers
                 success = res
             });
         }
+        
 
 
         public async Task<IActionResult> Add(string CategoryId)

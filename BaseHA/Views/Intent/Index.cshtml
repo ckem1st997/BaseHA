@@ -64,8 +64,8 @@
                     {
                         columns.Select().Width(30);
                         columns.Bound(x => x.Id).Width(300).Hidden();
-                        columns.Bound(x => x.IntentVn).ClientTemplate("#=grd.tmp.name(IntentVn)#").Title("Ý định tiếng Việt");
-                        columns.Bound(x => x.IntentEn).Title("Ý định tiếng Anh");
+                        columns.Bound(x => x.IntentVn).ClientTemplate("#=grd.tmp.name(IntentVn)#").Title("Kịch bản Tiếng Việt");
+                        columns.Bound(x => x.IntentEn).Title("Kịch bản Tiếng Anh");
                         columns.Bound(x => x.Inactive).ClientTemplate("#=grd.tmp.activate(!Inactive)#").Title("Trạng thái");
                     })
                     .DataSource(dataSource => dataSource
@@ -209,6 +209,7 @@
             app.window.form.open({ url: `${master.urlImportExcel}`, options: { width: '620px' } });
         };
         master.create = function () {
+            
             var CategoryId = null;
             if (!_.isEmpty(treeWareHouse.api) && treeWareHouse.api.getActiveNode())
                 CategoryId = treeWareHouse.api.activeNode.key;
@@ -217,8 +218,9 @@
                 return;
             }
             else
-                app.window.form.open({ url: master.urlCreate + "?CategoryId=" + CategoryId, options: { width: '550px' }, callback: master.actionCallback });
+        app.window.form.open({ url: master.urlCreate + "?CategoryId=" + CategoryId, options: { width: '550px' }, callback: master.actionCallback });                   
         };
+
         master.edit = function () {
             var id = grd.api.selectedIds()[0];
             console.log(id)

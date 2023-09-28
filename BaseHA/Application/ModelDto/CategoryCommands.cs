@@ -14,7 +14,7 @@ namespace BaseHA.Application.ModelDto
         }
 
 
-        public string NameCategory { get; set; } = default!;
+        public string NameCategory { get; set; } = "ORDER";
 
 
         public string IntentCodeEn { get; set; } = default!;
