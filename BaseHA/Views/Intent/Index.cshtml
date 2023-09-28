@@ -64,8 +64,7 @@
                     {
                         columns.Select().Width(30);
                         columns.Bound(x => x.Id).Width(300).Hidden();
-                        columns.Bound(x => x.IntentVn).ClientTemplate("#=grd.tmp.name(IntentVn)#").Title("Kịch bản Tiếng Việt");
-                        columns.Bound(x => x.IntentEn).ClientTemplate("#=grd.tmp.name(IntentEn)#").Title("Kịch bản Tiếng Anh");
+                        columns.Bound(x => x.IntentVn).ClientTemplate("#=grd.tmp.name(IntentVn)#").Title("Ý định");
                         columns.Bound(x => x.Inactive).ClientTemplate("#=grd.tmp.activate(!Inactive)#").Title("Trạng thái");
                     })
                     .DataSource(dataSource => dataSource
@@ -308,9 +307,9 @@
         };
         toolbar.actions.init = function () {
             var $toolbar = toolbar.$el;
-            $toolbar.find('a[data-action="edit"]').click(function (e) {
-                master.edit();
-            });
+            // $toolbar.find('a[data-action="edit"]').click(function (e) {
+            //     master.edit();
+            // });
 
             $toolbar.find('a[data-action="export"]').click(function (e) {
                 master.export();

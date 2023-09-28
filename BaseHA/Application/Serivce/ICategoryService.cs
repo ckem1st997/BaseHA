@@ -79,7 +79,7 @@ namespace BaseHA.Application.Serivce
 
         public async Task<PagedList<Category>> GetAsync(CategorySearchModel ctx)
         {
-            var l = from i in _generic.Table select i;
+            var l = from i in _generic.Table where i.OnDelete==false select i;
 
             if (!string.IsNullOrEmpty(ctx.Keywords))
                 l = from aa in l

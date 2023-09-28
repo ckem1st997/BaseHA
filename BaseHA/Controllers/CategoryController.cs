@@ -67,7 +67,7 @@ namespace BaseHA.Controllers
                     //return View(wareHouse);
                     return Ok(new ResultMessageResponse()
                     {
-                        message = $"Mã {wareHouse.IntentCodeVn} bằng tiếng Việt đã tồn tại !",
+                        message = $"Mã {wareHouse.IntentCodeVn} đã tồn tại !",
                         success = false
                     });
                 }
