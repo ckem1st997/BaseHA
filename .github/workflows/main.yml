@@ -17,9 +17,7 @@ jobs:
         run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
 
       - name: Build Docker image
-        run: |
-          cd ./BaseHA
-          docker build -t meoh0ang97/base_ha:latest .
+        run: docker build -t meoh0ang97/base_ha:latest ./BaseHA
 
       - name: Push Docker image to Docker Hub
         run: docker push meoh0ang97/base_ha:latest
