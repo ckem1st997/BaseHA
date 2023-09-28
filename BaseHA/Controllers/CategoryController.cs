@@ -166,6 +166,7 @@ namespace BaseHA.Controllers
                     message = "Không tồn tại bản ghi !",
                     success = false
                 });
+            unit.IntentCodeEn = unit.IntentCodeVn;
             var entity = _mapper.Map(unit, model);
             var res = await _generic.UpdateAsync(entity);
             return Ok(new ResultMessageResponse()
