@@ -65,7 +65,7 @@
                         columns.Select().Width(30);
                         columns.Bound(x => x.Id).Width(300).Hidden();
                         columns.Bound(x => x.IntentVn).ClientTemplate("#=grd.tmp.name(IntentVn)#").Title("Kịch bản Tiếng Việt");
-                        columns.Bound(x => x.IntentEn).Title("Kịch bản Tiếng Anh");
+                        columns.Bound(x => x.IntentEn).ClientTemplate("#=grd.tmp.name(IntentEn)#").Title("Kịch bản Tiếng Anh");
                         columns.Bound(x => x.Inactive).ClientTemplate("#=grd.tmp.activate(!Inactive)#").Title("Trạng thái");
                     })
                     .DataSource(dataSource => dataSource
