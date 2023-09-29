@@ -13,6 +13,7 @@ COPY ["Share.BaseCore/Share.BaseCore.csproj", "Share.BaseCore/"]
 RUN dotnet restore "BaseHA/BaseHA.csproj"
 COPY . .
 WORKDIR "/src/BaseHA"
+RUN dotnet restore "Share.BaseCore/Share.BaseCore.csproj"
 RUN dotnet build "BaseHA.csproj" -c Release -o /app/build
 
 FROM build AS publish
