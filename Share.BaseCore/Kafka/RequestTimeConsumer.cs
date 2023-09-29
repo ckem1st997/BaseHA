@@ -14,10 +14,10 @@ using Polly.Retry;
 using System.Net.Sockets;
 using Polly;
 using Serilog;
-using Share.BaseCore.EventBus.Abstractions;
-using Share.BaseCore.EventBus;
+using BaseHA.Core.EventBus.Abstractions;
+using BaseHA.Core.EventBus;
 
-namespace Share.BaseCore.Kafka
+namespace BaseHA.Core.Kafka
 {
     /// <summary>
     ///     A simple example demonstrating how to set up a Kafka consumer as an

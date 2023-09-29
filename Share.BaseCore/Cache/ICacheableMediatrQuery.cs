@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Share.BaseCore.Cache
+namespace BaseHA.Core.Cache
 {
     public interface ICacheableMediatrQuery
     {

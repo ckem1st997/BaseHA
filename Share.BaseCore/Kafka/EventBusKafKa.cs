@@ -1,17 +1,17 @@
 ﻿using Autofac;
+using BaseHA.Core.EventBus;
+using BaseHA.Core.EventBus.Abstractions;
 using KafKa.Net;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Share.BaseCore.EventBus;
-using Share.BaseCore.EventBus.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-namespace Share.BaseCore.Kafka
+namespace BaseHA.Core.Kafka
 {
     public static class EventBusKafKa
     {

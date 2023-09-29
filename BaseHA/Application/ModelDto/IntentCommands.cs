@@ -1,5 +1,5 @@
 ﻿using BaseHA.Domain.Entity;
-using Share.BaseCore;
+using BaseHA.Core;
 
 namespace BaseHA.Application.ModelDto
 {

@@ -1,13 +1,13 @@
-﻿using EasyCaching.Core.Configurations;
+﻿using BaseHA.Core.Cache.CacheName;
+using EasyCaching.Core.Configurations;
 using EasyCaching.Serialization.SystemTextJson.Configurations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using Share.BaseCore.Cache.CacheName;
 using StackExchange.Redis;
 
-namespace Share.BaseCore.Cache
+namespace BaseHA.Core.Cache
 {
     public static class ServiceCache
     {
@@ -30,7 +30,7 @@ namespace Share.BaseCore.Cache
                 options.ConfigurationOptions = connect;
             });
             //Configure other services up here
-            services.AddSingleton<IDatabase>(cfg =>
+            services.AddSingleton(cfg =>
             {
                 IConnectionMultiplexer multiplexer = ConnectionMultiplexer.Connect(connect);
                 return multiplexer.GetDatabase();

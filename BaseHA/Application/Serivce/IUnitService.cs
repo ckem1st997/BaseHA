@@ -1,14 +1,15 @@
-﻿using BaseHA.Domain.Entity;
+﻿using BaseHA.Core.Extensions;
+using BaseHA.Domain.Entity;
 using BaseHA.Models.SearchModel;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Diagnostics.Tracing.Parsers.Kernel;
 using Microsoft.EntityFrameworkCore;
 using Nest;
 using NuGet.Packaging.Signing;
-using Share.BaseCore.Base;
-using Share.BaseCore.Extensions;
-using Share.BaseCore.IRepositories;
 using System.Threading.Tasks;
+using BaseHA.Core.Extensions;
+using BaseHA.Core.IRepositories;
+using BaseHA.Core.Base;
 
 namespace BaseHA.Application.Serivce
 {

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization.Infrastructure;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Share.BaseCore.Authozire
+namespace BaseHA.Core.Authozire
 {
     public class RolesAuthorizationHandler : AuthorizationHandler<RolesAuthorizationRequirement>
     {

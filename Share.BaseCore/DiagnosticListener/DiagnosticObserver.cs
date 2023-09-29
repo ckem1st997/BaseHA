@@ -5,7 +5,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
-namespace Share.BaseCore.DiagnosticListener
+namespace BaseHA.Core.DiagnosticListener
 {
     #region DiagnosticObserver
     public class DiagnosticObserver : IObserver<System.Diagnostics.DiagnosticListener>

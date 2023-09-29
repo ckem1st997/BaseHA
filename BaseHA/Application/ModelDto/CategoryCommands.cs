@@ -1,6 +1,6 @@
 ﻿using BaseHA.Domain.Entity;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Share.BaseCore;
+using BaseHA.Core;
 
 namespace BaseHA.Application.ModelDto
 {

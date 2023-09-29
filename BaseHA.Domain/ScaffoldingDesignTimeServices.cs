@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Scaffolding;
 using Microsoft.EntityFrameworkCore.Scaffolding.Internal;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Share.BaseCore;
+using BaseHA.Core;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -27,7 +27,7 @@ namespace BaseHA.Domain
                 // Add custom template data
                 options.TemplateData = new Dictionary<string, object>
     {
-        { "models-namespace", "Share.BaseCore" },
+        { "models-namespace", "BaseHA.Core" },
         { "base-class", "BaseEntity" },
 
     };

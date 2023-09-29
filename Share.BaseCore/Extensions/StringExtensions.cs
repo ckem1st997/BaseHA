@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using BaseHA.Core.Extensions;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Localization;
 using NetTopologySuite.Utilities;
 using System;
@@ -17,7 +18,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace Share.BaseCore.Extensions
+namespace BaseHA.Core.Extensions
 {
 
 
@@ -233,9 +234,9 @@ namespace Share.BaseCore.Extensions
             return -1;
         }
 
-     
 
-        
+
+
 
         public static char TryRemoveDiacritic(this char c)
         {
@@ -450,7 +451,7 @@ namespace Share.BaseCore.Extensions
             return !string.IsNullOrWhiteSpace(value);
         }
 
-       
+
 
         //
         // Summary:
@@ -539,7 +540,7 @@ namespace Share.BaseCore.Extensions
                 return string.Empty;
             }
 
-            return new string(str.Where((char c) => char.IsDigit(c)).ToArray());
+            return new string(str.Where((c) => char.IsDigit(c)).ToArray());
         }
 
         [DebuggerStepThrough]
@@ -660,7 +661,7 @@ namespace Share.BaseCore.Extensions
             while (true)
             {
                 string text;
-                string line = (text = sr.ReadLine());
+                string line = text = sr.ReadLine();
                 if (text == null)
                 {
                     break;
@@ -704,7 +705,7 @@ namespace Share.BaseCore.Extensions
                 throw new ArgumentNullException("startsWith");
             }
 
-            return value.StartsWith(startsWith) ? value : (startsWith + value);
+            return value.StartsWith(startsWith) ? value : startsWith + value;
         }
 
         //
@@ -850,7 +851,7 @@ namespace Share.BaseCore.Extensions
                         return value.Split(new char[1] { c }, StringSplitOptions.RemoveEmptyEntries);
                     }
 
-                    if (c == '\r' && ((i + 1 < value.Length) & (value[i + 1] == '\n')))
+                    if (c == '\r' && i + 1 < value.Length & value[i + 1] == '\n')
                     {
                         return value.GetLines(trimLines: false, removeEmptyLines: true).ToArray();
                     }
@@ -878,7 +879,7 @@ namespace Share.BaseCore.Extensions
                 return false;
             }
 
-            int num = (splitAfterLast ? value.LastIndexOf(delimiter) : value.IndexOf(delimiter));
+            int num = splitAfterLast ? value.LastIndexOf(delimiter) : value.IndexOf(delimiter);
             if (num == -1)
             {
                 return false;
@@ -889,9 +890,9 @@ namespace Share.BaseCore.Extensions
             return true;
         }
 
-       
 
-      
+
+
 
         [DebuggerStepThrough]
         public static bool IsEnclosedIn(this string value, string enclosedIn)
@@ -1009,7 +1010,7 @@ namespace Share.BaseCore.Extensions
                     return "";
                 }
 
-                value = ((string.Compare(value, "true", ignoreCase: true) == 0) ? name : value);
+                value = string.Compare(value, "true", ignoreCase: true) == 0 ? name : value;
             }
 
             if (name.StartsWith("data"))
@@ -1062,7 +1063,7 @@ namespace Share.BaseCore.Extensions
             return value;
         }
 
-      
+
 
 
         [DebuggerStepThrough]
@@ -1099,7 +1100,7 @@ namespace Share.BaseCore.Extensions
                         }
 
                         flag = false;
-                        if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || c == '_')
+                        if (c >= '0' && c <= '9' || c >= 'A' && c <= 'Z' || c >= 'a' && c <= 'z' || c == '_')
                         {
                             stringBuilder.Append(c);
                         }
@@ -1140,7 +1141,7 @@ namespace Share.BaseCore.Extensions
                             }
 
                             char c2 = c.TryRemoveDiacritic();
-                            if ((c2 >= 'a' && c2 <= 'z') || (c2 >= 'A' && c2 <= 'Z'))
+                            if (c2 >= 'a' && c2 <= 'z' || c2 >= 'A' && c2 <= 'Z')
                             {
                                 stringBuilder.Append(c2);
                             }
@@ -1160,7 +1161,7 @@ namespace Share.BaseCore.Extensions
             {
             }
 
-            return (text.Length > 0) ? text : "null";
+            return text.Length > 0 ? text : "null";
         }
 
         public static string SanitizeHtmlId(this string value)
@@ -1168,7 +1169,7 @@ namespace Share.BaseCore.Extensions
             return TagBuilder.CreateSanitizedId(value, "");
         }
 
-      
+
 
         [DebuggerStepThrough]
         public static bool IsMatch(this string input, string pattern, RegexOptions options = RegexOptions.IgnoreCase | RegexOptions.Multiline)
@@ -1229,7 +1230,7 @@ namespace Share.BaseCore.Extensions
         [DebuggerStepThrough]
         public static int[] ToIntArray(this string s)
         {
-            return Array.ConvertAll(s.SplitSafe(","), (string v) => int.Parse(v.Trim()));
+            return Array.ConvertAll(s.SplitSafe(","), (v) => int.Parse(v.Trim()));
         }
 
         [DebuggerStepThrough]
@@ -1291,7 +1292,7 @@ namespace Share.BaseCore.Extensions
             if (!string.IsNullOrWhiteSpace(text))
             {
                 Regex regex = new Regex(text, RegexOptions.IgnoreCase);
-                input = regex.Replace(input, (Match m) => preMatch + m.Value.EmptyNull().HtmlEncode() + postMatch);
+                input = regex.Replace(input, (m) => preMatch + m.Value.EmptyNull().HtmlEncode() + postMatch);
             }
 
             return input;
@@ -1320,16 +1321,16 @@ namespace Share.BaseCore.Extensions
             return source.IndexOf(value, comparisonType) >= 0;
         }
 
-       
+
 
         public static string JavaScriptStringEncode(this string value)
         {
             return HttpUtility.JavaScriptStringEncode(value);
         }
 
-      
-      
-      
+
+
+
     }
     public static class LinqExtensions
     {
@@ -1462,7 +1463,7 @@ namespace Share.BaseCore.Extensions
         [DebuggerStepThrough]
         public static void NotNegative<T>(T arg, string argName, string message = "Argument '{0}' cannot be a negative value. Value: '{1}'.") where T : struct, IComparable<T>
         {
-            if (arg.CompareTo(default(T)) < 0)
+            if (arg.CompareTo(default) < 0)
             {
                 throw Error.ArgumentOutOfRange(argName, message.FormatInvariant(argName, arg));
             }
@@ -1471,7 +1472,7 @@ namespace Share.BaseCore.Extensions
         [DebuggerStepThrough]
         public static void NotZero<T>(T arg, string argName) where T : struct, IComparable<T>
         {
-            if (arg.CompareTo(default(T)) == 0)
+            if (arg.CompareTo(default) == 0)
             {
                 throw Error.ArgumentOutOfRange(argName, "Argument '{0}' must be greater or less than zero. Value: '{1}'.", argName, arg);
             }
@@ -1498,7 +1499,7 @@ namespace Share.BaseCore.Extensions
         [DebuggerStepThrough]
         public static void IsPositive<T>(T arg, string argName, string message = "Argument '{0}' must be a positive value. Value: '{1}'.") where T : struct, IComparable<T>
         {
-            if (arg.CompareTo(default(T)) < 1)
+            if (arg.CompareTo(default) < 1)
             {
                 throw Error.ArgumentOutOfRange(argName, message.FormatInvariant(argName));
             }
@@ -1533,7 +1534,7 @@ namespace Share.BaseCore.Extensions
             }
         }
 
-       
+
         [DebuggerStepThrough]
         public static void PagingArgsValid(int indexArg, int sizeArg, string indexArgName, string sizeArgName)
         {
@@ -1894,7 +1895,7 @@ namespace Share.BaseCore.Extensions
                 return true;
             }
 
-            return s_predefinedTypes.Any((Type t) => t == type);
+            return s_predefinedTypes.Any((t) => t == type);
         }
 
         public static bool IsStruct(this Type type)
@@ -2031,7 +2032,7 @@ namespace Share.BaseCore.Extensions
                 return true;
             }
 
-            return type.GetConstructors(BindingFlags.Instance | BindingFlags.Public).Any((ConstructorInfo ctor) => ctor.GetParameters().Length == 0);
+            return type.GetConstructors(BindingFlags.Instance | BindingFlags.Public).Any((ctor) => ctor.GetParameters().Length == 0);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -2113,8 +2114,8 @@ namespace Share.BaseCore.Extensions
             Type nonNullableType2 = target.GetNonNullableType();
             if (nonNullableType == source || nonNullableType2 != target)
             {
-                TypeCode typeCode = (nonNullableType.IsEnum ? TypeCode.Object : Type.GetTypeCode(nonNullableType));
-                TypeCode typeCode2 = (nonNullableType2.IsEnum ? TypeCode.Object : Type.GetTypeCode(nonNullableType2));
+                TypeCode typeCode = nonNullableType.IsEnum ? TypeCode.Object : Type.GetTypeCode(nonNullableType);
+                TypeCode typeCode2 = nonNullableType2.IsEnum ? TypeCode.Object : Type.GetTypeCode(nonNullableType2);
                 switch (typeCode)
                 {
                     case TypeCode.SByte:
@@ -2246,7 +2247,7 @@ namespace Share.BaseCore.Extensions
         }
 
 
-         
+
 
         //
         // Summary:

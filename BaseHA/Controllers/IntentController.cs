@@ -7,9 +7,9 @@ using BaseHA.Models.SearchModel;
 using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Share.BaseCore.Base;
-using Share.BaseCore.Extensions;
-using Share.BaseCore.IRepositories;
+using BaseHA.Core.Base;
+using BaseHA.Core.Extensions;
+using BaseHA.Core.IRepositories;
 
 namespace BaseHA.Controllers
 {

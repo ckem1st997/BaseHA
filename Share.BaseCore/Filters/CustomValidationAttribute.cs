@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BaseHA.Core.Extensions;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Share.BaseCore.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Share.BaseCore.Filters
+namespace BaseHA.Core.Filters
 {
     /// <summary>
     /// custom reponse message to validator by flutent
@@ -19,7 +19,7 @@ namespace Share.BaseCore.Filters
                     .SelectMany(v => v.Errors)
                     .Select(v => v.ErrorMessage)
                     .ToList();
-                var errorsString = errors.AnyList() ? string.Join("|",errors) : "Đã xảy ra lỗi với dữ liệu đầu vào !";
+                var errorsString = errors.AnyList() ? string.Join("|", errors) : "Đã xảy ra lỗi với dữ liệu đầu vào !";
                 var responseObj = new ResultMessageResponse
                 {
                     code = "200",

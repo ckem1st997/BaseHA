@@ -1,4 +1,4 @@
-﻿using Share.BaseCore.EventBus;
+﻿using BaseHA.Core.EventBus;
 using System;
 
 namespace KafKa.Net

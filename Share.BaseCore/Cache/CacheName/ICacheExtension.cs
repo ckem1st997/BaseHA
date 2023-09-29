@@ -3,12 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Share.BaseCore.Cache.CacheName
+namespace BaseHA.Core.Cache.CacheName
 {
     /// <summary>
     /// Extension Cache Redis
     /// </summary>
-    public interface ICacheExtension 
+    public interface ICacheExtension
     {
         /// <summary>
         /// Get All Name Keys

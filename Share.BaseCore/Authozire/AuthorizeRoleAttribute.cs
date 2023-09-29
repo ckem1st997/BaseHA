@@ -1,17 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
-using Share.BaseCore.Base;
-using Share.BaseCore.Extensions;
-using Share.BaseCore.IRepositories;
+using BaseHA.Core.Extensions;
+using BaseHA.Core.IRepositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using BaseHA.Core.Base;
 
-namespace Share.BaseCore.Authozire
+namespace BaseHA.Core.Authozire
 {
     public class AuthorizeRoleAttribute : ActionFilterAttribute
     {

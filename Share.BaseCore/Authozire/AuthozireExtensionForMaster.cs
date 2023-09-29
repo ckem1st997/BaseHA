@@ -1,5 +1,4 @@
-﻿
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -10,7 +9,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Share.BaseCore.Authozire
+namespace BaseHA.Core.Authozire
 {
     public class AuthozireExtensionForMaster : IAuthozireExtensionForMaster
     {
@@ -48,7 +47,7 @@ namespace Share.BaseCore.Authozire
 
         public string GetClaimType(string type)
         {
-            if (_contextAccessor.HttpContext.User.Identity is ClaimsIdentity identity && this.CheckUserIsAuthenticated())
+            if (_contextAccessor.HttpContext.User.Identity is ClaimsIdentity identity && CheckUserIsAuthenticated())
             {
                 IEnumerable<Claim> claims = identity.Claims;
                 return identity.Claims.FirstOrDefault(c => c.Type.Equals(type))?.Value;

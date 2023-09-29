@@ -1,5 +1,5 @@
-﻿using Share.BaseCore.EventBus.Abstractions;
-using Share.BaseCore.EventBus.Events;
+﻿using BaseHA.Core.EventBus.Abstractions;
+using BaseHA.Core.EventBus.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static KafKa.Net.InMemoryEventBusSubscriptionsManager;
 
-namespace Share.BaseCore.EventBus
+namespace BaseHA.Core.EventBus
 {
     /// <summary>
     /// danh sách các model mà service sẽ nhận để xử lý, tránh trường hợp xử lý hết message mà kafka bắn về

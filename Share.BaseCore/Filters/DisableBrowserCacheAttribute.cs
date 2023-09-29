@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Share.BaseCore.Filters
+namespace BaseHA.Core.Filters
 {
     /// <summary>
     ///     Ensures that the request is not cached by the browser

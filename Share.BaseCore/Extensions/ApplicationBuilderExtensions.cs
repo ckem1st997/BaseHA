@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Share.BaseCore.Base;
+﻿using BaseHA.Core.Base;
+using Microsoft.AspNetCore.Builder;
 using System;
 using System.Globalization;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Net;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
 
-namespace Share.BaseCore.Extensions
+namespace BaseHA.Core.Extensions
 {
     /// <summary>
     /// Represents extensions of IApplicationBuilder

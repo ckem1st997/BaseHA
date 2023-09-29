@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Share.BaseCore.Authozire
+namespace BaseHA.Core.Authozire
 {
     /// <summary>
     /// call get info width grpc in service khác service master

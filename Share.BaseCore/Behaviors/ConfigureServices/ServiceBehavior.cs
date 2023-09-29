@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Share.BaseCore.Behaviors.ConfigureServices
+namespace BaseHA.Core.Behaviors.ConfigureServices
 {
     public static class ServiceAuthorize
     {

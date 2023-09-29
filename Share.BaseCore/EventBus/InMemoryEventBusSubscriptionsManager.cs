@@ -1,6 +1,6 @@
-﻿using Share.BaseCore.EventBus;
-using Share.BaseCore.EventBus.Abstractions;
-using Share.BaseCore.EventBus.Events;
+﻿using BaseHA.Core.EventBus;
+using BaseHA.Core.EventBus.Abstractions;
+using BaseHA.Core.EventBus.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;

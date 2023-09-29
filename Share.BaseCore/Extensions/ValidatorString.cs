@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Share.BaseCore.Extensions
+namespace BaseHA.Core.Extensions
 {
     public static class ValidatorString
     {

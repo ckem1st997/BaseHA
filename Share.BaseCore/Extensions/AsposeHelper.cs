@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace Share.BaseCore.Extensions
+namespace BaseHA.Core.Extensions
 {
     public static class AsposeHelper
     {

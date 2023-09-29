@@ -5,7 +5,7 @@ VisualStudioVersion = 17.6.33815.320
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BaseHA", "BaseHA\BaseHA.csproj", "{E7B82286-A56D-4CC8-8ACF-36441D51EC69}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Share.BaseCore", "Share.BaseCore\Share.BaseCore.csproj", "{436D4072-4397-45D8-8F76-DDB27259CA2C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BaseHA.Core", "Share.BaseCore\BaseHA.Core.csproj", "{436D4072-4397-45D8-8F76-DDB27259CA2C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BaseHA.Domain", "BaseHA.Domain\BaseHA.Domain.csproj", "{7873F2C6-C6FE-4BBD-8294-512D3CEC882D}"
 EndProject

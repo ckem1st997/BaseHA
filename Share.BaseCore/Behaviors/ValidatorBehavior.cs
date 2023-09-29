@@ -2,14 +2,14 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Serilog;
-using Share.BaseCore.Base;
+using BaseHA.Core.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Share.BaseCore.Behaviors
+namespace BaseHA.Core.Behaviors
 {
     // xử lí validator trước khi đến điểm cuối, tức là xử lí trong đường ống trước khi đến điểm cuối MediatR để xử lí
     public class ValidatorBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : IRequest<TResponse>

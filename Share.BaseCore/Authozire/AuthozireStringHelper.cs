@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Share.BaseCore.Authozire
+namespace BaseHA.Core.Authozire
 {
     public static class AuthozireStringHelper
     {

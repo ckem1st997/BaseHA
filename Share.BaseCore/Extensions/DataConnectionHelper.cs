@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Share.BaseCore.Extensions
+namespace BaseHA.Core.Extensions
 {
     public static class DataConnectionHelper
     {
@@ -17,8 +17,8 @@ namespace Share.BaseCore.Extensions
             public const string Dashboard = "Dashboard";
             public const string File = "File";
             public const string Notify = "Notify";
-        }       
-        
+        }
+
         public static class ConnectionString
         {
             public const string Master = "MasterDataContext";

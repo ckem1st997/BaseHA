@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace Share.BaseCore.Base
+namespace BaseHA.Core.Base
 {
     /// <summary>
     /// Represents errors that occur during application execution

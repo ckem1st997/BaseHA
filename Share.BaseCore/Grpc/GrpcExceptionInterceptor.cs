@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using static Grpc.Core.Interceptors.Interceptor;
 using Serilog;
 
-namespace Share.BaseCore.Grpc
+namespace BaseHA.Core.Grpc
 {
     public class GrpcExceptionInterceptor : Interceptor
     {

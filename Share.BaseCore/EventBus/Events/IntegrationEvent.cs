@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace Share.BaseCore.EventBus.Events
+namespace BaseHA.Core.EventBus.Events
 {
     //sự kiện tích hợp để đăng ký
     public class IntegrationEvent

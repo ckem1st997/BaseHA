@@ -15,7 +15,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Share.BaseCore.Kafka
+namespace BaseHA.Core.Kafka
 {
     public class KafKaConnection : IKafKaConnection
     {

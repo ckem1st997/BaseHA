@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Context;
-using Share.BaseCore.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -18,9 +17,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using BaseHA.Core.Extensions;
 
-
-namespace Share.BaseCore.Behaviors
+namespace BaseHA.Core.Behaviors
 {
     //check connect db khi có request xuống lấy db
     public class TransactionBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
@@ -40,7 +39,7 @@ namespace Share.BaseCore.Behaviors
         {
             var response = default(TResponse);
             var typeName = request.GetGenericTypeName();
-          //  bool count= _dbContext.ChangeTracker.Entries<BaseEntity>().Any();
+            //  bool count= _dbContext.ChangeTracker.Entries<BaseEntity>().Any();
             try
             {
 
@@ -83,7 +82,7 @@ namespace Share.BaseCore.Behaviors
                 if (_currentTransaction != null)
                     return null;
 
-                _currentTransaction = await this._dbContext.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted);
+                _currentTransaction = await _dbContext.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted);
 
                 return _currentTransaction;
             }
@@ -97,7 +96,7 @@ namespace Share.BaseCore.Behaviors
 
                 try
                 {
-                    await this._dbContext.SaveChangesAsync();
+                    await _dbContext.SaveChangesAsync();
                     await transaction.CommitAsync();
                 }
                 catch

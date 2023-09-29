@@ -1,4 +1,4 @@
-﻿using Share.BaseCore.Base;
+﻿using BaseHA.Core.Base;
 
 namespace BaseHA.Application.ModelDto.DTO
 {

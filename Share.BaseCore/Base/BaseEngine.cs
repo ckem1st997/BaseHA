@@ -5,12 +5,12 @@ using System.Reflection;
 using Autofac;
 using Autofac.Core;
 using Autofac.Extensions.DependencyInjection;
-using Share.BaseCore.Extensions;
+using BaseHA.Core.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Share.BaseCore.Base
+namespace BaseHA.Core.Base
 {
     /// <summary>
     /// </summary>

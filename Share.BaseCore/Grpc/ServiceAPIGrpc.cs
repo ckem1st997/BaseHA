@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Share.BaseCore.Grpc
+namespace BaseHA.Core.Grpc
 {
     public static class ServiceAPIGrpc
     {

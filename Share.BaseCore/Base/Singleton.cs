@@ -1,4 +1,4 @@
-﻿namespace Share.BaseCore.Base
+﻿namespace BaseHA.Core.Base
 {
     /// <summary>
     /// A statically compiled "singleton" used to store objects throughout the 

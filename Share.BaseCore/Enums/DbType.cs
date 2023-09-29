@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Share.BaseCore.Enums
+namespace BaseHA.Core.Enums
 {
     public enum DbType
     {

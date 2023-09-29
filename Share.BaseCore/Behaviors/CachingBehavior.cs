@@ -2,6 +2,8 @@
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using BaseHA.Core.Cache;
+using BaseHA.Core.Cache.CacheName;
 using EasyCaching.Core;
 using MediatR;
 using Microsoft.Extensions.Caching.Distributed;
@@ -10,10 +12,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Serilog;
-using Share.BaseCore.Cache;
-using Share.BaseCore.Cache.CacheName;
 
-namespace Share.BaseCore.Behaviors
+namespace BaseHA.Core.Behaviors
 {
     public class CachingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
         where TRequest : ICacheableMediatrQuery

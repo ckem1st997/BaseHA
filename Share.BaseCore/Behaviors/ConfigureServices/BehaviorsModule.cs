@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using BaseHA.Core.Behaviors;
 using FluentValidation;
 using MediatR;
 using System;
@@ -8,7 +9,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Share.BaseCore.Behaviors.ConfigureServices
+namespace BaseHA.Core.Behaviors.ConfigureServices
 {
     public class BehaviorsModule : Autofac.Module
     {

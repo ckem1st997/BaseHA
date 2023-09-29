@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Share.BaseCore.GraphQL
+namespace BaseHA.Core.GraphQL
 {
     public class HttpRequestInterceptor : DefaultHttpRequestInterceptor
     {

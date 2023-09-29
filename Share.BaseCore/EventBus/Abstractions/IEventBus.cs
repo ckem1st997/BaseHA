@@ -1,7 +1,7 @@
-﻿using Share.BaseCore.EventBus.Events;
+﻿using BaseHA.Core.EventBus.Events;
 using System.Threading.Tasks;
 
-namespace Share.BaseCore.EventBus.Abstractions
+namespace BaseHA.Core.EventBus.Abstractions
 {
     public interface IEventBus
     {
@@ -9,7 +9,7 @@ namespace Share.BaseCore.EventBus.Abstractions
         /// Xuất bản một tin nhắn.
         /// </summary>
         /// <param name="event"></param>
-        bool Publish(IntegrationEvent @event, string Topic="");
+        bool Publish(IntegrationEvent @event, string Topic = "");
         Task<bool> PublishAsync(IntegrationEvent @event, string Topic = "");
 
         bool IsConnectedConsumer();

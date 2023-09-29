@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using System.Data;
 
-namespace Share.BaseCore.Extensions
+namespace BaseHA.Core.Extensions
 {
     public class JsonTypeHandler<T> : SqlMapper.TypeHandler<T>
     {

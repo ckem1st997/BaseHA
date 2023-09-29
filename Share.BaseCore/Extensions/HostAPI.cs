@@ -13,11 +13,11 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Share.BaseCore.Extensions
+namespace BaseHA.Core.Extensions
 {
     public static class HostAPI
     {
-        private static string getEnv = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")??Environments.Development;
+        private static string getEnv = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? Environments.Development;
 
         public static Serilog.ILogger CreateSerilogLogger(IConfiguration configuration, string nameApp)
         {
@@ -26,7 +26,7 @@ namespace Share.BaseCore.Extensions
             var logstashUrl = configuration["Serilog:LogstashgUrl"];
             return new LoggerConfiguration()
                     .MinimumLevel.Verbose()
-                    .Enrich.WithProperty("ApplicationContext-"+getEnv, nameApp)
+                    .Enrich.WithProperty("ApplicationContext-" + getEnv, nameApp)
                     .Enrich.FromLogContext()
                     .WriteTo.Console()
                    .WriteTo.Http(string.IsNullOrWhiteSpace(logstashUrl) ? "http://logstash:5044" : logstashUrl)
@@ -49,7 +49,7 @@ namespace Share.BaseCore.Extensions
 
         public static void LogStartUp<T>(string[] args, int portHttp1AndHttp2, int portHttp2) where T : class
         {
-            Log.Information("Starting up: "+ getEnv);
+            Log.Information("Starting up: " + getEnv);
             CreateHostBuilder<T>(args, portHttp1AndHttp2, portHttp2).Build().Run();
             WebApplication.CreateBuilder(new WebApplicationOptions
             {

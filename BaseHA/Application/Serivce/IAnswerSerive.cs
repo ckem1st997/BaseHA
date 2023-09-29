@@ -1,14 +1,15 @@
 ﻿using BaseHA.Application.ModelDto.DTO;
+using BaseHA.Core.Extensions;
 using BaseHA.Domain.Entity;
 using BaseHA.Models.SearchModel;
 using Dapper;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Share.BaseCore.Base;
-using Share.BaseCore.Extensions;
-using Share.BaseCore.IRepositories;
 using System.Data;
 using System.Text;
+using BaseHA.Core.Extensions;
+using BaseHA.Core.IRepositories;
+using BaseHA.Core.Base;
 
 namespace BaseHA.Application.Serivce
 {

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Share.BaseCore.Extensions;
+using BaseHA.Core.Base;
+using BaseHA.Core.Extensions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,7 +12,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Share.BaseCore.Base
+namespace BaseHA.Core.Base
 {
     /// <summary>
     /// Represents a common helper

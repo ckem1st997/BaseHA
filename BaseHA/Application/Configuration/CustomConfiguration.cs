@@ -15,14 +15,14 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Share.BaseCore.CustomConfiguration;
 using BaseHA.Controllers;
 using Serilog;
 using Newtonsoft.Json.Serialization;
-using Share.BaseCore.Filters;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using BaseHA.Application.Serivce;
 using BaseHA.Domain.Contexts;
+using BaseHA.Core.Filters;
+using BaseHA.Core.CustomConfiguration;
 
 namespace BaseHA.Application.Configuration
 {

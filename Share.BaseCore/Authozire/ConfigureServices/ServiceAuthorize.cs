@@ -12,8 +12,8 @@ using Nest;
 using Nest.JsonNetSerializer;
 using Newtonsoft.Json;
 using Serilog;
-using Share.BaseCore.Extensions;
-using Share.BaseCore.Filters;
+using BaseHA.Core.Extensions;
+using BaseHA.Core.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +21,7 @@ using System.Text;
 using System.Threading.Tasks;
 using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
-namespace Share.BaseCore.Authozire.ConfigureServices
+namespace BaseHA.Core.Authozire.ConfigureServices
 {
     public static class ServiceAuthorize
     {
@@ -67,7 +67,7 @@ namespace Share.BaseCore.Authozire.ConfigureServices
                         // If the request is for our hub...
                         var path = context.HttpContext.Request.Path;
                         if (!string.IsNullOrEmpty(accessToken) &&
-                            (path.StartsWithSegments("/signalr")))
+                            path.StartsWithSegments("/signalr"))
                         {
                             // Read the token out of the query string
                             context.Token = accessToken;
@@ -86,8 +86,8 @@ namespace Share.BaseCore.Authozire.ConfigureServices
                     .AllowAnyHeader()
                     .WithExposedHeaders("Grpc-Status", "Grpc-Message", "Grpc-Encoding", "Grpc-Accept-Encoding");
             }));
-        }     
-        
+        }
+
         public static void AddApiElastic(this IServiceCollection services, IConfiguration Configuration)
         {
 

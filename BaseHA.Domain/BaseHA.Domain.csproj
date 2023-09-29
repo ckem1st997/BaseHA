@@ -8,13 +8,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Share.BaseCore\Share.BaseCore.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<!--<PackageReference Include="EfCore.SchemaCompare" Version="6.0.0" />-->
 		<PackageReference Include="EntityFrameworkCore.Scaffolding.Handlebars" Version="6.0.3" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.4" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Share.BaseCore\BaseHA.Core.csproj" />
 	</ItemGroup>
 
 </Project>

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Share.BaseCore.EventBus.Abstractions
+namespace BaseHA.Core.EventBus.Abstractions
 {
     public interface IDynamicIntegrationEventHandler
     {

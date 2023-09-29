@@ -1,14 +1,14 @@
 ﻿using Autofac;
+using BaseHA.Core.EventBus;
+using BaseHA.Core.EventBus.Abstractions;
+using BaseHA.Core.EventBus.Events;
+using BaseHA.Core.Extensions;
 using Confluent.Kafka;
 using KafKa.Net;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Polly.Retry;
 using Serilog;
-using Share.BaseCore.EventBus;
-using Share.BaseCore.EventBus.Abstractions;
-using Share.BaseCore.EventBus.Events;
-using Share.BaseCore.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +17,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Share.BaseCore.Kafka
+namespace BaseHA.Core.Kafka
 {
     public class EventKafKa : IEventBus, IDisposable
     {

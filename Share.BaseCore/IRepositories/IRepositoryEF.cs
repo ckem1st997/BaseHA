@@ -12,10 +12,10 @@ using System.Threading.Tasks;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
 using static Dapper.SqlMapper;
-using Share.BaseCore.Base;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using BaseHA.Core.Base;
 
-namespace Share.BaseCore.IRepositories
+namespace BaseHA.Core.IRepositories
 {
 
     public interface IDapperEF : IDisposable
@@ -49,20 +49,20 @@ namespace Share.BaseCore.IRepositories
 
         public IQueryable<T> WhereTracking(Expression<Func<T, bool>> predicate);
         public Task<IQueryable<T>> WhereTrackingAsync(Expression<Func<T, bool>> predicate);
-        Task<T?> GetByIdsync(string id, CancellationToken cancellationToken = default(CancellationToken), bool Tracking = false);
+        Task<T?> GetByIdsync(string id, CancellationToken cancellationToken = default, bool Tracking = false);
         IEnumerable<T> GetList(Func<T, bool> filter);
-        Task<T> AddAsync(T entity, CancellationToken cancellationToken = default(CancellationToken));
+        Task<T> AddAsync(T entity, CancellationToken cancellationToken = default);
         /// <summary>
         /// hàm này sẽ update tất cả các trường, nếu muốn tận dụng tracking thì hãy bỏ update và dùng savechange
         /// </summary>
         /// <param name="entity"></param>
         void Update(T entity);
         void Update(IEnumerable<T> entity);
-        public Task<bool> UpdateAsync(T entity, CancellationToken cancellationToken = default(CancellationToken));
+        public Task<bool> UpdateAsync(T entity, CancellationToken cancellationToken = default);
         void Delete(T entity);
         void Delete(IEnumerable<T> entity);
-        Task<int> SaveChangesConfigureAwaitAsync(bool configure = false, CancellationToken cancellationToken = default(CancellationToken));
-        Task<IEnumerable<T>> DeteleSoftDelete(IEnumerable<string> ids, CancellationToken cancellationToken = default(CancellationToken));
-        Task<T> DeteleSoftDelete(string id, CancellationToken cancellationToken = default(CancellationToken));
+        Task<int> SaveChangesConfigureAwaitAsync(bool configure = false, CancellationToken cancellationToken = default);
+        Task<IEnumerable<T>> DeteleSoftDelete(IEnumerable<string> ids, CancellationToken cancellationToken = default);
+        Task<T> DeteleSoftDelete(string id, CancellationToken cancellationToken = default);
     }
 }

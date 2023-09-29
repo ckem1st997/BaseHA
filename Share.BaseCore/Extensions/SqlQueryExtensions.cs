@@ -8,7 +8,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Share.BaseCore.Extensions
+namespace BaseHA.Core.Extensions
 {
     internal static class SqlQueryExtensions
     {

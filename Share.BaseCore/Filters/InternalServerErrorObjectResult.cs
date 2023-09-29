@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Share.BaseCore.Filters
+namespace BaseHA.Core.Filters
 {
 
     //respone return error

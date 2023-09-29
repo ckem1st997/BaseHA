@@ -1,16 +1,16 @@
-﻿using MediatR;
+﻿using BaseHA.Core.Extensions;
+using MediatR;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Serilog;
-using Share.BaseCore.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Share.BaseCore.Behaviors
+namespace BaseHA.Core.Behaviors
 {
     // log khi co Request
     // chạy đầu tiên sau đó đến các Behavior tiếp theo như cache, logging, validation, ...

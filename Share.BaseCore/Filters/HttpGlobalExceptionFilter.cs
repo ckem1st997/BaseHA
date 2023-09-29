@@ -5,15 +5,16 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
-using Share.BaseCore.Base;
-using Share.BaseCore.Extensions;
+using BaseHA.Core.Extensions;
+using BaseHA.Core.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using BaseHA.Core.Base;
 
-namespace Share.BaseCore.Filters
+namespace BaseHA.Core.Filters
 {
     /// custom response nếu có lỗi trong server ở phần base xảy ra ngoài ý muốn
     // bộ lọc Exceptions toàn server

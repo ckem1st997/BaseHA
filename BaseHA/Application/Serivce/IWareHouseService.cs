@@ -9,12 +9,12 @@ using Microsoft.EntityFrameworkCore;
 using Nest;
 using NuGet.Packaging.Signing;
 using NuGet.Protocol.Core.Types;
-using Share.BaseCore.Base;
-using Share.BaseCore.Extensions;
-using Share.BaseCore.IRepositories;
 using System.Data;
 using System.Text;
 using System.Threading.Tasks;
+using BaseHA.Core.Extensions;
+using BaseHA.Core.IRepositories;
+using BaseHA.Core.Base;
 
 namespace BaseHA.Application.Serivce
 {

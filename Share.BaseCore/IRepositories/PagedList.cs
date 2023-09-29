@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Share.BaseCore.IRepositories
+namespace BaseHA.Core.IRepositories
 {
     public class PagedList<T> where T : class
     {

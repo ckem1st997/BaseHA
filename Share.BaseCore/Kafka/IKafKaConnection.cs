@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Share.BaseCore.Kafka
+namespace BaseHA.Core.Kafka
 {
     /// <summary>
     /// get Producer and  Consumer

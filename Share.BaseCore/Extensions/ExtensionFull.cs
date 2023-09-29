@@ -1,8 +1,8 @@
-using Share.BaseCore.Base;
-using Share.BaseCore.IRepositories;
+using BaseHA.Core.Base;
+using BaseHA.Core.IRepositories;
 using System;
 
-namespace Share.BaseCore.Extensions
+namespace BaseHA.Core.Extensions
 {
     public static class ExtensionFull
     {

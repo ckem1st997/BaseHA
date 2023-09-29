@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Share.BaseCore
+namespace BaseHA.Core.Base
 {
     public abstract class BaseEntityGeneric<T>
     {

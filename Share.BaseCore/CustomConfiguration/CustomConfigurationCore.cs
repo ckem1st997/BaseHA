@@ -12,13 +12,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Nest;
 using Serilog;
-using Share.BaseCore.Authozire;
-using Share.BaseCore.Base;
-using Share.BaseCore.Enums;
-using Share.BaseCore.Extensions;
-using Share.BaseCore.Filters;
-using Share.BaseCore.IRepositories;
-using Share.BaseCore.Repositories;
+using BaseHA.Core.Authozire;
+using BaseHA.Core.Extensions;
+using BaseHA.Core.Filters;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -27,8 +23,13 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
+using BaseHA.Core.IRepositories;
+using BaseHA.Core.Base;
+using BaseHA.Core.Enums;
+using BaseHA.Core.CustomConfiguration;
+using BaseHA.Core.Repositories;
 
-namespace Share.BaseCore.CustomConfiguration
+namespace BaseHA.Core.CustomConfiguration
 {
     public static class CustomConfigurationCore
     {

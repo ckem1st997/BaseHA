@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Share.BaseCore;
+using BaseHA.Core.Base;
 
 namespace BaseHA.Domain.Entity
 {

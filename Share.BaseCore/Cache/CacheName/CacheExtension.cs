@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using StackExchange.Redis;
 
-namespace Share.BaseCore.Cache.CacheName
+namespace BaseHA.Core.Cache.CacheName
 {
     public class CacheExtension : ICacheExtension
     {

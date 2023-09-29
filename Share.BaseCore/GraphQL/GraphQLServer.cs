@@ -1,4 +1,5 @@
-﻿using Google.Protobuf.WellKnownTypes;
+﻿using BaseHA.Core.GraphQL;
+using Google.Protobuf.WellKnownTypes;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,11 +9,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Share.BaseCore.GraphQL
+namespace BaseHA.Core.GraphQL
 {
     public static class GraphQLServer
     {
-        public static void AddGraphQLServer<T,TContext>(this IServiceCollection services) where T: class where TContext: DbContext
+        public static void AddGraphQLServer<T, TContext>(this IServiceCollection services) where T : class where TContext : DbContext
         {
             services.AddGraphQLServer().AddQueryType<T>().AddHttpRequestInterceptor<HttpRequestInterceptor>().AddFiltering()
         .AddSorting()

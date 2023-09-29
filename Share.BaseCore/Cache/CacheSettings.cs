@@ -1,4 +1,4 @@
-﻿namespace Share.BaseCore.Cache
+﻿namespace BaseHA.Core.Cache
 {
     public class CacheSettings
     {

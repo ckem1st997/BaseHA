@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Share.BaseCore.Base
+namespace BaseHA.Core.Base
 {
     public class FancytreeItem
     {
-        
+
         public bool active { get; set; }
 
         /// <summary>Optional array of child nodes.</summary>

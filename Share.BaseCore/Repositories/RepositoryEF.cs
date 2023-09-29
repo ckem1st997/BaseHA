@@ -7,7 +7,6 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using EFCore.BulkExtensions;
-using Share.BaseCore.IRepositories;
 using Nest;
 using System.Data.Common;
 using Dapper;
@@ -15,12 +14,14 @@ using Confluent.Kafka;
 using Microsoft.Data.SqlClient;
 using StackExchange.Redis;
 using static Dapper.SqlMapper;
-using Share.BaseCore.Base;
-using Share.BaseCore.DiagnosticListener;
+using BaseHA.Core.Base;
+using BaseHA.Core.DiagnosticListener;
 using System.Reflection;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using BaseHA.Core.Base;
+using BaseHA.Core.IRepositories;
 
-namespace Share.BaseCore.Repositories
+namespace BaseHA.Core.Repositories
 {
     public class RepositoryEF<T> : IRepositoryEF<T> where T : BaseEntity
     {
@@ -44,7 +45,7 @@ namespace Share.BaseCore.Repositories
 
 
 
-        public virtual async Task<T> AddAsync(T entity, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<T> AddAsync(T entity, CancellationToken cancellationToken = default)
         {
 
             cancellationToken.ThrowIfCancellationRequested();
@@ -69,7 +70,7 @@ namespace Share.BaseCore.Repositories
             _dbSet.Update(entity);
         }
 
-        public virtual async Task<bool> UpdateAsync(T entity, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<bool> UpdateAsync(T entity, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
             // ThrowIfDisposed();

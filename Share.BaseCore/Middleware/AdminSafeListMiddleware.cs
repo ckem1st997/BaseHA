@@ -8,7 +8,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Share.BaseCore.Middleware
+namespace BaseHA.Core.Middleware
 {
     /// <summary>
     /// app.UseMiddleware<AdminSafeListMiddleware>(Configuration["AdminSafeList"]);

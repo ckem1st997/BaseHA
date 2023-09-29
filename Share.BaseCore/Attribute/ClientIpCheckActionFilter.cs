@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BaseHA.Core.Authozire;
+using BaseHA.Core.Base;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
-using Share.BaseCore.Authozire;
-using Share.BaseCore.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +11,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Share.BaseCore.Attribute
+namespace BaseHA.Core.Attribute
 {
     /// <summary>
     /// ignore ip not in list ip

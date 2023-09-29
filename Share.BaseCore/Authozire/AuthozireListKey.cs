@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Share.BaseCore.Base;
+using BaseHA.Core.Base;
 
-namespace Share.BaseCore.Authozire
+namespace BaseHA.Core.Authozire
 {
     public static class AuthozireListKey
     {
@@ -110,20 +110,20 @@ namespace Share.BaseCore.Authozire
         public static List<string> GetAllKey()
         {
             List<string> strings = new List<string>();
-            strings.AddRange(typeof(AuthozireListKey.WarehouseKey.WarehouseCreateKey).GetAllPublicConstantValues<string>());
-            strings.AddRange(typeof(AuthozireListKey.WarehouseKey.WarehouseEditKey).GetAllPublicConstantValues<string>());
-            strings.AddRange(typeof(AuthozireListKey.WarehouseKey.WarehouseDeleteKey).GetAllPublicConstantValues<string>());
-            strings.AddRange(typeof(AuthozireListKey.WarehouseKey.WarehouseReadKey).GetAllPublicConstantValues<string>());
+            strings.AddRange(typeof(WarehouseKey.WarehouseCreateKey).GetAllPublicConstantValues<string>());
+            strings.AddRange(typeof(WarehouseKey.WarehouseEditKey).GetAllPublicConstantValues<string>());
+            strings.AddRange(typeof(WarehouseKey.WarehouseDeleteKey).GetAllPublicConstantValues<string>());
+            strings.AddRange(typeof(WarehouseKey.WarehouseReadKey).GetAllPublicConstantValues<string>());
             //
-            strings.AddRange(typeof(AuthozireListKey.MasterKey.MasterCreateKey).GetAllPublicConstantValues<string>());
-            strings.AddRange(typeof(AuthozireListKey.MasterKey.MasterEditKey).GetAllPublicConstantValues<string>());
-            strings.AddRange(typeof(AuthozireListKey.MasterKey.MasterDeleteKey).GetAllPublicConstantValues<string>());
-            strings.AddRange(typeof(AuthozireListKey.MasterKey.MasterReadKey).GetAllPublicConstantValues<string>());
+            strings.AddRange(typeof(MasterKey.MasterCreateKey).GetAllPublicConstantValues<string>());
+            strings.AddRange(typeof(MasterKey.MasterEditKey).GetAllPublicConstantValues<string>());
+            strings.AddRange(typeof(MasterKey.MasterDeleteKey).GetAllPublicConstantValues<string>());
+            strings.AddRange(typeof(MasterKey.MasterReadKey).GetAllPublicConstantValues<string>());
             //
-            strings.AddRange(typeof(AuthozireListKey.GlobalKey.GlobalCreateKey).GetAllPublicConstantValues<string>());
-            strings.AddRange(typeof(AuthozireListKey.GlobalKey.GlobalDeleteKey).GetAllPublicConstantValues<string>());
-            strings.AddRange(typeof(AuthozireListKey.GlobalKey.GlobalEditKey).GetAllPublicConstantValues<string>());
-            strings.AddRange(typeof(AuthozireListKey.GlobalKey.GlobalReadKey).GetAllPublicConstantValues<string>());
+            strings.AddRange(typeof(GlobalKey.GlobalCreateKey).GetAllPublicConstantValues<string>());
+            strings.AddRange(typeof(GlobalKey.GlobalDeleteKey).GetAllPublicConstantValues<string>());
+            strings.AddRange(typeof(GlobalKey.GlobalEditKey).GetAllPublicConstantValues<string>());
+            strings.AddRange(typeof(GlobalKey.GlobalReadKey).GetAllPublicConstantValues<string>());
 
             return strings;
         }

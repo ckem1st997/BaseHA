@@ -8,7 +8,7 @@ using System.Collections;
 using System.Threading;
 using NetTopologySuite.Utilities;
 
-namespace Share.BaseCore.Extensions
+namespace BaseHA.Core.Extensions
 {
     public static class CollectionExtensions
     {
@@ -43,8 +43,8 @@ namespace Share.BaseCore.Extensions
           params string[] members)
         {
             DataTable dataTable = new DataTable();
-            using (ObjectReader objectReader = ObjectReader.Create<T>(data, members))
-                dataTable.Load((IDataReader)objectReader);
+            using (ObjectReader objectReader = ObjectReader.Create(data, members))
+                dataTable.Load(objectReader);
             return dataTable;
         }
     }

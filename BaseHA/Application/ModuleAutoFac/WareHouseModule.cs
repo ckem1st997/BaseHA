@@ -3,15 +3,15 @@ using Autofac.Core;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Share.BaseCore.Behaviors;
-using Share.BaseCore.Repositories;
+using BaseHA.Core.Behaviors;
+using BaseHA.Core.Repositories;
 using System;
 using Nest;
-using Share.BaseCore.IRepositories;
-using Share.BaseCore.CustomConfiguration;
-using Share.BaseCore.Base;
-using Share.BaseCore.Extensions;
+using BaseHA.Core.IRepositories;
 using BaseHA.Domain.Contexts;
+using BaseHA.Core.Base;
+using BaseHA.Core.Extensions;
+using BaseHA.Core.CustomConfiguration;
 
 namespace BaseHA.Application.ModuleAutoFac
 {

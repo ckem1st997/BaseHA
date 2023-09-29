@@ -1,10 +1,11 @@
-﻿using BaseHA.Domain.Entity;
+﻿using BaseHA.Core.Extensions;
+using BaseHA.Domain.Entity;
 using BaseHA.Models.SearchModel;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Share.BaseCore.Base;
-using Share.BaseCore.Extensions;
-using Share.BaseCore.IRepositories;
+using BaseHA.Core.Extensions;
+using BaseHA.Core.IRepositories;
+using BaseHA.Core.Base;
 
 namespace BaseHA.Application.Serivce
 {

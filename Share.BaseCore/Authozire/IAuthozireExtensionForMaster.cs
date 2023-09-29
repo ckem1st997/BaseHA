@@ -5,7 +5,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Share.BaseCore.Authozire
+namespace BaseHA.Core.Authozire
 {
     /// <summary>
     /// using in service master manager authozire
