@@ -14,7 +14,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Share.BaseCore\BaseHA.Core.csproj" />
+	  <ProjectReference Include="..\BaseHA.Core\BaseHA.Core.csproj" />
 	</ItemGroup>
 
 </Project>
