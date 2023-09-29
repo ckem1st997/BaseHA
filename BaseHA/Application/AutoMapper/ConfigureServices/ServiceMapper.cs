@@ -12,6 +12,7 @@ namespace BaseHA.Application.AutoMapper.ConfigureServices
         public static void AddMapper(this IServiceCollection services)
         {
             services.AddAutoMapper(typeof(WareHouseCommandProfile).Assembly);
+            services.AddAutoMapper(typeof(BeginningWareHouseProfile).Assembly);
         }
     }
 }
