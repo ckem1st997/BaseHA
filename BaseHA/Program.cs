@@ -48,7 +48,7 @@ builder.Services.AddControllersWithViews();
 var services = builder.Services;
 var Configuration = builder.Configuration;
 //
-services.AddDataProtection();
+services.AddDataProtection().SetApplicationName("Base");
 services.AddAntiforgery();
 
 services.AddMapper();
