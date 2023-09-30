@@ -49,12 +49,7 @@ var services = builder.Services;
 var Configuration = builder.Configuration;
 //
 services.AddDataProtection();
-services.AddAntiforgery(options =>
-{
-    options.HeaderName = "X-CSRF-TOKEN"; // Tên của header chứa token
-    options.SuppressXFrameOptionsHeader = false; // Vô hiệu hóa X-Frame-Options header
-    // Các tùy chọn khác
-});
+services.AddAntiforgery();
 
 services.AddMapper();
 services.AddMvc();
