@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using BaseHA.Core;
 using BaseHA.Core.Cache;
@@ -48,7 +48,14 @@ builder.Services.AddControllersWithViews();
 var services = builder.Services;
 var Configuration = builder.Configuration;
 //
-services.AddDataProtection().ProtectKeysWithCertificate("thumbprint");
+services.AddDataProtection();
+services.AddAntiforgery(options =>
+{
+    options.HeaderName = "X-CSRF-TOKEN"; // Tên của header chứa token
+    options.SuppressXFrameOptionsHeader = false; // Vô hiệu hóa X-Frame-Options header
+    // Các tùy chọn khác
+});
+
 services.AddMapper();
 services.AddMvc();
 services.AddValidator();
