@@ -36,6 +36,7 @@ namespace BaseHA.Core.CustomConfiguration
         public static void AddCustomConfigurationCore<TDbContext>(this IServiceCollection services, IConfiguration configuration, string nameConnect, DbType dbType = DbType.MSSQL) where TDbContext : DbContext
         {
             var sqlConnect = configuration.GetConnectionString(nameConnect);
+            Console.WriteLine("Sql ConnectString: "+sqlConnect);
             services.AddDbContext<TDbContext>(options =>
             {
                 switch (dbType)
