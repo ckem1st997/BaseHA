@@ -40,6 +40,7 @@ using BaseHA.Application.AutoMapper.WareHouses;
 using AutoMapper;
 using BaseHA.Core.Authozire.ConfigureServices;
 using BaseHA.Core.Extensions;
+using Microsoft.AspNetCore.DataProtection;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -47,6 +48,7 @@ builder.Services.AddControllersWithViews();
 var services = builder.Services;
 var Configuration = builder.Configuration;
 //
+services.AddDataProtection().ProtectKeysWithCertificate("thumbprint");
 services.AddMapper();
 services.AddMvc();
 services.AddValidator();
