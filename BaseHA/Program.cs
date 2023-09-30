@@ -41,6 +41,8 @@ using AutoMapper;
 using BaseHA.Core.Authozire.ConfigureServices;
 using BaseHA.Core.Extensions;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -48,7 +50,12 @@ builder.Services.AddControllersWithViews();
 var services = builder.Services;
 var Configuration = builder.Configuration;
 //
-services.AddDataProtection().SetApplicationName("Base");
+services.AddDataProtection().SetApplicationName("Base")
+    .UseCryptographicAlgorithms(new AuthenticatedEncryptorConfiguration
+{
+    EncryptionAlgorithm = EncryptionAlgorithm.AES_256_CBC,
+    ValidationAlgorithm = ValidationAlgorithm.HMACSHA256
+}).PersistKeysToFileSystem(new DirectoryInfo(@"\\server\share\directory\")); ;
 services.AddAntiforgery();
 
 services.AddMapper();
