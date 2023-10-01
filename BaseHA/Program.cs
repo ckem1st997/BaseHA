@@ -56,20 +56,10 @@ if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == Environments
 {
     var redis = ConnectionMultiplexer.Connect("192.168.3.130:6379");
     services.AddDataProtection().SetApplicationName("Base")
-        .UseCryptographicAlgorithms(new AuthenticatedEncryptorConfiguration
-        {
-            EncryptionAlgorithm = EncryptionAlgorithm.AES_256_CBC,
-            ValidationAlgorithm = ValidationAlgorithm.HMACSHA256
-        }).PersistKeysToStackExchangeRedis(redis, "DataProtection-Keys");
+        .PersistKeysToStackExchangeRedis(redis, "DataProtection-Keys");
 }
-
 else
-    services.AddDataProtection().SetApplicationName("Base")
-    .UseCryptographicAlgorithms(new AuthenticatedEncryptorConfiguration
-    {
-        EncryptionAlgorithm = EncryptionAlgorithm.AES_256_CBC,
-        ValidationAlgorithm = ValidationAlgorithm.HMACSHA256
-    });
+    services.AddDataProtection().SetApplicationName("Base");
 services.AddAntiforgery();
 
 services.AddMapper();
