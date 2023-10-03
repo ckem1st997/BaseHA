@@ -12,7 +12,7 @@ namespace BaseHA.Application.ModelDto
         public string? AnswerVn { get; set; }
 
 
-        public bool Inactive { get; set; }
+        public bool Inactive { get; set; } 
 
         public virtual CategoryCommands? CategoryCommands { get; set; }
     }

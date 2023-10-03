@@ -35,8 +35,8 @@
         <div class="page-data">
             <div class="row search-form">
                 <form style="
-    display: flex;
-    align-items: center;">
+                            display: flex;
+                            align-items: center;">
                     <div class="search-label">
                         Tìm kiếm:
                     </div>
@@ -50,12 +50,23 @@
                     <div class="col-md-1">
                         <div class="form-group form-group-sm">
                             <button type="submit" id="btnSearch" class="btn btn-default btn-sm">
-                                <i class="fa fa-search"></i>GetData
+                                <i class="fa fa-search"></i>Tìm
                             </button>
                         </div>
                     </div>
+                   
+                        <div style="display: flex;
+                                align-items: center;">
+                            <div class="search-label">
+                                Tên kịch bản:
+                            </div>
+                                    <div id="selected">                                            
+                                    </div>                              
+                         </div>
+                    
                 </form>
             </div>
+            
             <div class="row full-height">
                 @(Html.Kendo().Grid<IntentCommands>()
                     .Name("grd")
@@ -67,11 +78,30 @@
                         columns.Bound(x => x.IntentVn).ClientTemplate("#=grd.tmp.name(IntentVn)#").Title("Ý định");
                         columns.Bound(x => x.Inactive).ClientTemplate("#=grd.tmp.activate(!Inactive)#").Title("Trạng thái");
                     })
+                    .ToolBar(toolbar =>
+                    {
+                        toolbar.Create();
+                        toolbar.Save();
+                    })
+                    .Events(e => e.BeforeEdit("master.addDefault"))
+                    .Editable(editable => editable.Mode(GridEditMode.InCell))
                     .DataSource(dataSource => dataSource
                     .Ajax()
+                    .Events(e => e.Sync("master.refresh"))
                     .ServerOperation(true)
+                    .Model(model =>
+                    {
+                        model.Id(p => p.Id);                       
+                        model.Field(p => p.CategoryId);
+                        model.Field(p => p.IntentVn);
+                        model.Field(p => p.Inactive);
+                        
+                    })
                     .PageSize(setting.GridPageSize)
                     .Read(read => read.Action("Get", "Intent").Data("grd.data"))
+                    .Create(add => add.Action("Add", "Intent"))
+                    .Update(update => update.Action("Edit", "Intent"))
+                    .Destroy(destroy => destroy.Action("Delete", "Intent"))
                     )
                     .NoRecords()
                     .Scrollable(scr => scr.Enabled(true))
@@ -159,6 +189,7 @@
                 $el: {},
                 init: function () { }
             },
+           
             init: function () { },
             details: function (id) { },
             create: function () { },
@@ -166,6 +197,8 @@
             deletes: function () { },
             activates: function (activate, ids) { },
             refresh: function () { },
+           // refreshData: function () { },
+            addDefault: function () { },
             actionCallback: function () { },
             importExcel: function () { },
             export: function () { }
@@ -175,10 +208,13 @@
         var mnu = master.mnu;
         var btnSearch = master.btnSearch;
         var treeWareHouse = master.treeWareHouse;
+       
 
         grd.data = function () {
             var $keywords = $('#@Html.FieldIdFor(m => m.Keywords)');
             var $status = $('#@Html.FieldIdFor(m => m.ActiveStatus)');
+            
+
             var CategoryId = null;
             if (!_.isEmpty(treeWareHouse.api) && treeWareHouse.api.getActiveNode())
                 CategoryId = treeWareHouse.api.activeNode.key;
@@ -196,6 +232,8 @@
 @section Scripts {
     <script>
         // Methods
+
+
         master.details = function () {
             var id = grd.api.selectedIds()[0];
             if (id) {
@@ -266,8 +304,20 @@
                 notify({ text: 'Bạn chưa chọn bảng ghi nào !', type: 'info' });
             }
         };
-        master.refresh = function () {
-            grd.api.reload();
+
+        master.addDefault = function(data){
+                 
+            if (data.model.CategoryId == "" || data.model.CategoryId == null) {
+                data.model.CategoryId = treeWareHouse.api.activeNode.key;
+            }
+        }
+        
+        // master.refreshData = function(data){
+        //     console.log("reload data:",data)
+        // }
+
+        master.refresh = function (data) {
+           grd.api.reload();
         };
         master.actionCallback = function () {
             grd.api.reload();
@@ -298,6 +348,7 @@
             mnu.init();
             btnSearch.init();
             treeWareHouse.init();
+            
         };
 
         toolbar.init = function () {
@@ -353,6 +404,9 @@
                 activate: function (event, data) {
                     $('#@Html.FieldIdFor(m => m.Keywords)').val("")
                     var node = data.node;
+
+                    $("#selected").text(node.title);
+
                     if (node.statusNodeType !== 'loading') {
                         grd.api.resetPage();
                     }

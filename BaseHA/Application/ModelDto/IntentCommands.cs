@@ -15,7 +15,7 @@ namespace BaseHA.Application.ModelDto
         public string? IntentVn { get; set; }
 
 
-        public bool Inactive { get; set; }
+        public bool Inactive { get; set; } 
 
 
 
