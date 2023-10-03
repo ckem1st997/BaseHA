@@ -10,6 +10,7 @@ using BaseHA.Core.Extensions;
 
 namespace BaseHA.Controllers
 {
+
     public class AnswerController : Controller
     {
         private readonly ILogger<AnswerController> _logger;
