@@ -86,6 +86,7 @@ namespace BaseHA.Application.Serivce
                     where aa.NameCategory.Contains(ctx.Keywords)
                     || aa.IntentCodeEn.Contains(ctx.Keywords)
                     || aa.IntentCodeVn.Contains(ctx.Keywords)
+                    || aa.Description.Contains(ctx.Keywords)
                     select aa;
 
             if (!string.IsNullOrEmpty(ctx.CategoryId))
