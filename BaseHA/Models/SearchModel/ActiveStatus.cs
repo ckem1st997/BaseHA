@@ -31,7 +31,7 @@ namespace BaseHA.Models.SearchModel
 
         public AdminAreaSettings()
         {
-            GridPageSize = 15;
+            GridPageSize = 50;
             GridButtonCount = 5;
             GridPageSizeOptions = new string[5] { "15", "50", "100", "200", "500" };
             RichEditorFlavor = "RichEditor";
