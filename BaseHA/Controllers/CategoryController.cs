@@ -20,14 +20,14 @@ namespace BaseHA.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly ICategoryService _generic;
         private readonly IMapper _mapper;
-        
+
 
         public CategoryController(ILogger<HomeController> logger, ICategoryService generic, IMapper mapper)
         {
             _logger = logger;
             _generic = generic;
             _mapper = mapper;
-          
+
         }
 
         public IActionResult Index()
@@ -56,13 +56,13 @@ namespace BaseHA.Controllers
         {
             if (wareHouse.Id == null)
             {
-                wareHouse.Id= Guid.NewGuid().ToString();
+                wareHouse.Id = Guid.NewGuid().ToString();
             }
             if (wareHouse.NameCategory == null)
             {
                 wareHouse.NameCategory = "ORDER";
             }
-            if (wareHouse.IntentCodeEn==null)
+            if (wareHouse.IntentCodeEn == null)
             {
                 wareHouse.IntentCodeEn = wareHouse.IntentCodeVn;
             }
@@ -81,50 +81,33 @@ namespace BaseHA.Controllers
 
             if (_generic.IsIntentVnDuplicate(wareHouse.IntentCodeVn))
             {
-
-                ModelState.AddModelError("IntentCodeVn", "Mã bằng tiếng Việt đã tồn tại");
-                //return View(wareHouse);
-                /* return Ok(new ResultMessageResponse()
-                 {
-                     message = $"Mã {wareHouse.IntentCodeVn} đã tồn tại !",
-                     success = false
-                 });*/
-                return BadRequest(new ResultMessageResponse()
+                NotifyWarning($"Mã {wareHouse.IntentCodeVn} đã tồn tại !");
+                return Ok(new ResultMessageResponse()
                 {
-                    message = $"Mã {wareHouse.IntentCodeVn} đã tồn tại !",
                     success = false
                 });
             }
 
             if (_generic.IsIntentEnDuplicate(wareHouse.IntentCodeEn))
             {
-                ModelState.AddModelError("IntentCodeEn", "Mã bằng tiếng Anh đã tồn tại");
-                //return View(wareHouse);
+                NotifyWarning("Mã bằng tiếng Anh đã tồn tại !");
                 return Ok(new ResultMessageResponse()
                 {
-                    message = "Mã bằng tiếng Anh đã tồn tại !",
                     success = false
                 });
             }
+            var entity = _mapper.Map<Category>(wareHouse);
+            var res = await _generic.InsertAsync(entity);
+            if (res)
+                NotifySuccess("Thành công !");
+            else
+                NotifyWarning("Thất bại !");
+            return Ok(new ResultMessageResponse()
+            {
+                success = res
+            });
 
-           
-                var entity = _mapper.Map<Category>(wareHouse);
-                var res = await _generic.InsertAsync(entity);
-                return Ok(new ResultMessageResponse()
-                {
-                    message = res ? "Thành công !" : "Thất bại !",
-                    success = res
-                });
-           
         }
-
-       /* public  bool IsIntentEnDuplicate(string intent)
-        {
-            bool isDuplicate = _category.Table.Any(e => e.IntentCodeEn == intent);
-            return isDuplicate;
-        }*/
-
-
 
         [HttpPost]
         public async Task<IActionResult> Delete(IEnumerable<string> ids)
@@ -175,20 +158,24 @@ namespace BaseHA.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(CategoryCommands unit)
         {
-            
+
             var model = await _generic.GetByIdAsync(unit.Id, true);
             if (model == null)
-                return NotFound(new ResultMessageResponse()
+            {
+                NotifyWarning("Không tồn tại bản ghi !");
+                return Ok(new ResultMessageResponse()
                 {
                     message = "Không tồn tại bản ghi !",
                     success = false
                 });
+            }
 
-            if(unit.IntentCodeVn != model.IntentCodeVn)
+
+            if (unit.IntentCodeVn != model.IntentCodeVn)
             {
-                return BadRequest(new ResultMessageResponse()
+                NotifyWarning(" Mã kịch bản không được thay đổi !");
+                return Ok(new ResultMessageResponse()
                 {
-                    message = " Mã kịch bản không được thay đổi !",
                     success = false,
                 });
             }
@@ -196,14 +183,17 @@ namespace BaseHA.Controllers
             unit.IntentCodeEn = unit.IntentCodeVn;
             var entity = _mapper.Map(unit, model);
             var res = await _generic.UpdateAsync(entity);
+            if (res)
+                NotifySuccess("Thành công !");
+            else
+                NotifyWarning("Thất bại !");
             return Ok(new ResultMessageResponse()
             {
-                message = res ? "Thành công !" : "Thất bại !",
                 success = res
             });
         }
 
-        
+
 
 
         /// <summary>
