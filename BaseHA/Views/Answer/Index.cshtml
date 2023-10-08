@@ -50,34 +50,61 @@
                     <div class="col-md-1">
                         <div class="form-group form-group-sm">
                             <button type="submit" id="btnSearch" class="btn btn-default btn-sm">
-                                <i class="fa fa-search"></i>GetData
+                                <i class="fa fa-search"></i>Tìm
                             </button>
+                        </div>
+                    </div>
+
+                    <div style="display: flex;
+                                align-items: center;">
+                        <div class="search-label">
+                            Tên kịch bản:
+                        </div>
+                        <div id="selected">
                         </div>
                     </div>
                 </form>
             </div>
             <div class="row full-height">
-                @(Html.Kendo().Grid<AnswerCommands>()
-                    .Name("grd")
-                    .HtmlAttributes(new { style = "height: 100%" })
-                    .Columns(columns =>
-                    {
-                        columns.Select().Width(30);
-                        columns.Bound(x => x.Id).Width(300).Hidden();
-                        columns.Bound(x => x.AnswerVn).ClientTemplate("#=grd.tmp.name(AnswerVn)#").Title("Câu trả lời");
-                        columns.Bound(x => x.Inactive).ClientTemplate("#=grd.tmp.activate(!Inactive)#").Title("Trạng thái");
-                    })
-                    .DataSource(dataSource => dataSource
-                    .Ajax()
-                    .ServerOperation(true)
+                @(
+                    Html.Kendo().Grid<AnswerCommands>()
+                        .Name("grd")
+                        .HtmlAttributes(new { style = "height: 100%" })
+                        .Columns(columns =>
+                        {
+                            columns.Select().Width(30);
+                            columns.Bound(x => x.Id).Width(300).Hidden();
+                            columns.Bound(x => x.AnswerVn).ClientTemplate("#=grd.tmp.name(AnswerVn)#").Title("Câu trả lời");
+                            columns.Bound(x => x.Inactive).ClientTemplate("#=grd.tmp.activate(!Inactive)#").Title("Trạng thái");
+                        })
+                        .ToolBar(toolbar =>
+                        {
+                            toolbar.Create();
+                            toolbar.Save();
+                        })
+                        .Editable(editable => editable.Mode(GridEditMode.InCell))
+                        .DataSource(dataSource => dataSource
+                        .Ajax()
+                        .Events(e => e.Sync("master.refresh"))
+                        .ServerOperation(true)
+                        .Model(model =>
+                        {
+                            model.Id(p => p.Id);
+                            model.Field(p => p.CategoryId);
+                            model.Field(p => p.AnswerVn);
+                        })
                     .PageSize(setting.GridPageSize)
                     .Read(read => read.Action("Get", "Answer").Data("grd.data"))
+                    .Create(add => add.Action("Add", "Answer").Data("grd.getCategoryId"))
+                    .Update(update => update.Action("Edit", "Answer"))
+                    .Destroy(destroy => destroy.Action("Delete", "Answer"))
                     )
                     .NoRecords()
                     .Scrollable(scr => scr.Enabled(true))
                     .Pageable(pageable => pageable.ButtonCount(setting.GridButtonCount).Info(true).Input(true).Numeric(true).PageSizes(setting.GridPageSizeOptions).PreviousNext(true).Refresh(true))
                     .Selectable(selectable => selectable.Type(GridSelectionType.Row).Mode(GridSelectionMode.Multiple))
-                    .Navigatable())
+                    .Navigatable()
+                )
             </div>
         </div>
     </div>
@@ -188,6 +215,13 @@
                 CategoryId: CategoryId
             };
             return searchModel;
+        };
+         grd.getCategoryId = function (data) {
+            var CategoryId = null;
+            if (!_.isEmpty(treeWareHouse.api) && treeWareHouse.api.getActiveNode())
+                data.CategoryId = treeWareHouse.api.activeNode.key;
+
+            return { CategoryId: data.CategoryId };
         };
     </script>
 }
@@ -351,6 +385,9 @@
                 activate: function (event, data) {
                     $('#@Html.FieldIdFor(m => m.Keywords)').val("")
                     var node = data.node;
+
+                    $("#selected").text(node.title);
+
                     if (node.statusNodeType !== 'loading') {
                         grd.api.resetPage();
                     }

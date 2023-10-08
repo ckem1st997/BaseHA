@@ -53,6 +53,22 @@ namespace BaseHA.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(IntentCommands wareHouse)
         {
+            if(wareHouse.CategoryId==null)
+            {
+                return BadRequest(new ResultMessageResponse()
+                {
+                    message = $"Bạn chưa lựa chọn Tên kịch bản !",
+                    success = false
+                });
+            }
+            if (wareHouse.Id == null)
+            {
+                wareHouse.Id = Guid.NewGuid().ToString();
+            }
+            if (wareHouse.Inactive == false)
+            {
+                wareHouse.Inactive = true;
+            }
             var entity = _mapper.Map<Intent>(wareHouse);
             var res = await _generic.InsertAsync(entity);
             return Ok(new ResultMessageResponse()
