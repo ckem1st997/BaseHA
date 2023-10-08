@@ -70,8 +70,8 @@
             })
             .ToolBar(toolbar =>
             {
-                toolbar.Create();
-                toolbar.Save();
+                toolbar.Create().Text("Thêm mới");
+                toolbar.Save().CancelText("Huỷ bỏ").Text("Lưu lại");
             })
             //.Events(e => e.SaveChanges("master.refresh"))
             .Editable(editable => editable.Mode(GridEditMode.InCell))
