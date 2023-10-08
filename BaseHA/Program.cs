@@ -45,6 +45,7 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using StackExchange.Redis;
+using BaseHA.Core.Base;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -52,14 +53,14 @@ builder.Services.AddControllersWithViews();
 var services = builder.Services;
 var Configuration = builder.Configuration;
 //
-if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == Environments.Production)
-{
-    var redis = ConnectionMultiplexer.Connect("192.168.3.130:6379");
-    services.AddDataProtection().SetApplicationName("Base")
-        .PersistKeysToStackExchangeRedis(redis, "DataProtection-Keys");
-}
-else
-    services.AddDataProtection().SetApplicationName("Base");
+//if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == Environments.Production)
+//{
+//    var redis = ConnectionMultiplexer.Connect("192.168.3.130:6379");
+//    services.AddDataProtection().SetApplicationName("Base")
+//        .PersistKeysToStackExchangeRedis(redis, "DataProtection-Keys");
+//}
+//else
+services.AddDataProtection().SetApplicationName("Base");
 services.AddAntiforgery();
 
 services.AddMapper();
@@ -85,7 +86,8 @@ services.AddApiCors();
 //auto fac
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 builder.Host.ConfigureContainer<ContainerBuilder>(
-   builder => builder.RegisterModule(new WareHouseModule()));
+   builder => builder.RegisterModule(new WareHouseModule())
+   .RegisterModule(new CoreModule()));
 
 
 var app = builder.Build();

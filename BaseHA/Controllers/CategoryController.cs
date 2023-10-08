@@ -11,10 +11,11 @@ using BaseHA.Core.Extensions;
 using System.Diagnostics;
 using BaseHA.Core.IRepositories;
 using BaseHA.Core.Base;
+using BaseHA.Core.ControllerBase;
 
 namespace BaseHA.Controllers
 {
-    public class CategoryController : Controller
+    public class CategoryController : BaseMvcController
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ICategoryService _generic;

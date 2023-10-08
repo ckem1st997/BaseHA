@@ -8,10 +8,11 @@ using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Mvc;
 using BaseHA.Core.Extensions;
 using System.Diagnostics;
+using BaseHA.Core.ControllerBase;
 
 namespace BaseHA.Controllers
 {
-    public class UnitController : Controller
+    public class UnitController : BaseMvcController
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IUnitService _generic;

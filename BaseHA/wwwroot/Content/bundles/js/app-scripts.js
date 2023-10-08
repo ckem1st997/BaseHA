@@ -503,23 +503,23 @@
                 if (!app.ajax.handleUnauthorizedRequest(xhr))
                     return;
 
-                var enMsg = xhr.getResponseHeader('X-XBase-Message');
+                var enMsg = xhr.getResponseHeader('X-Message');
                 if (!enMsg)
                     return;
 
                 var msg = atob(enMsg);
                 if (msg) {
-                    displayNotification(decode(msg), xhr.getResponseHeader('X-XBase-Message-Type'));
+                    displayNotification(decode(msg), xhr.getResponseHeader('X-Message-Type'));
                 }
             });
             //.ajaxError(function (ev, xhr) {
-            //    var enMsg = xhr.getResponseHeader('X-XBase-Message');
+            //    var enMsg = xhr.getResponseHeader('X-Message');
             //    if (!enMsg)
             //        return;
 
             //    var msg = atob(enMsg);
             //    if (msg) {
-            //        displayNotification(decode(msg), xhr.getResponseHeader('X-XBase-Message-Type'));
+            //        displayNotification(decode(msg), xhr.getResponseHeader('X-Message-Type'));
             //    }
             //    else {
             //        try {

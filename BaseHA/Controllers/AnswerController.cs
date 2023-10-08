@@ -7,11 +7,12 @@ using BaseHA.Models.SearchModel;
 using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Mvc;
 using BaseHA.Core.Extensions;
+using BaseHA.Core.ControllerBase;
 
 namespace BaseHA.Controllers
 {
 
-    public class AnswerController : Controller
+    public class AnswerController : BaseMvcController
     {
         private readonly ILogger<AnswerController> _logger;
         private readonly IAnswerSerive _generic;

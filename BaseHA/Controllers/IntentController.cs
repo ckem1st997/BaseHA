@@ -10,10 +10,11 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using BaseHA.Core.Base;
 using BaseHA.Core.Extensions;
 using BaseHA.Core.IRepositories;
+using BaseHA.Core.ControllerBase;
 
 namespace BaseHA.Controllers
 {
-    public class IntentController : Controller
+    public class IntentController : BaseMvcController
     {
         private readonly ILogger<IntentController> _logger;
         private readonly IIntentService _generic;
