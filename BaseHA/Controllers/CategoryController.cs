@@ -12,6 +12,7 @@ using System.Diagnostics;
 using BaseHA.Core.IRepositories;
 using BaseHA.Core.Base;
 using BaseHA.Core.ControllerBase;
+using MediatR;
 
 namespace BaseHA.Controllers
 {
@@ -62,19 +63,22 @@ namespace BaseHA.Controllers
             {
                 wareHouse.NameCategory = "ORDER";
             }
+            string intentCodeVn = wareHouse.IntentCodeVn.Trim(); //xóa khoảng trắng ở đầu và cuối
+            
             if (wareHouse.IntentCodeEn == null)
             {
-                wareHouse.IntentCodeEn = wareHouse.IntentCodeVn;
+                wareHouse.IntentCodeEn = intentCodeVn;
             }
             if (wareHouse.Inactive == false)
             {
                 wareHouse.Inactive = true;
             }
+           
             if (!ModelState.IsValid)
             {
                 return Ok(new ResultMessageResponse()
                 {
-                    message = "Thất bại !",
+                    message = "Bạn nhập dữ liệu không đúng định dạng ! Vui lòng thử lại !",
                     success = false
                 });
             }
@@ -90,18 +94,19 @@ namespace BaseHA.Controllers
 
             if (_generic.IsIntentEnDuplicate(wareHouse.IntentCodeEn))
             {
-                NotifyWarning("Mã bằng tiếng Anh đã tồn tại !");
+                NotifyWarning($"Mã {wareHouse.IntentCodeEn} đã tồn tại !");
                 return Ok(new ResultMessageResponse()
                 {
                     success = false
                 });
             }
             var entity = _mapper.Map<Category>(wareHouse);
+            entity.IntentCodeVn= intentCodeVn;
             var res = await _generic.InsertAsync(entity);
             if (res)
-                NotifySuccess("Thành công !");
+                NotifySuccess("Thêm kịch bản mới thành công !");
             else
-                NotifyWarning("Thất bại !");
+                NotifyWarning("Bạn nhập dữ liệu không đúng định dạng ! Vui lòng thử lại !");
             return Ok(new ResultMessageResponse()
             {
                 success = res
@@ -115,14 +120,14 @@ namespace BaseHA.Controllers
             if (ids == null)
                 return Ok(new ResultMessageResponse()
                 {
-                    message = "Thất bại !",
+                    message = "Xóa loại kịch bản thất bại !",
                     success = false
                 });
 
             var res = await _generic.DeletesAsync(ids);
             return Ok(new ResultMessageResponse()
             {
-                message = res ? "Thành công !" : "Thất bại !",
+                message = res ? "Xóa kịch bản thành công !" : "Kịch bản này đã được xóa !",
                 success = res
             });
         }
@@ -134,13 +139,13 @@ namespace BaseHA.Controllers
             if (ids == null)
                 return Ok(new ResultMessageResponse()
                 {
-                    message = "Thất bại !",
+                    message = "Thay đổi trạng thái thất bại !",
                     success = false
                 });
             var res = await _generic.ActivatesAsync(ids, active);
             return Ok(new ResultMessageResponse()
             {
-                message = res ? "Thành công !" : "Thất bại !",
+                message = res ? "Thay đổi trạng thái thành công !" : "Sản phẩm đã được kích hoạt! Vui lòng thử lại !",
                 success = res
             });
         }
@@ -184,9 +189,9 @@ namespace BaseHA.Controllers
             var entity = _mapper.Map(unit, model);
             var res = await _generic.UpdateAsync(entity);
             if (res)
-                NotifySuccess("Thành công !");
+                NotifySuccess("Sửa kịch bản thành công !");
             else
-                NotifyWarning("Thất bại !");
+                NotifyWarning("Bạn nhập dữ liệu không đúng định dạng ! Vui lòng thử lại !");
             return Ok(new ResultMessageResponse()
             {
                 success = res

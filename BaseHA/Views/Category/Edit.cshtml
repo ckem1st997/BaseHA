@@ -14,8 +14,8 @@
             <div class="modal-body">
                 @Html.AntiForgeryToken()
                 @Html.HiddenFor(m => m.Id)
-
-
+                
+                  @Html.HiddenFor(m => m.IntentCodeVn, new { @class = "form-control" })
                 
                 <div class="form-group form-group-sm">
                     <label class="control-label  col-md-4" for="UnitName">Mã kịch bản</label>
@@ -43,10 +43,10 @@
                     <i class="fa fa-spinner fa-spin spin-submit"></i>
                     <i class="fa fa-check"></i> Lưu lại
                 </button>
-                <button type="submit" class="btn blue btn-sm" data-action="continueAdding">
+                @* <button type="submit" class="btn blue btn-sm" data-action="continueAdding">
                     <i class="fa fa-spinner fa-spin spin-submit"></i>
                     <i class="fa fa-plus"></i> Tiếp tục thêm
-                </button>
+                </button> *@
                 <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">
                     <i class="fa fa-times"></i> Đóng
                 </button>

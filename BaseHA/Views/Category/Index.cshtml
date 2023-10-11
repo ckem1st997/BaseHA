@@ -1,4 +1,5 @@
 ﻿@using BaseHA.Application.ModelDto;
+@using BaseHA.Domain.Entity;
 @using BaseHA.Models.SearchModel;
 @model CategorySearchModel
 
@@ -57,48 +58,51 @@
         </form>
     </div>
     <div class="row full-height">
-        @(Html.Kendo().Grid<CategoryCommands>()
-            .Name("grd")
-            .HtmlAttributes(new { style = "height: 100%" })
-            .Columns(columns =>
-            {
-                columns.Select().Width(30);
-                columns.Bound(x => x.Id).Width(10).Hidden();
-                columns.Bound(x => x.IntentCodeVn).ClientTemplate("#=grd.tmp.name(IntentCodeVn)#").Title("Mã kịch bản");
-                columns.Bound(x => x.Description).Title("Mô tả");
-                columns.Bound(x => x.Inactive).ClientTemplate("#=grd.tmp.activate(!Inactive)#").Width(100).Title("Trạng thái");
-            })
-            .ToolBar(toolbar =>
-            {
-                toolbar.Create().Text("Thêm mới");
-                toolbar.Save().CancelText("Huỷ bỏ").Text("Lưu lại");
-            })
-            //.Events(e => e.SaveChanges("master.refresh"))
-            .Editable(editable => editable.Mode(GridEditMode.InCell))
+        @(
+            Html.Kendo().Grid<CategoryCommands>()
+                    .Name("grd")
+                    .HtmlAttributes(new { style = "height: 100%" })
+                    .Columns(columns =>
+                    {
+                        columns.Select().Width(30);
+                        columns.Bound(x => x.Id).Width(10).Hidden();
+                        columns.Bound(x => x.IntentCodeVn).ClientTemplate("#=grd.tmp.name(IntentCodeVn)#").Title("Mã kịch bản");
+                        columns.Bound(x => x.Description).Title("Mô tả");
+                        columns.Bound(x => x.Inactive).ClientTemplate("#=grd.tmp.activate(!Inactive)#").Width(100).Title("Trạng thái");
+                    })
+                    .ToolBar(toolbar =>
+                    {
+                        toolbar.Create().Text("Thêm mới");
+                        toolbar.Save().CancelText("Huỷ bỏ").Text("Lưu lại");
+                    })
+                    //.Events(e => e.SaveChanges("master.refresh"))
+                    .Editable(editable => editable.Mode(GridEditMode.InCell))
 
-            .DataSource(dataSource => dataSource
-            .Ajax()
-            .Events(e => e.Sync("master.refresh"))
-            .ServerOperation(true)
-            .Model(model =>
-            {
-                model.Id(p => p.Id);
-                model.Field(p => p.IntentCodeVn);
-                model.Field(p => p.Description);
-             
-            })
-            .PageSize(setting.GridPageSize)
-            .Read(read => read.Action("Get", "Category").Data("grd.data"))
-            .Create(add => add.Action("Add", "Category"))
-            .Update(update => update.Action("Edit", "Category"))
-            .Destroy(destroy => destroy.Action("Delete", "Category"))
+                    .DataSource(dataSource => dataSource
+                    .Ajax()
+                    //.Batch(true)
+                    .Events(e => e.Sync("master.refresh"))
+                    .ServerOperation(true)
+                    .Model(model =>
+                    {
+                        model.Id(p => p.Id);
+                        model.Field(p => p.IntentCodeVn);
+                        model.Field(p => p.Description);
 
-            )
+                        })
+                        .PageSize(setting.GridPageSize)
+                        .Read(read => read.Action("Get", "Category").Data("grd.data"))
+                        .Create(add => add.Action("Add", "Category"))
+                        .Update(update => update.Action("Edit", "Category"))
+                        .Destroy(destroy => destroy.Action("Delete", "Category"))
+
+                     )
             .NoRecords()
             .Scrollable(scr => scr.Enabled(true))
             .Pageable(pageable => pageable.ButtonCount(setting.GridButtonCount).Info(true).Input(true).Numeric(true).PageSizes(setting.GridPageSizeOptions).PreviousNext(true).Refresh(true))
             .Selectable(selectable => selectable.Type(GridSelectionType.Row).Mode(GridSelectionMode.Multiple))
-            .Navigatable())
+            .Navigatable()
+        )
     </div>
 </div>
 
@@ -182,6 +186,7 @@
             actionCallback: function () { },
             importExcel: function () { },
             export: function () { }
+            
         };
         var toolbar = master.toolbar;
         var grd = master.grd;
@@ -196,7 +201,7 @@
                 Status: $status.val(),
             };
             return searchModel;
-        };
+        }
     </script>
 }
 
@@ -204,6 +209,7 @@
 @section Scripts {
     <script>
         // Methods
+       
         master.details = function () {
             var id = grd.api.selectedIds()[0];
             if (id) {
@@ -255,6 +261,7 @@
                         if (msg && msg.message)
                             notify({ text: msg.message, type: msg.success ? 'success' : 'info' });
                         app.ui.loader(grd.api.element, false);
+                        
                     },
                     error: function (jqXhr, textStatus, errorThrown) {
                         app.ui.loader(grd.api.element, false);
