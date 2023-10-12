@@ -9,7 +9,9 @@ namespace BaseHA.Application.Validations.WareHouse
         {
             
            
-            RuleFor(order => order.IntentVn).NotEmpty().WithMessage("Bạn chưa nhập Ý định");
+            RuleFor(order => order.IntentVn).NotEmpty().WithMessage("Bạn chưa nhập Ý định")
+            .Must(value => !string.IsNullOrWhiteSpace(value))
+            .WithMessage(" Và không nhận giá trị rỗng."); 
  
 
         }

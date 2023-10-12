@@ -63,9 +63,13 @@ namespace BaseHA.Controllers
             }
             var entity = _mapper.Map<Answer>(wareHouse);
             var res = await _generic.InsertAsync(entity);
+            if (res)
+                NotifySuccess("Thêm câu trả lời thành công");
+            else
+                NotifyWarning("Bạn nhập dữ liệu không đúng định dạng ! Vui lòng thử lại !");
             return Ok(new ResultMessageResponse()
             {
-                message = res ? "Thành công !" : "Thất bại !",
+                //message = res ? "Thành công !" : "Thất bại !",
                 success = res
             });
         }
@@ -75,14 +79,14 @@ namespace BaseHA.Controllers
             if (ids == null)
                 return Ok(new ResultMessageResponse()
                 {
-                    message = "Thất bại !",
+                    message = "Xóa câu trả lời thất bại !",
                     success = false
                 });
 
             var res = await _generic.DeletesAsync(ids);
             return Ok(new ResultMessageResponse()
             {
-                message = res ? "Thành công !" : "Thất bại !",
+                message = res ? "Xóa câu trả lời thành công !" : "Kịch bản này đã được xóa !",
                 success = res
             });
         }
@@ -92,13 +96,13 @@ namespace BaseHA.Controllers
             if (ids == null)
                 return Ok(new ResultMessageResponse()
                 {
-                    message = "Thất bại !",
+                    message = "Thay đổi trạng thái thất bại !",
                     success = false
                 });
             var res = await _generic.ActivatesAsync(ids, active);
             return Ok(new ResultMessageResponse()
             {
-                message = res ? "Thành công !" : "Thất bại !",
+                message = res ? "Thay đổi trạng thái thành công !" : "Sản phẩm đã được kích hoạt! Vui lòng thử lại !",
                 success = res
             });
         }
@@ -120,9 +124,13 @@ namespace BaseHA.Controllers
                 });
             var entity = _mapper.Map(unit, model);
             var res = await _generic.UpdateAsync(entity);
+            if (res)
+                NotifySuccess("Sửa câu trả lời thành công");
+            else
+                NotifyWarning("Bạn nhập dữ liệu không đúng định dạng ! Vui lòng thử lại !");
             return Ok(new ResultMessageResponse()
             {
-                message = res ? "Thành công !" : "Thất bại !",
+                //message = res ? "Thành công !" : "Thất bại !",
                 success = res
             });
         }

@@ -9,8 +9,11 @@ namespace BaseHA.Application.Validations.WareHouse
         public CategoryCommandValidator() 
         {
 
-            RuleFor(order => order.IntentCodeVn).NotEmpty().WithMessage("Bạn chưa nhập mã kịch bản");
-                
+            RuleFor(order => order.IntentCodeVn).NotEmpty().WithMessage("Bạn chưa nhập mã kịch bản ")
+            //.Must(value => value.Trim()=="")
+            .Must(value => !string.IsNullOrWhiteSpace(value))
+            .WithMessage(" Và không nhận giá trị rỗng.");
+
 
         }
     }

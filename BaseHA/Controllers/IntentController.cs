@@ -57,7 +57,7 @@ namespace BaseHA.Controllers
             {
                 return BadRequest(new ResultMessageResponse()
                 {
-                    message = $"Bạn chưa lựa chọn Tên kịch bản !",
+                    message = $"Bạn chưa lựa chọn Loại kịch bản !",
                     success = false
                 });
             }
@@ -71,9 +71,12 @@ namespace BaseHA.Controllers
             }
             var entity = _mapper.Map<Intent>(wareHouse);
             var res = await _generic.InsertAsync(entity);
+            if (res)
+                NotifySuccess("Thêm ý định mới thành công !");
+            else
+                NotifyWarning("Bạn nhập dữ liệu không đúng định dạng ! Vui lòng thử lại !");
             return Ok(new ResultMessageResponse()
             {
-                message = res ? "Thành công !" : "Thất bại !",
                 success = res
             });
         }
@@ -85,14 +88,14 @@ namespace BaseHA.Controllers
             if (ids == null)
                 return Ok(new ResultMessageResponse()
                 {
-                    message = "Thất bại !",
+                    message = "Xóa ý định thất bại !",
                     success = false
                 });
 
             var res = await _generic.DeletesAsync(ids);
             return Ok(new ResultMessageResponse()
             {
-                message = res ? "Thành công !" : "Thất bại !",
+                message = res ? "Xóa ý định thành công !" : "Kịch bản này đã được xóa !",
                 success = res
             });
         }
@@ -104,13 +107,13 @@ namespace BaseHA.Controllers
             if (ids == null)
                 return Ok(new ResultMessageResponse()
                 {
-                    message = "Thất bại !",
+                    message = "Thay đổi trạng thái thất bại !",
                     success = false
                 });
             var res = await _generic.ActivatesAsync(ids, active);
             return Ok(new ResultMessageResponse()
             {
-                message = res ? "Thành công !" : "Thất bại !",
+                message = res ? "Thay đổi trạng thái thành công !" : "Sản phẩm đã được kích hoạt! Vui lòng thử lại !",
                 success = res
             });
         }
@@ -138,9 +141,12 @@ namespace BaseHA.Controllers
                 });
             var entity = _mapper.Map(unit, model);
             var res = await _generic.UpdateAsync(entity);
+            if (res)
+                NotifySuccess("Sửa ý định thành công !");
+            else
+                NotifyWarning("Bạn nhập dữ liệu không đúng định dạng ! Vui lòng thử lại !");
             return Ok(new ResultMessageResponse()
             {
-                message = res ? "Thành công !" : "Thất bại !",
                 success = res
             });
         }
