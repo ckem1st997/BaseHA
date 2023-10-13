@@ -74,13 +74,11 @@
                     {
                         toolbar.Create().Text("Thêm mới");
                         toolbar.Save().CancelText("Huỷ bỏ").Text("Lưu lại");
-                    })
-                    //.Events(e => e.SaveChanges("master.refresh"))
+                    })           
                     .Editable(editable => editable.Mode(GridEditMode.InCell))
-
+                    //.Events(events => events.Edit("master.validator"))
                     .DataSource(dataSource => dataSource
                     .Ajax()
-                    //.Batch(true)
                     .Events(e => e.Sync("master.refresh"))
                     .ServerOperation(true)
                     .Model(model =>
@@ -89,15 +87,15 @@
                         model.Field(p => p.IntentCodeVn);
                         model.Field(p => p.Description);
 
-                        })
+                    })
                         .PageSize(setting.GridPageSize)
                         .Read(read => read.Action("Get", "Category").Data("grd.data"))
-                        .Create(add => add.Action("Add", "Category"))
+                        .Create(add => add.Action("Add", "Category"))//.Data("grd.validator"))
                         .Update(update => update.Action("Edit", "Category"))
                         .Destroy(destroy => destroy.Action("Delete", "Category"))
 
                      )
-                     .Events(events => events.Save("master.validator"))
+            
             .NoRecords()
             .Scrollable(scr => scr.Enabled(true))
             .Pageable(pageable => pageable.ButtonCount(setting.GridButtonCount).Info(true).Input(true).Numeric(true).PageSizes(setting.GridPageSizeOptions).PreviousNext(true).Refresh(true))
@@ -205,20 +203,30 @@
             };
             return searchModel;
         }
+
+        // grd.validator = function (data) {
+        //     var intentCodeVn = data.model.IntentCodeVn.trim();
+        //     if (intentCodeVn === '') {
+        //         data.preventDefault();
+        //         //alert("Mã kịch bản không nhận giá trị rỗng");
+        //         notify({ text: 'Mã kịch bản không nhận dữ liệu rỗng ! Vui lòng thử lại', type: 'info' });
+        //     }
+        // };
     </script>
 }
 
-
 @section Scripts {
+       
     <script>
         // Methods
        
         master.validator = function (data) {
-            var intentCodeVn = data.model.IntentCodeVn.trim();
+            var intentCodeVn = data.model.IntentCodeVn?.trim();
             if (intentCodeVn === '') {
                 data.preventDefault();
                 //alert("Mã kịch bản không nhận giá trị rỗng");
                 notify({ text: 'Mã kịch bản không nhận dữ liệu rỗng ! Vui lòng thử lại', type: 'info' });
+               
             }
         };
 

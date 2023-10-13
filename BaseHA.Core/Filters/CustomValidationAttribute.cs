@@ -22,7 +22,8 @@ namespace BaseHA.Core.Filters
                 var errorsString = errors.AnyList() ? string.Join("|", errors) : "Đã xảy ra lỗi với dữ liệu đầu vào !";
                 var responseObj = new ResultMessageResponse
                 {
-                    code = "200",
+                    //code = "200",
+                    code = "500",
                     message = errorsString,
                     errors = new Dictionary<string, IEnumerable<string>>()
                     {
@@ -36,7 +37,8 @@ namespace BaseHA.Core.Filters
 
                 context.Result = new JsonResult(responseObj)
                 {
-                    StatusCode = 200
+                    //StatusCode = 200
+                    StatusCode = 500
                 };
             }
         }
