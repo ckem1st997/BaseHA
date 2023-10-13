@@ -8,7 +8,7 @@ namespace BaseHA.Application.Validations.WareHouse
 
         public AnswerCommandValidator() 
         {
-            RuleFor(order => order.AnswerVn).NotEmpty().WithMessage("Bạn chưa nhập câu trả lời")
+            RuleFor(order => order.AnswerVn).NotEmpty().WithMessage("Bạn chưa nhập câu trả lời ")
              .Must(value => !string.IsNullOrWhiteSpace(value))
             .WithMessage(" Và không nhận giá trị rỗng."); 
                 
