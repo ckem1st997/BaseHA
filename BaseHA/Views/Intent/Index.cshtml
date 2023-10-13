@@ -103,6 +103,7 @@
                     .Update(update => update.Action("Edit", "Intent"))
                     .Destroy(destroy => destroy.Action("Delete", "Intent"))
                     )
+                    .Events(events => events.Save("master.validator"))
                     .NoRecords()
                     .Scrollable(scr => scr.Enabled(true))
                     .Pageable(pageable => pageable.ButtonCount(setting.GridButtonCount).Info(true).Input(true).Numeric(true).PageSizes(setting.GridPageSizeOptions).PreviousNext(true).Refresh(true))
@@ -201,7 +202,8 @@
             addDefault: function () { },
             actionCallback: function () { },
             importExcel: function () { },
-            export: function () { }
+            export: function () { },
+            validator: function () { }
         };
         var toolbar = master.toolbar;
         var grd = master.grd;
@@ -233,6 +235,14 @@
     <script>
         // Methods
 
+        master.validator = function (data) {
+            var intentVn = data.model.IntentVn.trim();
+            if (intentVn === '') {
+                data.preventDefault();
+                //alert("Mã kịch bản không nhận giá trị rỗng");
+                notify({ text: 'Ý định không nhận dữ liệu rỗng ! Vui lòng thử lại', type: 'info' });
+            }
+        };
 
         master.details = function () {
             var id = grd.api.selectedIds()[0];
