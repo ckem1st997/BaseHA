@@ -103,7 +103,7 @@
                     .Update(update => update.Action("Edit", "Intent"))
                     .Destroy(destroy => destroy.Action("Delete", "Intent"))
                     )
-                    .Events(events => events.Save("master.validator"))
+                    //.Events(events => events.Edit("master.validator"))
                     .NoRecords()
                     .Scrollable(scr => scr.Enabled(true))
                     .Pageable(pageable => pageable.ButtonCount(setting.GridButtonCount).Info(true).Input(true).Numeric(true).PageSizes(setting.GridPageSizeOptions).PreviousNext(true).Refresh(true))
