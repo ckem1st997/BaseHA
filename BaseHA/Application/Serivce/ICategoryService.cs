@@ -22,6 +22,7 @@ namespace BaseHA.Application.Serivce
         Task<bool> UpdateAsync(Category entity);
 
         Task<bool> DeletesAsync(IEnumerable<string> ids);
+        Task<bool> DeleteId(string ids);
 
         Task<PagedList<Category>> GetAsync(CategorySearchModel ctx);
 
@@ -66,6 +67,14 @@ namespace BaseHA.Application.Serivce
             return await _generic.SaveChangesConfigureAwaitAsync() > 0;
         }
 
+        public async Task<bool> DeleteId(string ids)
+        {
+            if (ids == null)
+                throw new ArgumentNullException(nameof(ids));
+            await _generic.DeteleSoftDelete(ids);
+            return await _generic.SaveChangesConfigureAwaitAsync() > 0;
+        }
+
         public  bool IsIntentEnDuplicate(string intentCodeEn)
         {
             bool isDuplicate = _generic.Table.Any(e => e.IntentCodeEn == intentCodeEn );
@@ -79,7 +88,7 @@ namespace BaseHA.Application.Serivce
 
         public async Task<PagedList<Category>> GetAsync(CategorySearchModel ctx)
         {
-            var l = from i in _generic.Table where i.OnDelete==false select i;
+            var l = from i in _generic.Table where i.OnDelete==false orderby i.IntentCodeVn ascending select i;
 
             if (!string.IsNullOrEmpty(ctx.Keywords))
                 l = from aa in l
@@ -87,6 +96,7 @@ namespace BaseHA.Application.Serivce
                     || aa.IntentCodeEn.Contains(ctx.Keywords)
                     || aa.IntentCodeVn.Contains(ctx.Keywords)
                     || aa.Description.Contains(ctx.Keywords)
+                    orderby aa.IntentCodeVn ascending
                     select aa;
 
             if (!string.IsNullOrEmpty(ctx.CategoryId))
@@ -124,7 +134,7 @@ namespace BaseHA.Application.Serivce
                 var departmentIds = (await _generic.QueryAsync<string>(queryBuilder.ToString())).ToList();
                 departmentIds.Add(ctx.CategoryId);
                 if (departmentIds != null && departmentIds.Any())
-                    l = from aa in l where departmentIds.Contains(aa.Id) select aa;
+                    l = from aa in l where departmentIds.Contains(aa.Id) orderby aa.IntentCodeVn ascending select aa;
             }
             PagedList<Category> res = new PagedList<Category>();
             await res.Result(ctx.PageSize, (ctx.PageIndex - 1) * ctx.PageSize, l);
@@ -173,9 +183,9 @@ namespace BaseHA.Application.Serivce
                     tooltip = s.NameCategory,
                     ParentId = s.ParentId,
                     Name = "[" + s.NameCategory + "]-" + s.IntentCodeVn
-                });
+                }).OrderBy(o=>o.title);
 
-            var roots = organizationalUnitModels.Where(w => !w.ParentId.HasValue()).OrderBy(o => o.Name);
+            var roots = organizationalUnitModels.Where(w => !w.ParentId.HasValue()).OrderBy(o => o.title);
 
             foreach (var root in roots)
             {

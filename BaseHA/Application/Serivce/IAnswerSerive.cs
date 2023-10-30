@@ -65,12 +65,12 @@ namespace BaseHA.Application.Serivce
 
         public async Task<PagedList<Answer>> GetAsync(AnswerSearchModel ctx)
         {
-            var l = from i in _generic.Table where i.OnDelete == false select i;
+            var l = from i in _generic.Table where i.OnDelete == false orderby i.AnswerVn ascending select i;
 
             if (!string.IsNullOrEmpty(ctx.Keywords))
                 l = from aa in l
                     where aa.AnswerVn.Contains(ctx.Keywords)
-
+                    orderby aa.AnswerVn ascending
                     select aa;
 
             if (!string.IsNullOrEmpty(ctx.CategoryId))
@@ -110,7 +110,7 @@ namespace BaseHA.Application.Serivce
 
                 departmentIds.Add(ctx.CategoryId);
                 if (departmentIds != null && departmentIds.Any())
-                    l = from aa in l where departmentIds.Contains(aa.CategoryId) select aa;
+                    l = from aa in l where departmentIds.Contains(aa.CategoryId) orderby aa.AnswerVn ascending select aa;
             }
             PagedList<Answer> res = new PagedList<Answer>();
             await res.Result(ctx.PageSize, (ctx.PageIndex - 1) * ctx.PageSize, l);

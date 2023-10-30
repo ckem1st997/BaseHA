@@ -13,6 +13,7 @@ using BaseHA.Core.IRepositories;
 using BaseHA.Core.Base;
 using BaseHA.Core.ControllerBase;
 using MediatR;
+using static HotChocolate.ErrorCodes;
 
 namespace BaseHA.Controllers
 {
@@ -28,7 +29,6 @@ namespace BaseHA.Controllers
             _logger = logger;
             _generic = generic;
             _mapper = mapper;
-
         }
 
         public IActionResult Index()
@@ -50,6 +50,15 @@ namespace BaseHA.Controllers
             var res = await _generic.GetByIdAsync($"{id}");
             var entity = _mapper.Map<CategoryCommands>(res);
             return View(entity);
+        }
+
+        public async Task<IActionResult> DetailApi(string id)
+        {
+            var res = await _generic.GetByIdAsync($"{id}");
+            var entity = _mapper.Map<CategoryCommands>(res);
+            return Ok(new ResultMessageResponse() { 
+                data=entity
+            });
         }
 
         [HttpPost]
@@ -111,7 +120,63 @@ namespace BaseHA.Controllers
             {
                 success = res
             });
+        }
 
+        [HttpPost]
+        public async Task<IActionResult> Create(CategoryCommands wareHouse)
+        {
+            if (wareHouse.Id == null)
+            {
+                wareHouse.Id = Guid.NewGuid().ToString();
+            }
+            if (wareHouse.NameCategory == null)
+            {
+                wareHouse.NameCategory = "ORDER";
+            }
+            string intentCodeVn = wareHouse.IntentCodeVn.Trim(); //xóa khoảng trắng ở đầu và cuối
+
+            if (wareHouse.IntentCodeEn == null)
+            {
+                wareHouse.IntentCodeEn = intentCodeVn;
+            }
+            if (wareHouse.Inactive == false)
+            {
+                wareHouse.Inactive = true;
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new ResultMessageResponse() { 
+                    message = "Bạn nhập dữ liệu không đúng định dạng ! Vui lòng thử lại !"
+                });
+            }
+
+            if (_generic.IsIntentVnDuplicate(wareHouse.IntentCodeVn))
+            {
+                return BadRequest(new ResultMessageResponse()
+                {
+                    message = $"Mã {wareHouse.IntentCodeVn} đã tồn tại !"
+                });
+            }
+
+            if (_generic.IsIntentEnDuplicate(wareHouse.IntentCodeEn))
+            {
+                return BadRequest(new ResultMessageResponse()
+                {
+                    message = $"Mã {wareHouse.IntentCodeEn} đã tồn tại !"
+                });
+            }
+            var entity = _mapper.Map<Category>(wareHouse);
+            entity.IntentCodeVn = intentCodeVn;
+            var res = await _generic.InsertAsync(entity);
+
+            if (res)
+                return Ok(true);
+            else
+                return BadRequest(new ResultMessageResponse()
+                {
+                    message = "Không thành công"
+                }); 
         }
 
         [HttpPost]
@@ -130,6 +195,25 @@ namespace BaseHA.Controllers
                 message = res ? "Xóa kịch bản thành công !" : "Kịch bản này đã được xóa !",
                 success = res
             });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteApi( string id)
+        {
+
+            if (id == null)
+                return BadRequest(new ResultMessageResponse()
+                {
+                    message = "Bạn chưa chọn kịch bản"
+                });
+            var res = await _generic.DeleteId(id);
+            if (res)
+                return Ok(true);
+            else
+                return BadRequest(new ResultMessageResponse()
+                {
+                    message = " Kịch bản đã được xóa trước đó !"
+                });
         }
 
 
@@ -199,6 +283,43 @@ namespace BaseHA.Controllers
         }
 
 
+        [HttpPost]
+        public async Task<IActionResult> EditApi(CategoryCommands unit)
+        {
+
+            var model = await _generic.GetByIdAsync(unit.Id, true);
+            if (model == null)
+            {
+                return BadRequest(new ResultMessageResponse()
+                {
+                    message = "Dữ liệu đã được xóa trước đó !"
+                });
+
+            }
+
+
+            if (unit.IntentCodeVn != model.IntentCodeVn)
+            {
+                return BadRequest(new ResultMessageResponse()
+                {
+                    message = "Không được sửa Mã kịch bản !"
+                });
+            }
+
+            unit.IntentCodeEn = unit.IntentCodeVn;
+            var entity = _mapper.Map(unit, model);
+            var res = await _generic.UpdateAsync(entity);
+            
+            if (res)
+                return Ok(true);
+            else
+                return BadRequest(new ResultMessageResponse()
+                {
+                    message = "Không thành công"
+                });
+        }
+
+
 
 
         /// <summary>
@@ -241,6 +362,29 @@ namespace BaseHA.Controllers
         [IgnoreAntiforgeryToken]
         [HttpPost]
         public async Task<IActionResult> Get([DataSourceRequest] DataSourceRequest request, CategorySearchModel searchModel)
+        {
+
+            searchModel.BindRequest(request);
+            var data = await _generic.GetAsync(searchModel);
+
+            var dataList = new List<CategoryCommands>();
+            foreach (var item in data.Lists)
+            {
+                var model = _mapper.Map<CategoryCommands>(item);
+                dataList.Add(model);
+            }
+            var result = new DataSourceResult
+            {
+                Data = dataList,
+                Total = data.Count
+            };
+
+
+            return Ok(result);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> List([DataSourceRequest] DataSourceRequest request,[FromRoute] CategorySearchModel searchModel)
         {
 
             searchModel.BindRequest(request);
