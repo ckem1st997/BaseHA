@@ -69,13 +69,14 @@ namespace BaseHA.Application.Serivce
 
         public async Task<PagedList<Intent>> GetAsync(IntentSearchModel ctx)
         {
-            var l = from i in _generic.Table where i.OnDelete==false select i;
+            var l = from i in _generic.Table where i.OnDelete==false orderby i.IntentVn ascending select i;
 
             if (!string.IsNullOrEmpty(ctx.Keywords))
                 l = from aa in l
                     where aa.IntentEn.Contains(ctx.Keywords)
                     || aa.IntentEn.Contains(ctx.Keywords)
                     || aa.IntentVn.Contains(ctx.Keywords)
+                    orderby aa.IntentVn ascending
                     select aa;
 
             if (!string.IsNullOrEmpty(ctx.CategoryId))
@@ -115,7 +116,7 @@ namespace BaseHA.Application.Serivce
 
                 departmentIds.Add(ctx.CategoryId);
                 if (departmentIds != null && departmentIds.Any())
-                    l = from aa in l where departmentIds.Contains(aa.CategoryId) select aa;
+                    l = from aa in l where departmentIds.Contains(aa.CategoryId) orderby aa.IntentVn ascending select aa;
             }
             PagedList<Intent> res = new PagedList<Intent>();
             await res.Result(ctx.PageSize, (ctx.PageIndex - 1) * ctx.PageSize, l);
