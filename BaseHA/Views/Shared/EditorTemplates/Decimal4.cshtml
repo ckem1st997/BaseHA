@@ -1,0 +1,67 @@
+﻿@using Kendo.Mvc.UI
+@using Newtonsoft.Json
+
+
+@using Microsoft.AspNetCore.Routing
+
+
+@model decimal?
+
+@functions {
+    private object _htmlAttributes;
+    private object HtmlAttributes
+    {
+        get
+        {
+            if (_htmlAttributes != null)
+                return _htmlAttributes;
+            var htmlAttrData = ViewData["htmlAttributes"];
+            if (htmlAttrData != null)
+                _htmlAttributes = new RouteValueDictionary(htmlAttrData);
+            return _htmlAttributes;
+        }
+    }
+
+    private bool? _isNullValue;
+    private bool IsNullValue
+    {
+        get
+        {
+            if (_isNullValue.HasValue)
+                return _isNullValue.Value;
+            var isNullValue = ViewData["isNullValue"];
+            if (isNullValue != null)
+                _isNullValue = (bool)isNullValue;
+            else
+                _isNullValue = false;
+            return _isNullValue.Value;
+        }
+    }
+
+    private decimal? _value;
+    private decimal? Value
+    {
+        get
+        {
+            if (_value.HasValue)
+                return _value;
+            if (ViewData.Model != null)
+            {
+                if (IsNullValue)
+                    _value = null;
+                else
+                    _value = Convert.ToDecimal(ViewData.Model, System.Globalization.CultureInfo.InvariantCulture);
+            }
+            return _value;
+        }
+    }
+}
+
+
+@(Html.Kendo().NumericTextBoxFor(m => m)
+    .Culture(System.Globalization.CultureInfo.CurrentCulture.Name)
+    //.Name(name)
+    .Value(Value)
+    .Decimals(4)
+    .Format("n4")
+    .HtmlAttributes(HtmlAttributes ?? new RouteValueDictionary()))

@@ -1,0 +1,53 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>e171fd9a-8832-4a8c-b177-f5c489f9b98b</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="Views\Shared\EditorTemplates\AvatarUpload.cshtml" />
+    <None Include="Views\Shared\EditorTemplates\Boolean.cshtml" />
+    <None Include="Views\Shared\EditorTemplates\CkEditor.cshtml" />
+    <None Include="Views\Shared\EditorTemplates\Color.cshtml" />
+    <None Include="Views\Shared\EditorTemplates\DateTime.cshtml" />
+    <None Include="Views\Shared\EditorTemplates\Decimal.cshtml" />
+    <None Include="Views\Shared\EditorTemplates\Decimal4.cshtml" />
+    <None Include="Views\Shared\EditorTemplates\FileUpload.cshtml" />
+    <None Include="Views\Shared\EditorTemplates\IconPicker.cshtml" />
+    <None Include="Views\Shared\EditorTemplates\ImageUpload.cshtml" />
+    <None Include="Views\Shared\EditorTemplates\Int32.cshtml" />
+    <None Include="Views\Shared\EditorTemplates\KendoTextArea.cshtml" />
+    <None Include="Views\Shared\EditorTemplates\KendoTextBox.cshtml" />
+    <None Include="Views\Shared\EditorTemplates\TimeSpan.cshtml" />
+    <None Include="Views\Shared\EditorTemplates\Year.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="11.6.0" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.6.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.18" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.18">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.18.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.14" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BaseHA.Domain\BaseHA.Domain.csproj" />
+    <ProjectReference Include="..\BaseHA.BaseCore\BaseHA.BaseCore.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Kendo.Mvc">
+      <HintPath>..\Kendo.Mvc\Kendo.Mvc.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

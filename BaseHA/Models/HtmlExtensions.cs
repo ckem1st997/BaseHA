@@ -5,12 +5,13 @@ using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using NetTopologySuite.Utilities;
-using Share.BaseCore;
+using BaseHA.Core;
 using System.Linq.Expressions;
 using System.Text.Encodings.Web;
 using System.Text;
 using System.Web;
 using Kendo.Mvc.UI;
+using BaseHA.Models.SearchModel;
 
 namespace BaseHA.Models
 {

@@ -1,26 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using Share.BaseCore;
-#nullable disable
+using BaseHA.Core.Base;
 
 namespace BaseHA.Domain.Entity
 {
-    public class Unit : BaseEntity
+    public partial class Unit: BaseEntity
     {
         public Unit()
         {
-            Number = 0;
-            Id = Guid.NewGuid().ToString();
+            BeginningWareHouses = new HashSet<BeginningWareHouse>();
+            InwardDetails = new HashSet<InwardDetail>();
+            OutwardDetails = new HashSet<OutwardDetail>();
+            WareHouseItemUnits = new HashSet<WareHouseItemUnit>();
+            WareHouseItems = new HashSet<WareHouseItem>();
+            WareHouseLimits = new HashSet<WareHouseLimit>();
         }
 
-        [Required(ErrorMessage ="Bạn chưa nhập tên")]
-        public string UnitName { get; set; }
 
-        [Required(ErrorMessage = "Bạn chưa nhập mã")]
-        public string Code { get; set; }
-        public int Number { get; set; }
+        public override string Id { get; set; } = default!;
+
+
+        public string? UnitName { get; set; }
+
+
         public bool Inactive { get; set; }
 
+
+        public override bool OnDelete { get; set; } = default!;
+
+
+        public virtual ICollection<BeginningWareHouse> BeginningWareHouses { get; set; }
+        public virtual ICollection<InwardDetail> InwardDetails { get; set; }
+        public virtual ICollection<OutwardDetail> OutwardDetails { get; set; }
+        public virtual ICollection<WareHouseItemUnit> WareHouseItemUnits { get; set; }
+        public virtual ICollection<WareHouseItem> WareHouseItems { get; set; }
+        public virtual ICollection<WareHouseLimit> WareHouseLimits { get; set; }
     }
 }

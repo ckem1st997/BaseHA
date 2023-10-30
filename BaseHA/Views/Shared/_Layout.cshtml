@@ -1,113 +1,214 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html lang="en">
 <head>
+    <script>
+        window.onload = function () {
+            if (!sessionStorage['firstLoad']) {
+                sessionStorage['firstLoad'] = true;
+                window.location.reload();
+            }
+        };
+    </script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - BaseHA</title>
-    @*    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/BaseHA.styles.css" asp-append-version="true" />*@
+    <title>Công cụ nội bộ Hacom</title>
+    <cache expires-after="@TimeSpan.FromDays(1)">
+
+        <link rel="apple-touch-icon" href="~/Content/global/img/apple-touch-icon.png">
+        <link rel="shortcut icon" href="~/Content/global/img/favicon.ico" />
+
+        <!-- Plugins Styles -->
+        <link href="~/Content/bundles/css/admin-plugins.min.css?version=1.0.0.0" rel="stylesheet" />
+
+        <!-- Theme Styles -->
+        <link href="~/Content/bundles/css/admin-theme.min.css?version=1.0.0.0" rel="stylesheet" type="text/css" />
+        <!-- Custom Styles -->
+        <link href="~/Content/bundles/css/app-custom.min.css?version=1.0.0.0" rel="stylesheet" />
+        <link href="~/Content/bundles/css/admin-custom.min.css?version=1.0.0.0" rel="stylesheet" type="text/css" />
+
+        <!-- Head Scripts -->
+        <script src="~/Content/bundles/js/admin-head-scripts.js?version=1.0.0.0"></script>
+
+        <script src="/Content/global/plugins/kendo-ui/js/cultures/kendo.culture.vi-VN.min.js?version=1.0.0.0"></script>
+        <script src="~/Content/global/plugins/kendo-ui/js/messages/kendo.messages.vi-VN.min.js?version=1.0.0.0"></script>
+        <script>kendo.culture("vi");</script>
+        <script src="@("/Content/global/plugins/globalize/cultures/globalize.culture.vi-VN.js")"></script>
+        <script>$.fn.select2.defaults.set('theme', 'bootstrap');</script>
+
+        @{
+            await Html.RenderPartialAsync("_Enums");
+        }
+        @{
+            await Html.RenderPartialAsync("_LocaleStringResources");
+        }
+        <script src="~/Content/bundles/js/app-declares.js?version=1.0.0.0" type="text/javascript"></script>
+        <script src="~/Content/bundles/js/admin-declares.js?version=1.0.0.0" type="text/javascript"></script>
+    </cache>
 
 
-    <link rel="apple-touch-icon" href="~/Content/global/img/apple-touch-icon.png">
-    <link rel="shortcut icon" href="~/Content/global/img/favicon.ico" />
-
-    <!-- Plugins Styles -->
-    <link href="~/Content/bundles/css/admin-plugins.min.css?version=1.0.0.0" rel="stylesheet" />
-
-    <!-- Theme Styles -->
-    <link href="~/Content/bundles/css/admin-theme.min.css?version=1.0.0.0" rel="stylesheet" type="text/css" />
-    <!-- Custom Styles -->
-    <link href="~/Content/bundles/css/app-custom.min.css?version=1.0.0.0" rel="stylesheet" />
-    <link href="~/Content/bundles/css/admin-custom.min.css?version=1.0.0.0" rel="stylesheet" type="text/css" />
-
-    <!-- Head Scripts -->
-    <script src="~/Content/bundles/js/admin-head-scripts.js?version=1.0.0.0"></script>
-
-    <script src="/Content/global/plugins/kendo-ui/js/cultures/kendo.culture.vi-VN.min.js?version=1.0.0.0"></script>
-    <script src="~/Content/global/plugins/kendo-ui/js/messages/kendo.messages.vi-VN.min.js?version=1.0.0.0"></script>
-    <script>kendo.culture("vi");</script>
-    <script src="@("/Content/global/plugins/globalize/cultures/globalize.culture.vi-VN.js")"></script>
-    <script>$.fn.select2.defaults.set('theme', 'bootstrap');</script>
-
-    <script src="~/Content/bundles/js/app-declares.js?version=1.0.0.0" type="text/javascript"></script>
-    <script src="~/Content/bundles/js/admin-declares.js?version=1.0.0.0" type="text/javascript"></script>
 </head>
-<body>
-    @*    <header>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-    <div class="container-fluid">
-    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">BaseHA</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-    aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-    <ul class="navbar-nav flex-grow-1">
-    <li class="nav-item">
-    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-    </li>
-    <li class="nav-item">
-    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-    </li>
-    </ul>
-    </div>
-    </div>
-    </nav>
-    </header>*@
-
-
-
-    <div class="container page-content">
-        <main role="main" class="pb-3">
-            @{
-                await RenderSectionAsync("HeadScripts", false);
-            }
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2023 - BaseHA - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+<body class="h-layout page-quick-sidebar-over-content page-content-white page-md page-full-width">
+    <cache expires-after="@TimeSpan.FromDays(1)">
+        <!-- Loader -->
+        <div class="page-loader">
+            <svg class="amz-spinner" width="65px" height="65px" viewBox="0 0 66 66">
+                <circle class="path" fill="none" stroke-width="2" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
+            </svg>
         </div>
-    </footer>
-    @* <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>*@
+        <!-- Header -->
+        <div class="page-header navbar navbar-static-top">
+            <div class="page-header-inner">
+                <div class="page-logo">
+                    <a href="/Admin">
+                        <img src="https://hanoicomputercdn.com/media/lib/09-08-2023/logo-hacom-since-2001.png" alt="logo" class="logo-default">
+                    </a>
+                </div>
+                <div id="admin_hMenu" class="hor-menu hor-menu-light hidden-sm hidden-xs">
+                    <ul class="nav navbar-nav">
+                        <li class="classic-menu-dropdown">
+                            <a href="javascript:;" data-hover="megamenu-dropdown" data-close-others="true" class="hover-initialized" aria-expanded="false">
+                                <i class="fa flaticon2-warning"></i>
+                                <span class="navbar-label">Chatbot</span>
+                            </a>
+                            <ul class="dropdown-menu pull-left">
+                                <li>
+                                    <a asp-action="Index" asp-controller="Category">
+                                        <i class=""></i> Phân loại kịch bản
+                                    </a>
+                                </li>
+                                <li>
+                                    <a asp-action="Index" asp-controller="Intent">
+                                        <i class=""></i> Phân loại ý định
+                                    </a>
+                                </li>
+                                <li>
+                                    <a asp-action="Index" asp-controller="Answer">
+                                        <i class=""></i> Phân loại câu trả lời
+                                    </a>
+                                </li>
 
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <a href="javascript:;" class="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse" style="display: none">
+                    <span></span>
+                </a>
+                <div class="top-menu">
+                    <ul class="nav navbar-nav">
+                        <form id="form-languageselector" class="hide" action="/Admin/Common/LanguageSelected" method="post" data-ajax="true" data-ajax-complete="onLanguageChangedRequestCompleted();">
+                            <input type="hidden" id="userlanguage" value="1">
+                        </form>
+                        <li class="dropdown dropdown-language">
+                            <a href="javascript:;" class="dropdown-toggle" title="Vietnamese" data-toggle="dropdown" aria-expanded="false">
+                                <img alt="Vietnamese" src="/Content/global/img/flags/vn.svg">
+                                <span class="langname">VI</span>
+                                <i class="fa fa-angle-down"></i>
+                            </a>
+                            <ul id="language-selector" class="dropdown-menu dropdown-menu-default" style="left: -100px">
+                                <li disabled="">
+                                    <a href="javascript:;" data-lang-id="1">
+                                        <img alt="Vietnamese" src="/Content/global/img/flags/vn.svg">
+                                        Vietnamese
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="javascript:;" data-lang-id="2">
+                                        <img alt="English" src="/Content/global/img/flags/us.svg">
+                                        English
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <script>
+                            $(document).ready(function () {
+
+                                $("#language-selector > li:not(.disabled) > a").click(function () {
+                                    var el = $(this);
+                                    var langId = el.data("lang-id");
+                                    $("#userlanguage").val(langId);
+                                    $("#form-languageselector").submit();
+                                });
+                            });
+
+                            function onLanguageChangedRequestCompleted() {
+                                location.reload();
+                            }
+                        </script>
+                        <li class="dropdown dropdown-user">
+                            <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                <i class="icon-user"></i>
+                                <span class="username username-hide-on-mobile">
+                                    demo-ticket
+                                </span>
+                                <i class="fa fa-angle-down"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-default" style="left: -28px">
+                                <li>
+                                    <a href="javascript:document.getElementById('logoutForm').submit()">
+                                        <i class="fa fa-sign-out"></i> Đăng xuất
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"> </div>
+    </cache>
+
+
+    <!-- Container -->
+    <div class="page-container">
+        <div class="page-sidebar-wrapper">
+            <div class="page-sidebar navbar-collapse collapse">
+                <div class="page-sidebar-wrapper">
+                    @*@{ Html.RenderAction("_MobileMenu", "Common"); }*@
+                </div>
+            </div>
+        </div>
+        <div class="page-content-wrapper">
+            <div class="page-content" style="margin-left: 0 !important">
+
+                @{
+                    await RenderSectionAsync("HeadScripts", false);
+                }
+                @RenderBody()
+            </div>
+        </div>
+    </div>
     <!-- Plugins -->
-    <script src="~/Content/bundles/js/admin-plugins.js?version=1.0.0.0" type="text/javascript"></script>
-    <script src="~/Content/global/plugins/ckeditor/ckeditor.js?version=1.0.0.0" type="text/javascript"></script>
+    <cache expires-after="@TimeSpan.FromDays(1)">
+        <script src="~/Content/bundles/js/admin-plugins.js?version=1.0.0.0" type="text/javascript"></script>
+        <script src="~/Content/global/plugins/ckeditor/ckeditor.js?version=1.0.0.0" type="text/javascript"></script>
+        <!-- Theme Scripts -->
+        <script src="/Content/bundles/js/admin-theme.js?version=1.0.0.0" type="text/javascript"></script>
+        <!-- Application Script -->
+        <script src="/Content/bundles/js/app-scripts.js?version=1.0.0.0"></script>
+        <script src="/Content/bundles/js/admin-scripts.js?version=1.0.0.0"></script>
+
+        <script src="~/Content/global/plugins/jquery-validation/localization/messages_vi.min.js"></script>
+    </cache>
+
 
     <script>moment.locale('vi');</script>
 
 
 
-    <!-- Theme Scripts -->
-    <script src="/Content/bundles/js/admin-theme.js?version=1.0.0.0" type="text/javascript"></script>
-    <!-- Application Script -->
-    <script src="/Content/bundles/js/app-scripts.js?version=1.0.0.0"></script>
 
-    @*    <script src="/Content/bundles/js/admin-scripts.js?version=1.0.0.0"></script>
-    *@
 
-    @*  @if (!workContext.IsEnglishCulture)
-    {
-    <script src="~/Content/global/plugins/plupload/js/i18n/@(currentUiCulture.TwoLetterISOLanguageName).js"></script>
-    <script src="~/Content/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.@(currentUiCulture.TwoLetterISOLanguageName).js"></script>
+    @{
+        await Html.RenderPartialAsync("_AppInit");
     }
-    <script>moment.locale('@currentUiCulture.TwoLetterISOLanguageName');</script>
-    *@
-    <script src="~/Content/global/plugins/jquery-validation/localization/messages_vi.min.js"></script>
-
 
     <script>
         // admin.urls
-        admin.urls.clearCache = '@Url.Action("ClearCache", "AdminMvcCommon")';
-        admin.urls.breadcrumb = '@Url.Action("Breadcrumb", "AdminMvcCommon")';
+        //admin.urls.clearCache = '@Url.Action("ClearCache", "AdminMvcCommon")';
+        // admin.urls.breadcrumb = '@Url.Action("Breadcrumb", "AdminMvcCommon")';
 
-        app.pjax.init();
+        // app.pjax.init();
         app.init();
         admin.init();
 
@@ -116,8 +217,9 @@
         });
 
     </script>
-
     <div id="__scriptsSection">
+        @await RenderSectionAsync("StartupScripts", false);
+
         @await RenderSectionAsync("Scripts", required: false)
 
     </div>

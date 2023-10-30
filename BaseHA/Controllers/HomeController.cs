@@ -1,15 +1,26 @@
-﻿using BaseHA.Domain.Entity;
-using BaseHA.Infrastructure;
+﻿using AutoMapper;
+using BaseHA.Application.AutoMapper.WareHouses;
+using BaseHA.Application.ModelDto;
+using BaseHA.Application.ModelDto.DTO;
+using BaseHA.Application.Serivce;
+using BaseHA.Domain.Entity;
 using BaseHA.Models;
+using BaseHA.Models.SearchModel;
 using Kendo.Mvc.UI;
+using MediatR;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Nest;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using Share.BaseCore;
-using Share.BaseCore.Extensions;
-using Share.BaseCore.IRepositories;
+using BaseHA.Core;
+using BaseHA.Core.Attribute;
+using BaseHA.Core.Base;
+using BaseHA.Core.Extensions;
+using BaseHA.Core.IRepositories;
+using StackExchange.Redis;
+using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Reflection;
@@ -19,14 +30,14 @@ namespace BaseHA.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IGenericRepository<FakeDbContext> _generic;
+        private readonly IWareHouseService _generic;
+        private readonly IMapper _mapper;
 
-        public HomeController(ILogger<HomeController> logger, IGenericRepository<FakeDbContext> generic)
+        public HomeController(ILogger<HomeController> logger, IWareHouseService generic, IMapper mapper)
         {
             _logger = logger;
             _generic = generic;
-            //   this.dapper = EngineContext.Current.Resolve<IDapper>(DataConnectionHelper.ConnectionStringNames.Warehouse);
-
+            _mapper = mapper;
         }
 
         private static string GenerateRandomName(int length)
@@ -37,82 +48,132 @@ namespace BaseHA.Controllers
                 .Select(s => s[random.Next(s.Length)]).ToArray());
             return randomName;
         }
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var list = new List<Unit>();
-            var l = from i in _generic.GetQueryable<Unit>() select i;
-            if (l.Count() < 1)
-            {
-                for (int i = 0; i < 100; i++)
-                {
-                    list.Add(new Unit()
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        UnitName = GenerateRandomName(10),
-                        Code = GenerateRandomName(10),
-                        Inactive = i % 2 == 0,
-                    });
-
-                }
-                await _generic.AddAsync<Unit>(list);
-            }
-            await _generic.SaveChangesAsync();
-
-            return View();
+            var model = new WareHouseSearchModel();
+            return View(model);
         }
 
         public async Task<IActionResult> Edit(string id)
         {
-            var res = await _generic.GetByIdAsync<Unit>(id);
+            var res = await _generic.GetByIdAsync(id);
+            var entity = _mapper.Map<WareHouseCommands>(res);
+            entity.AvailableWareHouses = await _generic.GetSelectListItem();
+            return View(entity);
+        }
 
+        public async Task<IActionResult> Details(string id)
+        {
+            var res = await _generic.GetByIdAsync($"{id}");
+            var entity = _mapper.Map<WareHouseCommands>(res);
+            return View(entity);
+        }
 
-            return View(res);
+        [HttpPost]
+        public async Task<IActionResult> Add(WareHouseCommands wareHouse)
+        {
+            var entity = _mapper.Map<WareHouse>(wareHouse);
+            var res = await _generic.InsertAsync(entity);
+            return Ok(new ResultMessageResponse()
+            {
+                message = res ? "Thành công !" : "Thất bại !",
+                success = res
+            });
         }
 
 
-
         [HttpPost]
-        public async Task<IActionResult> Add(string id, Unit unit)
+        public async Task<IActionResult> Delete(IEnumerable<string> ids)
         {
-            await _generic.AddAsync<Unit>(unit);
-            var res = await _generic.SaveChangesAsync();
-            return Ok(res);
+            if (ids == null)
+                return Ok(new ResultMessageResponse()
+                {
+                    message = "Thất bại !",
+                    success = false
+                });
+
+            var res = await _generic.DeletesAsync(ids);
+            return Ok(new ResultMessageResponse()
+            {
+                message = res ? "Thành công !" : "Thất bại !",
+                success = res
+            });
         }
 
 
         [HttpPost]
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Activates(IEnumerable<string> ids, bool active)
         {
-            var model = await _generic.GetByIdAsync<Unit>(id);
-            if (model == null)
-                return Ok(false);
-            _generic.Remove<Unit>(model);
-            var res = await _generic.SaveChangesAsync();
-            return Ok(res);
+            if (ids == null)
+                return Ok(new ResultMessageResponse()
+                {
+                    message = "Thất bại !",
+                    success = false
+                });
+            var res = await _generic.ActivatesAsync(ids, active);
+            return Ok(new ResultMessageResponse()
+            {
+                message = res ? "Thành công !" : "Thất bại !",
+                success = res
+            });
         }
 
 
         public async Task<IActionResult> Add()
         {
-            return View(new Unit());
+            var model = new WareHouseCommands();
+            model.AvailableWareHouses = await _generic.GetSelectListItem();
+            return View(model);
         }
 
 
 
         [HttpPost]
-        public async Task<IActionResult> Edit(string id, Unit unit)
+        public async Task<IActionResult> Edit(WareHouseCommands unit)
         {
-            var model = await _generic.GetByIdAsync<Unit>(id);
+            var model = await _generic.GetByIdAsync(unit.Id, true);
             if (model == null)
-                return Ok(false);
-            var res = await _generic.UpdateAsync<Unit>(unit);
-            return Ok(res);
+                return Ok(new ResultMessageResponse()
+                {
+                    message = "Không tồn tại bản ghi !",
+                    success = false
+                });
+            var entity = _mapper.Map(unit, model);
+            var res = await _generic.UpdateAsync(entity);
+            return Ok(new ResultMessageResponse()
+            {
+                message = res ? "Thành công !" : "Thất bại !",
+                success = res
+            });
         }
 
 
-        public async Task<IActionResult> Privacy()
+        /// <summary>
+        /// Gọi Api lấy cấu trúc cây kho
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ActionResult> GetTree()
         {
-            return View();
+            var res = await _generic.GetTree(2);
+            IList<WareHouseTreeModel> cg = new List<WareHouseTreeModel>();
+            foreach (var item in res)
+            {
+                cg.Add(item);
+            }
+            var all = new WareHouseTreeModel()
+            {
+                Name = "Tất cả",
+                key = "",
+                title = "Tất cả",
+                tooltip = "Tất cả",
+                children = cg,
+                level = 1,
+                expanded = true
+            };
+            res.Clear();
+            res.Add(all);
+
+            return Ok(res);
         }
 
 
@@ -126,23 +187,16 @@ namespace BaseHA.Controllers
         /// <returns></returns>
         [IgnoreAntiforgeryToken]
         [HttpPost]
-        public async Task<IActionResult> Get([DataSourceRequest] DataSourceRequest request, UnitSearchModel searchModel)
+        public async Task<IActionResult> Get([DataSourceRequest] DataSourceRequest request, WareHouseSearchModel searchModel)
         {
 
             searchModel.BindRequest(request);
-
-            var res = new List<Unit>();
-
-            var l = from i in _generic.GetQueryable<Unit>() select i;
-            if (!string.IsNullOrEmpty(searchModel.Keywords))
-                l = from aa in l where aa.UnitName.Contains(searchModel.Keywords) || aa.Code.Contains(searchModel.Keywords) select aa;
-
-            var data = await l.Skip((searchModel.PageIndex - 1) * searchModel.PageSize).Take(searchModel.PageSize).ToListAsync();
+            var data = await _generic.GetAsync(searchModel);
 
             var result = new DataSourceResult
             {
-                Data = data,
-                Total = await l.CountAsync()
+                Data = data.Lists,
+                Total = data.Count
             };
 
             return Ok(result);

@@ -1,5 +1,7 @@
-﻿@using BaseHA.Domain.Entity;
-@model UnitSearchModel
+﻿@using BaseHA.Application.ModelDto;
+@using BaseHA.Domain.Entity;
+@using BaseHA.Models.SearchModel;
+@model WareHouseSearchModel
 
 @{
     var setting = new AdminAreaSettings();
@@ -12,28 +14,26 @@
             <a data-action="create" href="javascript:void(0)" class="btn blue btn-sm"><i class="flaticon2-plus"></i> Add</a>
             <a data-action="edit" href="javascript:void(0)" class="btn yellow btn-sm"><i class="flaticon2-pen"></i> Edit</a>
             <a data-action="deletes" href="javascript:void(0)" class="btn red btn-sm"><i class="flaticon-delete"></i> Deletes</a>
-            @* <button type="button" class="btn purple btn-sm dropdown-toggle" data-toggle="dropdown">
-            <i class="flaticon-more"></i> @T("Common.OtherActions") <i class="fa fa-angle-down"></i>
-            </button>*@
-            @* <ul class="dropdown-menu pull-right" role="menu">
-            <li>
-            <a data-action="activate" href="javascript: void(0);"><i class="fa fa-check font-blue"></i> @T("Common.Activate")</a>
-            </li>
-            <li>
-            <a data-action="deactivate" href="javascript: void(0);"><i class="fa fa-lock font-yellow"></i> @T("Common.Deactivate")</a>
-            </li>
-            <li>
-            <a data-action="export" href="javascript:void(0)"><i class="fa fa-print"></i> @T("Common.ExportData")</a>
-            </li>
-            <li>
-            <a data-action="importexcel" href="javascript:void(0)"><i class="fa fa-file-excel-o"></i> @T("Common.ImportExcel")</a>
-            </li>
-            </ul>*@
+            <button type="button" class="btn purple btn-sm dropdown-toggle" data-toggle="dropdown">
+                <i class="flaticon-more"></i> T("Common.OtherActions") <i class="fa fa-angle-down"></i>
+            </button>
+            <ul class="dropdown-menu pull-right" role="menu">
+                <li>
+                    <a data-action="activate" href="javascript: void(0);"><i class="fa fa-check font-blue"></i> ("Common.Activate")</a>
+                </li>
+                <li>
+                    <a data-action="deactivate" href="javascript: void(0);"><i class="fa fa-lock font-yellow"></i> ("Common.Deactivate")</a>
+                </li>
+                <li>
+                    <a data-action="export" href="javascript:void(0)"><i class="fa fa-print"></i> T("Common.ExportData")</a>
+                </li>
+                <li>
+                    <a data-action="importexcel" href="javascript:void(0)"><i class="fa fa-file-excel-o"></i> T("Common.ImportExcel")</a>
+                </li>
+            </ul>
         </div>
     </div>
 </div>
-<!-- #endregion -->
-<!-- #region Page Content -->
 <div class="page-data">
     <div class="row search-form">
         <form style="
@@ -59,17 +59,17 @@
         </form>
     </div>
     <div class="row full-height">
-        @(Html.Kendo().Grid<Unit>()
+        @(Html.Kendo().Grid<WareHouseCommands>()
             .Name("grd")
             .HtmlAttributes(new { style = "height: 100%" })
             .Columns(columns =>
             {
                 columns.Select().Width(30);
                 columns.Bound(x => x.Id).Width(300).Hidden();
-                columns.Bound(x => x.UnitName).Width(100).Title("Tên");
-                columns.Bound(x => x.Code).Width(100).Title("Mã");
-                columns.Bound(x => x.Number).Width(100).Title("Số lượng");
-                columns.Bound(x => x.Inactive).ClientTemplate("#=grd.tmp.activate(!Inactive)#").Width(100).Title("Kích hoạt");
+                columns.Bound(x => x.Name).ClientTemplate("#=grd.tmp.name(Name)#").Title("Tên");
+                columns.Bound(x => x.Code).Title("Mã");
+                columns.Bound(x => x.Description).Title("Mã");
+                columns.Bound(x => x.Inactive).ClientTemplate("#=grd.tmp.activate(!Inactive)#").Width(100).Title("Trạng thái");
             })
             .DataSource(dataSource => dataSource
             .Ajax()
@@ -115,10 +115,11 @@
     <script>
         // Fields
         var master = {
+            urlTree: '@Url.Action("GetTree","Category")',
             urlDetails: '@Url.Action("Details")',
             urlCreate: '@Url.Action("Add")',
             urlEdit: '@Url.Action("Edit")',
-            urlDeletes: '@Url.Action("Deletes")',
+            urlDeletes: '@Url.Action("Delete")',
             urlActivates: '@Url.Action("Activates")',
             urlExport: '@Url.Action("ExportOrder")',
             urlImportExcel: '@Url.Action("ImportExcel")',
@@ -143,6 +144,12 @@
                 },
                 data: function () { },
                 init: function () { }
+            },
+            treeWareHouse: {
+                el: '#treeWareHouse',
+                $el: {},
+                api: {},
+                init: function () { },
             },
             mnu: {
                 el: '#mnu',
@@ -170,15 +177,18 @@
         var grd = master.grd;
         var mnu = master.mnu;
         var btnSearch = master.btnSearch;
+        var treeWareHouse = master.treeWareHouse;
 
         grd.data = function () {
             var $keywords = $('#@Html.FieldIdFor(m => m.Keywords)');
             var $status = $('#@Html.FieldIdFor(m => m.ActiveStatus)');
-
+            var CategoryId = null;
+            if (!_.isEmpty(treeWareHouse.api) && treeWareHouse.api.getActiveNode())
+                CategoryId = treeWareHouse.api.activeNode.key;
             var searchModel = {
                 Keywords: $keywords.val(),
                 Status: $status.val(),
-                //   LanguageId: "1"
+                CategoryId: CategoryId
             };
             return searchModel;
         };
@@ -188,78 +198,6 @@
 
 @section Scripts {
     <script>
-
-        // Lấy thẻ <a> bằng cách sử dụng phương thức querySelector()
-        const editLink = document.querySelector('a[data-action="edit"]');
-
-        // Thêm sự kiện click cho thẻ <a>
-        editLink.addEventListener('click', function () {
-            // Xử lý khi thẻ <a> được nhấp
-            console.log('Đã nhấp vào Edit');
-
-            var id = grd.api.selectedIds()[0];
-            console.log(id)
-            if (id) {
-                location.href = `${master.urlEdit}/${id}`;
-                //  app.window.form.open({ url: `${master.urlEdit}/${id}`, options: { width: '450px' }, callback: master.actionCallback });
-            } else {
-                notify({ text: 'Notifies.NoItemsSelected', type: 'info' });
-            }
-        });
-
-        // Lấy thẻ <a> bằng cách sử dụng phương thức querySelector()
-        const addLink = document.querySelector('a[data-action="create"]');
-
-        // Thêm sự kiện click cho thẻ <a>
-        addLink.addEventListener('click', function () {
-            // Xử lý khi thẻ <a> được nhấp
-            console.log('Đã nhấp vào create');
-            location.href = `${master.urlCreate}`;
-
-        });
-
-
-        // Lấy thẻ <a> bằng cách sử dụng phương thức querySelector()
-        const deleteLink = document.querySelector('a[data-action="deletes"]');
-
-        // Thêm sự kiện click cho thẻ <a>
-        deleteLink.addEventListener('click', function () {
-            // Xử lý khi thẻ <a> được nhấp
-            console.log('Đã nhấp vào create');
-            // Gửi yêu cầu Ajax
-
-
-            var id = grd.api.selectedIds()[0];
-            console.log(id)
-            if (id) {
-                $.ajax({
-                    type: 'POST',
-                    url: `@Url.Action("Delete")/${id}`,
-                    data: id,
-                    success: function (response) {
-                        // Xử lý kết quả thành công
-                        console.log(response);
-                        if (response === 1) {
-                            notify({ text: 'Thành công !', type: 'success' });
-                            // Hàm sẽ được thực thi sau 1000ms
-                            grd.api.resetPage();
-                        }
-                        else
-                            notify({ text: 'Thất bại !', type: 'success' });
-
-                    },
-                    error: function (xhr, status, error) {
-                        // Xử lý lỗi
-                        console.log(error);
-                    }
-                });
-
-            } else {
-                notify({ text: 'Notifies.NoItemsSelected', type: 'info' });
-            }
-
-        });
-
         // Methods
         master.details = function () {
             var id = grd.api.selectedIds()[0];
@@ -271,10 +209,9 @@
         };
         master.importExcel = function () {
             app.window.form.open({ url: `${master.urlImportExcel}`, options: { width: '620px' } });
-            console.log();
         };
         master.create = function () {
-            app.window.form.open({ url: master.urlCreate, options: { width: '450px' }, callback: master.actionCallback });
+            app.window.form.open({ url: master.urlCreate, options: { width: '550px' }, callback: master.actionCallback });
         };
         master.edit = function () {
             var id = grd.api.selectedIds()[0];
@@ -310,6 +247,8 @@
                         if (!msg.HasError) {
                             master.actionCallback();
                         }
+                        if (msg && msg.message)
+                            notify({ text: msg.message, type: msg.success ? 'success' : 'info' });
                         app.ui.loader(grd.api.element, false);
                     },
                     error: function (jqXhr, textStatus, errorThrown) {
@@ -317,7 +256,7 @@
                     }
                 });
             } else {
-                notify({ text: 'Notifies.NoItemsSelected', type: 'info' });
+                notify({ text: 'Bạn chưa chọn bảng ghi nào !', type: 'info' });
             }
         };
         master.refresh = function () {
@@ -351,6 +290,7 @@
             grd.init();
             mnu.init();
             btnSearch.init();
+            treeWareHouse.init();
         };
 
         toolbar.init = function () {
@@ -360,6 +300,10 @@
         };
         toolbar.actions.init = function () {
             var $toolbar = toolbar.$el;
+            $toolbar.find('a[data-action="edit"]').click(function (e) {
+                master.edit();
+            });
+
             $toolbar.find('a[data-action="export"]').click(function (e) {
                 master.export();
             });
@@ -378,9 +322,36 @@
             grd.actions.init();
         };
         grd.actions.init = function () {
-            // grd.api.initDblClick(master.details);
-            // grd.api.initEdit(master.edit);
-            // grd.api.initActivate(master.activates);
+            grd.api.initDblClick(master.details);
+            grd.api.initEdit(master.edit);
+            grd.api.initActivate(master.activates);
+        };
+
+        treeWareHouse.init = function () {
+            treeWareHouse.$el = $(treeWareHouse.el);
+            treeWareHouse.$el.fancytree({
+                source: {
+                    url: master.urlTree,
+                    beforeSend: function (jqXHR, settings) {
+                        grd.api.clear();
+                    },
+                    complete: function () {
+                        var lastKeySelected = '@Model.WareHouseId';
+                        $("#treeWareHouse").fancytree("getTree").getNodeByKey(lastKeySelected).setActive();
+                    }
+                },
+                postProcess: function (event, data) {
+                    data.result = data.response.data;
+                },
+                activate: function (event, data) {
+                    $('#@Html.FieldIdFor(m => m.Keywords)').val("")
+                    var node = data.node;
+                    if (node.statusNodeType !== 'loading') {
+                        grd.api.resetPage();
+                    }
+                }
+            });
+            treeWareHouse.api = treeWareHouse.$el.fancytree("getTree");
         };
         mnu.init = function () {
             mnu.$el = $(mnu.el);
@@ -454,7 +425,7 @@
             return `<a data-action="edit" href="javascript:void(0)">${name}</a>`;
         };
         grd.tmp.activate = function (activate) {
-            return activate ? '<i data-action="deactivate" class="fa fa-check green pointer"></i>' : '<i data-action="activate" class="fa fa-lock yellow pointer"></i>';
+            return !activate ? '<i data-action="deactivate" class="fa fa-check green pointer"></i>' : '<i data-action="activate" class="fa fa-lock yellow pointer"></i>';
         };
 
         // Startup

@@ -1,0 +1,13 @@
+﻿        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+                optionsBuilder.LogTo(Log.Information, LogLevel.Information, DbContextLoggerOptions.UtcTime).EnableSensitiveDataLogging().EnableDetailedErrors();
+                optionsBuilder.LogTo(Console.WriteLine, LogLevel.Information, DbContextLoggerOptions.UtcTime).EnableSensitiveDataLogging().EnableDetailedErrors();
+            if (!optionsBuilder.IsConfigured)
+            {
+{{#if connectionstring-warning}}
+{{connectionstring-warning}}
+{{/if}}
+
+                optionsBuilder{{options-builder-provider}};
+            }
+        }

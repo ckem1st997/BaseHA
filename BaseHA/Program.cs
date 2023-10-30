@@ -1,9 +1,7 @@
-using BaseHA.Configuration;
-using BaseHA.Infrastructure;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Share.BaseCore.Kafka;
-using Share.BaseCore.Cache;
+using BaseHA.Core;
+using BaseHA.Core.Cache;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Grpc.Net.Client.Web;
@@ -12,6 +10,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
@@ -22,39 +21,66 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Share.BaseCore.Authozire;
-using Share.BaseCore.Authozire.ConfigureServices;
-using Share.BaseCore.Grpc;
+using BaseHA.Core.Authozire;
+using BaseHA.Core.Grpc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+using MediatR;
+using BaseHA.Core.CustomConfiguration;
+using System.Configuration;
+using System.Reflection;
+using BaseHA.Application.Configuration;
+using BaseHA.Application.ModuleAutoFac;
+using BaseHA.Application.AutoMapper.ConfigureServices;
+using BaseHA.Application.Validations.ConfigureServices;
+using BaseHA.Application.AutoMapper.WareHouses;
+using AutoMapper;
+using BaseHA.Core.Authozire.ConfigureServices;
+using BaseHA.Core.Extensions;
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
+using StackExchange.Redis;
+using BaseHA.Core.Base;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                      policy =>
+                      {
+                          policy.WithOrigins("*");
+                      });
+});
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 var services = builder.Services;
 var Configuration = builder.Configuration;
+//
+//if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == Environments.Production)
+//{
+//    var redis = ConnectionMultiplexer.Connect("192.168.3.130:6379");
+//    services.AddDataProtection().SetApplicationName("Base")
+//        .PersistKeysToStackExchangeRedis(redis, "DataProtection-Keys");
+//}
+//else
+services.AddDataProtection().SetApplicationName("Base");
+services.AddAntiforgery();
 
-
-
+services.AddMapper();
+services.AddMvc();
+services.AddValidator();
+//
+services.AddCustomDI();
+//
+services.AddMediatR(Assembly.GetExecutingAssembly());
 //services.AddCache(Configuration);
 services.AddCustomConfiguration(Configuration);
 // Add the Kendo UI services to the services container.
@@ -68,16 +94,17 @@ services.Configure<PasswordHasherOptions>(option =>
 });
 services.AddApiAuthentication();
 services.AddApiCors();
-//services.AddSignalR(options =>
-//{
-//    // Global filters will run first
-//    options.AddFilter<CustomFilter>();
-//});
+//auto fac
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+builder.Host.ConfigureContainer<ContainerBuilder>(
+   builder => builder.RegisterModule(new WareHouseModule())
+   .RegisterModule(new CoreModule()));
+
 
 var app = builder.Build();
 
-
-
+//auto fac
+ILifetimeScope AutofacContainer = app.Services.GetAutofacRoot();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -87,6 +114,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 // migrate any database changes on startup (includes initial db creation)
+app.UseCors(MyAllowSpecificOrigins);
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
@@ -97,7 +125,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Category}/{action=Index}/{id?}");
 
-
+app.ConfigureRequestPipeline();
 await app.RunAsync();

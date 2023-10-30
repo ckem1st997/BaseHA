@@ -3,13 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33815.320
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseHA", "BaseHA\BaseHA.csproj", "{E7B82286-A56D-4CC8-8ACF-36441D51EC69}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BaseHA", "BaseHA\BaseHA.csproj", "{E7B82286-A56D-4CC8-8ACF-36441D51EC69}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Share.BaseCore", "Share.BaseCore\Share.BaseCore.csproj", "{436D4072-4397-45D8-8F76-DDB27259CA2C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BaseHA.Domain", "BaseHA.Domain\BaseHA.Domain.csproj", "{7873F2C6-C6FE-4BBD-8294-512D3CEC882D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseHA.Domain", "BaseHA.Domain\BaseHA.Domain.csproj", "{7873F2C6-C6FE-4BBD-8294-512D3CEC882D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseHA.Infrastructure", "BaseHA.Infrastructure\BaseHA.Infrastructure.csproj", "{7D8CF23C-0F59-4CA8-B70B-F0B297525376}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseHA.Core", "BaseHA.Core\BaseHA.Core.csproj", "{4569587C-6D08-49D5-900C-C92D8020BA8E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,18 +19,14 @@ Global
 		{E7B82286-A56D-4CC8-8ACF-36441D51EC69}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E7B82286-A56D-4CC8-8ACF-36441D51EC69}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E7B82286-A56D-4CC8-8ACF-36441D51EC69}.Release|Any CPU.Build.0 = Release|Any CPU
-		{436D4072-4397-45D8-8F76-DDB27259CA2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{436D4072-4397-45D8-8F76-DDB27259CA2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{436D4072-4397-45D8-8F76-DDB27259CA2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{436D4072-4397-45D8-8F76-DDB27259CA2C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7873F2C6-C6FE-4BBD-8294-512D3CEC882D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7873F2C6-C6FE-4BBD-8294-512D3CEC882D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7873F2C6-C6FE-4BBD-8294-512D3CEC882D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7873F2C6-C6FE-4BBD-8294-512D3CEC882D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7D8CF23C-0F59-4CA8-B70B-F0B297525376}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7D8CF23C-0F59-4CA8-B70B-F0B297525376}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7D8CF23C-0F59-4CA8-B70B-F0B297525376}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7D8CF23C-0F59-4CA8-B70B-F0B297525376}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4569587C-6D08-49D5-900C-C92D8020BA8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4569587C-6D08-49D5-900C-C92D8020BA8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4569587C-6D08-49D5-900C-C92D8020BA8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4569587C-6D08-49D5-900C-C92D8020BA8E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
