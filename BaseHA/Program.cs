@@ -48,6 +48,17 @@ using StackExchange.Redis;
 using BaseHA.Core.Base;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                      policy =>
+                      {
+                          policy.WithOrigins("*");
+                      });
+});
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 var services = builder.Services;
@@ -103,6 +114,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 // migrate any database changes on startup (includes initial db creation)
+app.UseCors(MyAllowSpecificOrigins);
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

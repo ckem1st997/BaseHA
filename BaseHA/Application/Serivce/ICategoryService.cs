@@ -22,6 +22,7 @@ namespace BaseHA.Application.Serivce
         Task<bool> UpdateAsync(Category entity);
 
         Task<bool> DeletesAsync(IEnumerable<string> ids);
+        Task<bool> DeleteId(string ids);
 
         Task<PagedList<Category>> GetAsync(CategorySearchModel ctx);
 
@@ -59,6 +60,14 @@ namespace BaseHA.Application.Serivce
         }
 
         public async Task<bool> DeletesAsync(IEnumerable<string> ids)
+        {
+            if (ids == null)
+                throw new ArgumentNullException(nameof(ids));
+            await _generic.DeteleSoftDelete(ids);
+            return await _generic.SaveChangesConfigureAwaitAsync() > 0;
+        }
+
+        public async Task<bool> DeleteId(string ids)
         {
             if (ids == null)
                 throw new ArgumentNullException(nameof(ids));
